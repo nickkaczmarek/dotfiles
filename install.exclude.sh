@@ -40,8 +40,8 @@ link () {
 	read resp
 	# TODO - regex here?
 	if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
-		for file in $( ls -A | grep -vE '\.exclude*|\.git$|\.gitignore|\.DS_Store |.*.md' ) ; do
-			ln -sv "$PWD/$file" "$HOME/test"
+		for file in $( ls -A | grep -vE '\.exclude*|\.git$|\.gitignore|\.DS_Store|.*.md' ) ; do
+			ln -sfnv "$PWD/$file" "$HOME"
 		done
 		# TODO: source files here?
 		echo "Symlinking complete"
