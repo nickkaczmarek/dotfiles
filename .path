@@ -1,0 +1,8 @@
+###############################################
+# Path
+###############################################
+
+export PATH="~/scripts/:$PATH"
+export PATH="$(go env GOPATH)/bin/:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export GOPATH="$(go env GOPATH)"

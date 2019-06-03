@@ -1,0 +1,10 @@
+[core]
+	excludesfile = /Users/kacz/.gitignore
+[alias]
+	co = checkout
+	st = status
+	ci = commit
+	br = branch
+[user]
+	name = nickkaczmarek
+	email = nick.s.kaczmarek@gmail.com
