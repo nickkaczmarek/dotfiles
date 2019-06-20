@@ -17,5 +17,6 @@ PURPLE="\[${BOLD}$(tput setaf 4)\]"
 PINK="\[${BOLD}$(tput setaf 5)\]"
 TEAL="\[${BOLD}$(tput setaf 6)\]"
 WHITE="\[${BOLD}$(tput setaf 7)\]"
-PS1_GIT="\$(prompt_git $RESET\"\[${WHITE}\] on \[${PURPLE}\]\" \"\[${BLUE}\]\")"; # Git repository details
-export PS1="$TEAL\h$WHITE in $GREEN\w$PS1_GIT$RESET \012=>> ";
+PS1_GIT="\$(prompt_git $RESET${WHITE} ${PURPLE} ${BLUE})"; # Git repository details
+
+export PS1="$TEAL\h$RESET $GREEN\w$RESET $PS1_GIT $RESET \012=>> ";

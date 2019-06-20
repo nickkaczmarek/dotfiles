@@ -1,7 +1,7 @@
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
-for file in ./.{path,bash_prompt,exports,aliases,functions,extra,git-prompt.sh}; do
+for file in ~/.{path,functions,bash_prompt,exports,aliases,extra,git-prompt.sh,tmux-completion.sh}; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
@@ -16,7 +16,7 @@ elif [ -f /etc/bash_completion ]; then
 fi;
 
 #https://raw.githubusercontent.com/imomaliev/tmux-bash-completion/master/completions/tmux
-source .tmux-completion.sh
+# source ~/.tmux-completion.sh
 
 ###############################################
 # Tmux
@@ -25,7 +25,7 @@ source .tmux-completion.sh
 if [ -z "$TMUX" ]; then
   if ( tmux has-session ); then
     tmux attach
-  else
+ else
     # Create new session and detach
     tmux new -s dev -d
     # Create pane horizontally, $HOME directory, 50% width of current pane
