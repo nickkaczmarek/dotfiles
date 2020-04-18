@@ -4,21 +4,21 @@ set path+=**
 set wildmenu
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+"set rtp+=~/.vim/bundle/Vundle.vim
+"call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'vim-airline/vim-airline'
-Plugin 'rust-lang/rust.vim'
-Plugin 'morhetz/gruvbox'
+" Plugin 'vim-airline/vim-airline'
+" Plugin 'rust-lang/rust.vim'
+" Plugin 'morhetz/gruvbox'
 
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+"call vundle#end()            " required
+"filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
@@ -59,7 +59,7 @@ set hlsearch      " highlighting for search
   set termguicolors
  endif
 
-colorscheme gruvbox
+"colorscheme gruvbox
 
 set laststatus=2
 set number numberwidth=1
