@@ -5,6 +5,9 @@
 	st = status
 	ci = commit
 	br = branch
+	publish = push --set-upstream origin head
 [user]
 	name = nickkaczmarek
 	email = nick.s.kaczmarek@gmail.com
+[pull]
+	rebase = true
