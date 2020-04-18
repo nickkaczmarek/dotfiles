@@ -49,3 +49,5 @@ fi
 if [ -f '/Users/kacz/Downloads/google-cloud-sdk/completion.bash.inc' ]; 
   then source '/Users/kacz/Downloads/google-cloud-sdk/completion.bash.inc'; 
 fi
+
+export PATH="$HOME/.cargo/bin:$PATH"
