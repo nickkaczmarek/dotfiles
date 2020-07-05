@@ -13,6 +13,14 @@ setopt GLOB_COMPLETE
 # type in a dir name and enter or ..
 setopt AUTO_CD 
 
+# allows git autocompletion
+autoload -Uz compinit && compinit
+GIT_PS1_SHOWUPSTREAM="verbose"
+GIT_PS1_SHOWDIRTYSTATE="auto"
+GIT_PS1_SHOWSTASHSTATE="auto"
+GIT_PS1_SHOWUNTRACKEDFILES="auto"
+
+
 ###########################################################
 # HISTORY
 ###########################################################
@@ -290,7 +298,8 @@ fi
 
 setopt PROMPT_SUBST
 
-PROMPT='%(?.%B%F{010}√.%B%F{009}?%?%f) %F{014}%3~%f%F{013}$(parse_git_branch)%f %F{011}%(!.||>.|>)%f%b '
+precmd () { __git_ps1 "%n" "%~$ " "|%s" }
+# PROMPT='%(?.%B%F{010}√.%B%F{009}?%?%f) %F{014}%3~%f%F{013}$(parse_git_branch)%f %F{011}%(!.||>.|>)%f%b '
 RPROMPT='%B%F{012}%*%f%b'
 
 # Search up and down through history
