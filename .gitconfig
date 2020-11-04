@@ -6,8 +6,16 @@
 	ci = commit
 	br = branch
 	publish = push --set-upstream origin head
+	rst = reset --hard HEAD
 [user]
-	name = nickkaczmarek
-	email = nick.s.kaczmarek@gmail.com
+	name = Nick Kaczmarek
+	email = nickkaczmarek@hey.com
 [pull]
 	rebase = true
+[init]
+	defaultBranch = main
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f

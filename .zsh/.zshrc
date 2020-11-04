@@ -51,6 +51,7 @@ alias path='echo -e ${PATH//:/\\n}'
 alias funcs="functions"
 alias fnames="funcs + | fgrep -v iterm"
 alias shit="emulate -LR zsh"
+alias bbedit="open -a /Applications/BBEdit.app"
 
 # Normalize `open` across Linux, macOS, and Windows.
 # This is needed to make the `o` function (see below) cross-platform.
@@ -265,25 +266,40 @@ function tre() {
 	tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
 
+# code () { VSCODE_CWD=”$PWD” open -n -b “com.microsoft.VSCode” — args $* ;}
 
 ###############################################
 # Tmux
 ###############################################
 
-if [ -z "$TMUX" ]; then
-  if ( tmux has-session ); then
-    tmux attach
- else
-    # Create new session and detach
-    tmux new -s dev -d
-    # Create pane horizontally, $HOME directory, 50% width of current pane
-    tmux rename-window -t dev BASE
-    # tmux split-window -h -c $HOME -p 50 vim
-    # tmux select-window -t dev:1
-    # tmux select-pane -t:.1
-    tmux attach -t dev
-  fi
-fi
+function mux() {
+	if [ -z "$TMUX" ]; then
+	  if ( tmux has-session ); then
+		tmux attach
+	 else
+		# Create new session and detach
+		tmux new -s dev -d
+		# Create pane horizontally, $HOME directory, 50% width of current pane
+		tmux rename-window -t dev BASE
+		# tmux split-window -h -c $HOME -p 50 vim
+		# tmux select-window -t dev:1
+		# tmux select-pane -t:.1
+		tmux attach -t dev
+	  fi
+	fi
+}
+
+function work() {
+	sessionName=sfrent
+	# Create new session and detach
+	tmux new -s $sessionName -d
+	# Create pane horizontally, $HOME directory, 50% width of current pane
+	tmux rename-window -t $sessionName TAZ
+	tmux split-window -c /Users/kerams/dev/sfrent/taz -v -p 50
+	tmux select-window -t $sessionName:1
+	tmux select-pane -t:.1
+	tmux attach -t $sessionName
+}
 
 ###########################################################
 # PROMPT
@@ -310,3 +326,5 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
+
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
