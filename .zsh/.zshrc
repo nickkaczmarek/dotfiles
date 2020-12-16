@@ -34,8 +34,8 @@ setopt INC_APPEND_HISTORY
 # TEXT CORRECTION
 ###########################################################
 
-setopt CORRECT
-setopt CORRECT_ALL
+# setopt CORRECT
+# setopt CORRECT_ALL
 
 ###########################################################
 # ALIASES
@@ -289,16 +289,32 @@ function mux() {
 	fi
 }
 
-function work() {
-	sessionName=sfrent
-	# Create new session and detach
-	tmux new -s $sessionName -d
-	# Create pane horizontally, $HOME directory, 50% width of current pane
-	tmux rename-window -t $sessionName TAZ
-	tmux split-window -c /Users/kerams/dev/sfrent/taz -v -p 50
-	tmux select-window -t $sessionName:1
-	tmux select-pane -t:.1
-	tmux attach -t $sessionName
+function sfrent() {
+	jazzSessionName=jazz
+	tmux new -s $jazzSessionName -d
+	tmux rename-window -t $jazzSessionName rails
+	tmux send-keys -t rails 'cd /Users/kerams/dev/sfrent/jazz && docker-compose up -d && docker-compose attach jazz_web_1' C-m
+
+	tmux new-window
+	tmux rename-window -t $jazzSessionName postgres
+	tmux send-keys -t postgres 'cd /Users/kerams/dev/sfrent/jazz && docker-compose run db psql -U postgres -h db' C-m
+
+	tmux new-window
+	tmux rename-window -t $jazzSessionName docker
+	tmux send-keys -t docker 'cd /Users/kerams/dev/sfrent/jazz && docker-compose run web bash' C-m
+
+	tazSessionName=taz
+	tmux new -s $tazSessionName -d
+	tmux rename-window -t $tazSessionName rails
+	tmux send-keys -t rails 'cd /Users/kerams/dev/sfrent/taz && vagrant up && vagrant ssh' C-m
+
+	tmux new-window
+	tmux rename-window -t $tazSessionName mysql
+	tmux send-keys -t mysql 'cd /Users/kerams/dev/sfrent/taz' C-m
+	
+	tmux select-window -t $jazzSessionName:1
+	# tmux select-pane -t:.1
+	tmux attach -t $jazzSessionName
 }
 
 ###########################################################
