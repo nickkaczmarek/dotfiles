@@ -66,6 +66,11 @@ set number numberwidth=1
 set softtabstop=2
 set shiftwidth=2
 
+" show | and * in help text
+:set conceallevel=0
+:hi link HelpBar Normal
+:hi link HelpStar Normal
+
 command! WQ wq
 command! Wq wq
 command! W w
