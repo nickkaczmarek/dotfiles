@@ -1,5 +1,3 @@
-[core]
-	excludesfile = /Users/kacz/.gitignore
 [alias]
 	co = checkout
 	st = status
@@ -7,9 +5,11 @@
 	br = branch
 	publish = push --set-upstream origin head
 	rst = reset --hard HEAD
+	latest = describe --abbrev=0
+	alias = config --get-regexp alias
 [user]
 	name = Nick Kaczmarek
-	email = nickkaczmarek@hey.com
+	email = nickkaczmarek@me.com
 [pull]
 	rebase = true
 [init]
@@ -19,3 +19,5 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+[rebase]
+	autosquash = true
