@@ -38,6 +38,12 @@ brew install go
 # Show directory structure with excellent formatting
 brew install tree
 
+# github cli
+brew install gh
+
+# json parser
+brew install jq
+
 # tmux :'D 
 brew install tmux
 
