@@ -9,10 +9,9 @@ setopt PROMPT_SUBST
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 #tab completion
-setopt GLOB_COMPLETE 
+setopt GLOB_COMPLETE
 # type in a dir name and enter or ..
-setopt AUTO_CD 
-
+setopt AUTO_CD
 
 ###########################################################
 # HISTORY
@@ -43,7 +42,7 @@ setopt INC_APPEND_HISTORY
 
 alias ls="ls -G"
 alias la="ls -aF"
-alias ll="ls -laF"
+alias ll="ls -halF"
 alias c="clear"
 alias sb="source ~/.zshrc"
 alias grep="grep --color=auto"
@@ -52,8 +51,9 @@ alias funcs="functions"
 alias fnames="funcs + | fgrep -v iterm"
 alias shit="emulate -LR zsh"
 alias bbedit="open -a /Applications/BBEdit.app"
+alias pip=pip3
 
-alias git='nocorrect git '
+# alias git='nocorrect git '
 
 # Normalize `open` across Linux, macOS, and Windows.
 # This is needed to make the `o` function (see below) cross-platform.
@@ -94,19 +94,12 @@ ostest() {
   echo ${machine}
 }
 
-parse_git_dirty () {
-  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working tree clean" ]] && echo "*"
-}
-parse_git_branch () {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ \1$(parse_git_dirty)/"
-}
-
 tputcolors() {
-  for i in {0..255}; 
+  for i in {0..255};
     do tput setab $i;
-      echo -n "$i    "; 
-    done; 
-    tput setab 0; 
+      echo -n "$i    ";
+    done;
+    tput setab 0;
     echo;
 }
 
@@ -184,24 +177,6 @@ function dataurl() {
 	echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
 }
 
-# Start an HTTP server from a directory, optionally specifying the port
-# function server() {
-# 	local port="${1:-8000}";
-# 	sleep 1 && open "http://localhost:${port}/" &
-# 	# Set the default Content-Type to `text/plain` instead of `application/octet-stream`
-# 	# And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
-# 	python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port";
-# }
-
-# Start a PHP server from a directory, optionally specifying the port
-# (Requires PHP 5.4.0+.)
-# function phpserver() {
-# 	local port="${1:-4000}";
-# 	local ip=$(ipconfig getifaddr en1);
-# 	sleep 1 && open "http://${ip}:${port}/" &
-# 	php -S "${ip}:${port}";
-# }
-
 # Compare original and gzipped file size
 function gz() {
 	local origsize=$(wc -c < "$1");
@@ -210,11 +185,6 @@ function gz() {
 	printf "orig: %d bytes\n" "$origsize";
 	printf "gzip: %d bytes (%2.2f%%)\n" "$gzipsize" "$ratio";
 }
-
-# Run `dig` and display the most useful info
-# digga() {
-# 	dig +nocmd "$1" any +multiline +noall +answer;
-# }
 
 # Show all the names (CNs and SANs) listed in the SSL certificate
 # for a given domain
@@ -268,55 +238,12 @@ function tre() {
 	tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
 
-# code () { VSCODE_CWD=”$PWD” open -n -b “com.microsoft.VSCode” — args $* ;}
-
-###############################################
-# Tmux
-###############################################
-
-function mux() {
-	if [ -z "$TMUX" ]; then
-	  if ( tmux has-session ); then
-		tmux attach
-	 else
-		# Create new session and detach
-		tmux new -s dev -d
-		# Create pane horizontally, $HOME directory, 50% width of current pane
-		tmux rename-window -t dev BASE
-		# tmux split-window -h -c $HOME -p 50 vim
-		# tmux select-window -t dev:1
-		# tmux select-pane -t:.1
-		tmux attach -t dev
-	  fi
-	fi
+function p() {
+	cd ~/dev/LCE/Caesar-Vision-Next-Gen
 }
 
-function sfrent() {
-	jazzSessionName=jazz
-	tmux new -s $jazzSessionName -d
-	tmux rename-window -t $jazzSessionName rails
-	tmux send-keys -t rails 'cd /Users/kerams/dev/sfrent/jazz && docker-compose up -d && docker-compose attach jazz_web_1' C-m
-
-	tmux new-window
-	tmux rename-window -t $jazzSessionName postgres
-	tmux send-keys -t postgres 'cd /Users/kerams/dev/sfrent/jazz && docker-compose run db psql -U postgres -h db' C-m
-
-	tmux new-window
-	tmux rename-window -t $jazzSessionName docker
-	tmux send-keys -t docker 'cd /Users/kerams/dev/sfrent/jazz && docker-compose run web bash' C-m
-
-	tazSessionName=taz
-	tmux new -s $tazSessionName -d
-	tmux rename-window -t $tazSessionName rails
-	tmux send-keys -t rails 'cd /Users/kerams/dev/sfrent/taz && vagrant up && vagrant ssh' C-m
-
-	tmux new-window
-	tmux rename-window -t $tazSessionName mysql
-	tmux send-keys -t mysql 'cd /Users/kerams/dev/sfrent/taz' C-m
-	
-	tmux select-window -t $jazzSessionName:1
-	# tmux select-pane -t:.1
-	tmux attach -t $jazzSessionName
+function pe() {
+	cd ~/dev/LCE/Caesar-Vision-Next-Gen/ElectronUI
 }
 
 ###########################################################
@@ -335,6 +262,7 @@ GIT_PS1_DESCRIBE_STYLE="branch"
 
 # precmd () { __git_ps1 "%n" "%~$ " "|%s" }
 PROMPT='%(?.%B%F{010}√.%B%F{009}?%?%f) %F{014}%1~%f%F{013}$(__git_ps1)%f %F{011}%(!.||>.|>)%f%b '
+# PROMPT='%(?.%B%F{010}√.%B%F{009}?%?%f) %F{014}%1~%f %F{011}%(!.||>.|>)%f%b '
 RPROMPT='%B%F{012}%*%f%b'
 
 # Search up and down through history
@@ -348,11 +276,6 @@ bindkey "^[[B" down-line-or-beginning-search # Down
 ###########################################################
 # nvm
 ###########################################################
-
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # place this after nvm initialization!
 autoload -U add-zsh-hook
@@ -380,3 +303,24 @@ if [ -f '/Users/kaczmarn/tools/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/kaczmarn/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/kaczmarn/tools/google-cloud-sdk/completion.zsh.inc'; fi
+
+###########################################################
+# rbenv
+###########################################################
+
+# Load rbenv automatically by appending
+# the following to ~/.zshrc:
+
+eval "$(rbenv init - zsh)"
+
+###########################################################
+# GPG
+###########################################################
+if [ -f "${HOME}/.gpg-agent-info" ]; then
+  . "${HOME}/.gpg-agent-info"
+  export GPG_AGENT_INFO
+  export SSH_AUTH_SOCK
+  export SSH_AGENT_PID
+fi
+
+export GPG_TTY=$(tty)

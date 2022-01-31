@@ -9,7 +9,8 @@
 	alias = config --get-regexp alias
 [user]
 	name = Nick Kaczmarek
-	email = nickkaczmarek@me.com
+	email = nick.kaczmarek@wwt.com
+	signingkey = BAF33AA8B77833AB
 [pull]
 	rebase = true
 [init]
@@ -21,3 +22,7 @@
 	smudge = git-lfs smudge -- %f
 [rebase]
 	autosquash = true
+[branch]
+	sort = committerdate
+[commit]
+	gpgsign = true
