@@ -7,6 +7,8 @@
 	rst = reset --hard HEAD
 	latest = describe --abbrev=0
 	alias = config --get-regexp alias
+	list-authors = "!$HOME/Developer/dotfiles/list-authors"
+	la = list-authors
 [user]
 	name = Nick Kaczmarek
 	email = nick.kaczmarek@wwt.com
