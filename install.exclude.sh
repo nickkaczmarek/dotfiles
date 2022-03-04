@@ -11,26 +11,30 @@ link () {
 	if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
 		BASEDIR=$(dirname "$0")
 		case $SHELL in
-		*/zsh) 
+		*/zsh)
 		   	# assume Zsh
-		   	for file in $( ls -RA $BASEDIR/.zsh | grep -vE '\.exclude*|\.git$|\.gitignore|\.DS_Store|.*.md|zshfunctions' ) ; do
-				ln -sfnv "$BASEDIR/.zsh/$file" "$HOME"
-			done
+		   	ln -sfnv "$BASEDIR/zshrc" "$HOME/.zshrc"
+		   	ln -sfnv "$BASEDIR/zlogin" "$HOME/.zlogin"
+		   	ln -sfnv "$BASEDIR/zlogout" "$HOME/.zlogout"
+		   	ln -sfnv "$BASEDIR/zshenv" "$HOME/.zshenv"
+		   	ln -sfnv "$BASEDIR/git-prompt.sh" "$HOME/.git-prompt.sh"
+		   	ln -sfnv "$BASEDIR/gitconfig" "$HOME/.gitconfig"
+		   	ln -sfnv "$BASEDIR/vimrc" "$HOME/.vimrc"
 		   	;;
-		*/bash)
-		   	# assume Bash
-		   	for file in $( ls -A $BASEDIR | grep -vE '\.exclude*|\.git$|\.gitignore|\.DS_Store|.*.md' ) ; do
-				ln -sfnv "$BASEDIR/.bash/$file" "$HOME"
-			done
-		   	;;
-		*)
-		   	# assume something else
-			echo "$SHELL not supported"
+		# */bash)
+# 		   	# assume Bash
+# 		   	for file in $( ls -A $BASEDIR | grep -vE '\.exclude*|\.git$|\.gitignore|\.DS_Store|.*.md' ) ; do
+# 				ln -sfnv "$BASEDIR/.bash/$file" "$HOME"
+# 			done
+# 		   	;;
+# 		*)
+# 		   	# assume something else
+# 			echo "$SHELL not supported"
 		esac
-		
-		for file in $( ls -A $BASEDIR | grep -vE '\.exclude*|\.git$|\.gitignore|\.DS_Store|.*.md|\.zsh' ) ; do
-			ln -sfnv "$BASEDIR/$file" "$HOME"
-		done
+#
+# 		for file in $( ls -A $BASEDIR | grep -vE '\.exclude*|\.git$|\.gitignore|\.DS_Store|.*.md|\.zsh' ) ; do
+# 			ln -sfnv "$BASEDIR/$file" "$HOME"
+# 		done
 		# TODO: source files here?
 		echo "Symlinking complete"
 	else
@@ -39,25 +43,25 @@ link () {
 	fi
 }
 
-install_tools () {
-	if [ $( echo "$OSTYPE" | grep 'darwin' ) ] ; then
-		echo "This utility will install useful utilities using Homebrew"
-		echo "Proceed? (y/n)"
-		read resp
-		# TODO - regex here?
-		if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
-			echo "Installing useful stuff using brew. This may take a while..."
-			sh brew.exclude.sh
-		else
-			echo "Brew installation cancelled by user"
-		fi
-	else
-		echo "Skipping installations using Homebrew because MacOS was not detected..."
-	fi
-}
+# install_tools () {
+# 	if [ $( echo "$OSTYPE" | grep 'darwin' ) ] ; then
+# 		echo "This utility will install useful utilities using Homebrew"
+# 		echo "Proceed? (y/n)"
+# 		read resp
+# 		# TODO - regex here?
+# 		if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
+# 			echo "Installing useful stuff using brew. This may take a while..."
+# 			sh brew.exclude.sh
+# 		else
+# 			echo "Brew installation cancelled by user"
+# 		fi
+# 	else
+# 		echo "Skipping installations using Homebrew because MacOS was not detected..."
+# 	fi
+# }
 
 link
-install_tools
+# install_tools
 
 
 

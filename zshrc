@@ -2,7 +2,7 @@
 # clear the pipes (revert to defaults)
 emulate -LR zsh
 
-source ~/.git-prompt.sh
+source ~/.git-prompt
 setopt PROMPT_SUBST
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
@@ -25,7 +25,7 @@ setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 
 alias c="clear"
-alias sb="source ~/.zshrc"
+alias sz="source ~/.zshrc"
 alias grep="grep --color=auto"
 alias path='echo -e ${PATH//:/\\n}'
 alias funcs="functions"
@@ -33,14 +33,14 @@ alias fnames="funcs + | fgrep -v iterm"
 alias shit="emulate -LR zsh"
 alias pip=pip3
 
+alias de="cd ~/Developer"
+
 # shamelessly stolen from tyler-keith-thompson
 alias ls="exa"
 alias l="ls -albhF --icons --git --no-permissions --color=always"
 alias xcopen='xcopen -d'
 alias cat='bat --paging=never'
-export CLICOLOR=1
-export LSCOLORS=ExfxcxdxBxegedabagacad
-export EXA_COLORS="uu=2;33:da=0;37"
+
 
 function co-authors() {
   local ME="nk"
@@ -151,3 +151,13 @@ if [ -f "${HOME}/.gpg-agent-info" ]; then
 fi
 
 export GPG_TTY=$(tty)
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+DISABLE_AUTO_TITLE="true"
+
+precmd() {
+  # sets the tab title to current dir
+  echo -ne "\e]1;${PWD##*/}\a"
+}
