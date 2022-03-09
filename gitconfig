@@ -12,8 +12,8 @@
 	la =                list-authors
 [user]
 	name = Nick Kaczmarek
-	email = nick.kaczmarek@wwt.com
-	signingkey = BAF33AA8B77833AB
+	email = nickkaczmarek@me.com
+	signingkey = 45298C7DA792C41C
 [pull]
 	rebase = true
 [init]

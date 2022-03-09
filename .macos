@@ -1,9 +1,6 @@
 # Gathered from many different sources including mathias bynens
 # https://github.com/mathiasbynens/dotfiles
 
-# Disable the sound effects on boot
-sudo nvram SystemAudioVolume=" "
-
 # Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
 defaults write com.apple.finder QuitMenuItem -bool true
 
@@ -14,7 +11,7 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 defaults write com.apple.NetworkBrowser BrowseAllInterfaces 1
 
 # Always open everything in Finder's list view. This is important.
-defaults write com.apple.Finder FXPreferredViewStyle Nlsv
+defaults write com.apple.Finder FXPreferredViewStyle -string Nlsv
 
 # Display full POSIX path as Finder window title
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
@@ -36,58 +33,14 @@ defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 # Enable Safari’s debug menu
 #defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
 
-# Enable subpixel font rendering on non-Apple LCDs
-defaults write NSGlobalDomain AppleFontSmoothing -int 2
-
-# Make Dock icons of hidden applications translucent
-defaults write com.apple.dock showhidden -bool true
-
-# Enable iTunes track notifications in the Dock
-defaults write com.apple.dock itunes-notifications -bool true
-
-# Always show scrollbars
-#defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
-
-# Show indicator lights for open applications in the Dock
-defaults write com.apple.dock show-process-indicators -bool true
-
-# Only use UTF-8 in Terminal.app
-defaults write com.apple.terminal StringEncodings -array 4
-
-# Require password immediately after sleep or screen saver begins
-#defaults write com.apple.screensaver askForPassword -int 1
-#defaults write com.apple.screensaver askForPasswordDelay -int 0
-
 # Disable the warning when changing a file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
 # Avoid creating .DS_Store files on network volumes
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
-# Set a blazingly fast keyboard repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 2
-
-# Set decently fast key repeat start
-defaults write NSGlobalDomain InitialKeyRepeat -int 15
-
-# Disable press-and-hold for keys in favor of key repeat
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-
-# Remove the auto-hiding Dock delay
-defaults write com.apple.Dock autohide-delay -float 0
-
 # Show status bar in Finder
 defaults write com.apple.finder ShowStatusBar -bool true
-
-# Automatically hide and show the Dock
-defaults write com.apple.dock autohide -bool true
-
-# Bluetooth headset higher bitrate
-# defaults read com.apple.BluetoothAudioAgent
-defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
-
-# Disable “natural” (Lion-style) scrolling
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
 # Allow selection of text in quicklook windows
 defaults write com.apple.finder QLEnableTextSelection -bool true
@@ -98,8 +51,7 @@ defaults write com.apple.finder QLEnableTextSelection -bool true
 defaults write org.n8gray.QLColorCode hlTheme orion
 defaults write org.n8gray.QLColorCode font Monaco
 
-# Disable expose animation
-defaults write com.apple.dock expose-animation-duration -float 0
-
 # Kill affected applications
 for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 2>&1; done
+open /Applications/Safari.app
+open /System/Applications/Mail.app

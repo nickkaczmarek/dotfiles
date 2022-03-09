@@ -2,8 +2,10 @@
 # clear the pipes (revert to defaults)
 emulate -LR zsh
 
-source ~/.git-prompt
+source ~/.git-prompt.sh
 setopt PROMPT_SUBST
+
+eval $(/opt/homebrew/bin/brew shellenv)
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
@@ -25,7 +27,7 @@ setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 
 alias c="clear"
-alias sz="source ~/.zshrc"
+alias sz="exec zsh"
 alias grep="grep --color=auto"
 alias path='echo -e ${PATH//:/\\n}'
 alias funcs="functions"
@@ -93,6 +95,10 @@ function sc() {
 	cd ~/Developer/SwiftCurrent
 }
 
+function dotfiles() {
+	cd ~/Developer/dotfiles
+}
+
 setopt PROMPT_SUBST
 # allows git autocompletion
 autoload -Uz compinit && compinit
@@ -114,27 +120,37 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
-# place this after nvm initialization!
-autoload -U add-zsh-hook
-load-nvmrc() {
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
+if [[ $(command -v nvm) ]]; then
+    # nvm is installed
+else
+    echo "NVM is not installed. Installing now"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    nvm install node
+    # place this after nvm initialization!
+    autoload -U add-zsh-hook
+    load-nvmrc() {
+      local node_version="$(nvm version)"
+      local nvmrc_path="$(nvm_find_nvmrc)"
 
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+      if [ -n "$nvmrc_path" ]; then
+        local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
 
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
-    fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
+        if [ "$nvmrc_node_version" = "N/A" ]; then
+          nvm install
+        elif [ "$nvmrc_node_version" != "$node_version" ]; then
+          nvm use
+        fi
+      elif [ "$node_version" != "$(nvm version default)" ]; then
+        echo "Reverting to nvm default version"
+        nvm use default
+      fi
+    }
+    add-zsh-hook chpwd load-nvmrc
+    load-nvmrc
+fi
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/kaczmarn/tools/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/kaczmarn/tools/google-cloud-sdk/path.zsh.inc'; fi
 
@@ -152,12 +168,10 @@ fi
 
 export GPG_TTY=$(tty)
 
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
 DISABLE_AUTO_TITLE="true"
 
 precmd() {
   # sets the tab title to current dir
   echo -ne "\e]1;${PWD##*/}\a"
 }
+
