@@ -1,11 +1,15 @@
-
 # clear the pipes (revert to defaults)
 emulate -LR zsh
 
 source ~/.git-prompt.sh
 setopt PROMPT_SUBST
 
-eval $(/opt/homebrew/bin/brew shellenv)
+# homebrew only needs to have this done if we're not on intel architecture
+arch=$(/usr/bin/arch)
+
+if [[ "$arch" -eq "arm64" ]]; then
+    eval $(/opt/homebrew/bin/brew shellenv)
+fi
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
@@ -43,6 +47,32 @@ alias l="ls -albhF --icons --git --no-permissions --color=always"
 alias xcopen='xcopen -d'
 alias cat='bat --paging=never'
 
+# get-git-pairs
+# a function that looks through all the authors on a git repo
+# sorts, removes duplicates, and formats them like the git Co-authored-by syntax
+# example output: nk=Co-authored-by: Nick Kaczmarek <nickkaczmarek@me.com>
+# this is for work so I have my work email as the filter
+# LIMITATIONS
+# at the moment this only gets emails already in the git log
+# it also just grabs the first and last initial so
+# duplicates and collisions are a very real problem
+# FUTURE IDEAS
+# find a way to query a github org
+# find a way to specify custom initials
+# custom initials would require a user.email with a middle name
+# and then somehow the script would have to know how to look for that
+
+function get-git-pairs() {
+    local EMAIL="wwt"
+    git log \
+    --all \
+    --format='%aN <%cE>' \
+    | sort -uf | \
+    grep $EMAIL | \
+    grep -vi vault | \
+    grep -E "^\w.+\s\w.+<.+>$" | \
+    awk '{print tolower(substr($1, 0, 1) substr($2, 0, 1)) "=Co-authored-by: "$1 " " $2 " " $3}'
+}
 
 function co-authors() {
   local ME="nk"
@@ -50,7 +80,7 @@ function co-authors() {
   local -A initialsMap
   while IFS== read -r key value; do
     initialsMap[$key]=$value
-  done < "${HOME}/.gitpairs"
+  done < <(get-git-pairs)
   # Parse parameters
   local parsed=("${(@s/-/)${*}}")
   local newline=$'\n'
@@ -92,11 +122,11 @@ function commit() {
 # end tt
 
 function sc() {
-	cd ~/Developer/SwiftCurrent
+    cd ~/Developer/SwiftCurrent
 }
 
 function dotfiles() {
-	cd ~/Developer/dotfiles
+    cd ~/Developer/dotfiles
 }
 
 setopt PROMPT_SUBST
@@ -151,13 +181,10 @@ else
     add-zsh-hook chpwd load-nvmrc
     load-nvmrc
 fi
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/kaczmarn/tools/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/kaczmarn/tools/google-cloud-sdk/path.zsh.inc'; fi
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/kaczmarn/tools/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/kaczmarn/tools/google-cloud-sdk/completion.zsh.inc'; fi
-
-eval "$(rbenv init - zsh)"
+if [[ $(command -v rbenv) ]]; then
+    eval "$(rbenv init - zsh)"
+fi
 
 if [ -f "${HOME}/.gpg-agent-info" ]; then
   . "${HOME}/.gpg-agent-info"
