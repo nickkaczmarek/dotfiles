@@ -50,6 +50,7 @@ cask "quicklookase"
 cask "rectangle"
 cask "suspicious-package"
 cask "visual-studio-code"
+cask "keycastr"
 mas "ApolloOne", id: 1044484672
 mas "BBEdit", id: 404009241
 mas "Boop", id: 1518425043
