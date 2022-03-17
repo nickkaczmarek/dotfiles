@@ -36,6 +36,7 @@ brew "tree"
 brew "wget"
 brew "macecchi/tap/xcopen"
 brew "robotsandpencils/made/xcodes", link: false
+brew "diff-so-fancy"
 cask "apparency"
 cask "font-fira-code"
 cask "font-meslo-lg-nerd-font"
