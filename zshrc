@@ -4,6 +4,8 @@ emulate -LR zsh
 source ~/.git-prompt.sh
 setopt PROMPT_SUBST
 
+PATH=~/.mint/bin:$PATH
+
 # homebrew only needs to have this done if we're not on intel architecture
 arch=$(/usr/bin/arch)
 
@@ -40,11 +42,12 @@ alias shit="emulate -LR zsh"
 alias pip=pip3
 
 alias de="cd ~/Developer"
+alias dec="cd ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/Developer"
 
 # shamelessly stolen from tyler-keith-thompson
 alias ls="exa"
 alias l="ls -albhF --icons --git --no-permissions --color=always"
-alias xcopen='xcopen -d'
+# alias xcopen='xcopen -d'
 alias cat='bat --paging=never'
 
 # get-git-pairs

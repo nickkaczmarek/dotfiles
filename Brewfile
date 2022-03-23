@@ -4,7 +4,6 @@ brew "mas"
 
 tap "homebrew/bundle"
 tap "homebrew/core"
-tap "macecchi/tap"
 tap "robotsandpencils/made"
 tap "homebrew/cask-fonts"
 brew "aria2"
@@ -34,9 +33,10 @@ brew "swiftlint"
 brew "tmux"
 brew "tree"
 brew "wget"
-brew "macecchi/tap/xcopen"
 brew "robotsandpencils/made/xcodes", link: false
 brew "diff-so-fancy"
+brew "brightness"
+brew "mint"
 cask "apparency"
 cask "font-fira-code"
 cask "font-meslo-lg-nerd-font"
@@ -52,6 +52,8 @@ cask "rectangle"
 cask "suspicious-package"
 cask "visual-studio-code"
 cask "keycastr"
+cask "xcodes"
+mas "Amphetamine", id: 937984704
 mas "ApolloOne", id: 1044484672
 mas "BBEdit", id: 404009241
 mas "Boop", id: 1518425043
@@ -62,6 +64,7 @@ mas "Drafts", id: 1435957248
 mas "DuckDuckGo Privacy Essentials", id: 1482920575
 mas "Front and Center", id: 1493996622
 mas "Hush", id: 1544743900
+mas "Home Assistant", id: 1099568401
 mas "JSONPeep", id: 1458969831
 mas "Keynote", id: 409183694
 mas "Magic Lasso", id: 1198047227
@@ -72,3 +75,5 @@ mas "Refined GitHub", id: 1519867270
 mas "Tweetbot", id: 1384080005
 mas "Userscripts", id: 1463298887
 mas "UTC Time", id: 1538245904
+mas "Zavala", id: 1546457750
+
