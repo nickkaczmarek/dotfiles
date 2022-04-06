@@ -2,10 +2,10 @@
 # PATH
 ###########################################################
 
-export PATH="$PATH:/Users/kaczmarn/dev/flutter/bin"
+echo "running zshenv"
 export GEM_HOME=$HOME/.gem
 export PATH=$GEM_HOME/bin:$PATH
-export PATH=$HOME/tools/confluent-5.3.1/bin:$PATH
+export PATH=~/.mint/bin:$PATH
 export CLICOLOR=1
 export LSCOLORS=ExfxcxdxBxegedabagacad
 export EXA_COLORS="uu=2;33:da=0;37"
