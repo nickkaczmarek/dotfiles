@@ -42,6 +42,8 @@ alias pip=pip3
 
 alias de="cd ~/Developer"
 alias dec="cd ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/Developer"
+alias work="cd ~/work"
+alias bbdot="bbedit ~/Developer/dotfiles"
 
 # shamelessly stolen from tyler-keith-thompson
 alias ls="exa"
