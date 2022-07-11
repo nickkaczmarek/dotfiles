@@ -1,0 +1,5 @@
+[user]
+	name = Nick Kaczmarek
+	email = nick.kaczmarek@wwt.com
+[commit]
+	gpgsign = false

@@ -1,3 +1,11 @@
+[includeIf "gitdir:~/Developer/"]
+    path = ~/.gitconfig-personal
+[includeIf "gitdir:~/Desktop/"]
+    path = ~/.gitconfig-personal
+
+[includeIf "gitdir:~/work/"]
+    path = ~/work/.gitconfig-work
+
 [alias]
 	co =                checkout
 	st =                status
@@ -10,26 +18,30 @@
 	list-authors =      "!$HOME/Developer/dotfiles/git/list-authors"
 	pp =                "!$HOME/Developer/dotfiles/git/pull-push"
 	la =                list-authors
-[user]
-	name = Nick Kaczmarek
-	email = nickkaczmarek@me.com
-	signingkey = 45298C7DA792C41C
 [pull]
 	rebase = true
 [init]
 	defaultBranch = main
-[filter "lfs"]
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
 [rebase]
 	autosquash = true
 [branch]
 	sort = committerdate
-[commit]
-	gpgsign = true
+# git-delta
 [core]
-	pager = diff-so-fancy | less --tabs=4 -RFX
+    pager = delta
 [interactive]
-	diffFilter = diff-so-fancy --patch
+    diffFilter = delta --color-only
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    light = false
+    line-numbers = true
+[merge]
+    conflictstyle = diff3
+[diff]
+    colorMoved = default
+
+# diff-so-fancy
+#[core]
+#	pager = diff-so-fancy | less --tabs=4 -RFX
+#[interactive]
+#	diffFilter = diff-so-fancy --patch
