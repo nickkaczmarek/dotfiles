@@ -35,6 +35,7 @@ brew "tree"
 brew "wget"
 brew "robotsandpencils/made/xcodes", link: false
 brew "diff-so-fancy"
+brew "git-delta"
 brew "brightness"
 brew "mint"
 cask "apparency"
