@@ -11,13 +11,23 @@
 	st =                status
 	ci =                commit
 	br =                branch
+	cp =                cherry-pick
+	purge =             clean -fd
+	unstage =           restore --staged
+	amend =             ci --amend
 	publish =           push --set-upstream origin head
 	rst =               reset --hard HEAD
 	latest =            describe --abbrev=0
 	alias =             config --get-regexp alias
-	list-authors =      "!$HOME/Developer/dotfiles/git/list-authors"
+	sorted-authors =    "!$HOME/Developer/dotfiles/git/list-authors"
 	pp =                "!$HOME/Developer/dotfiles/git/pull-push"
+	sa =                sorted-authors
+	list-authors =      shortlog -e -s -n
 	la =                list-authors
+	count-authors =     shortlog -s -n
+	ca =                count-authors
+	pretty-log =        log --pretty=format:'commit: %C(bold red)%h%Creset %C(red)<%H>%Creset %C(bold magenta)%d %Creset%ndate: %C(bold yellow)%cd %Creset%C(yellow)%cr%Creset%nauthor: %C(bold blue)%an%Creset %C(blue)<%ae>%Creset%n%C(cyan)%s%n%Creset'
+	pl =                pretty-log
 [pull]
 	rebase = true
 [init]
@@ -38,7 +48,7 @@
 [merge]
     conflictstyle = diff3
 [diff]
-    colorMoved = default
+    colorMoved = zebra
 
 # diff-so-fancy
 #[core]
