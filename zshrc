@@ -1,4 +1,3 @@
-echo "Running zshrc"
 # clear the pipes (revert to defaults)
 emulate -LR zsh
 
@@ -9,7 +8,10 @@ setopt PROMPT_SUBST
 arch=$(/usr/bin/arch)
 
 if [[ "$arch" -eq "arm64" ]]; then
-    eval $(/opt/homebrew/bin/brew shellenv)
+    if [[ $(command -v brew) ]]; then
+    else
+        eval $(/opt/homebrew/bin/brew shellenv)
+    fi
 fi
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
@@ -31,6 +33,17 @@ setopt APPEND_HISTORY
 # adds commands as they are typed, not at shell exit
 setopt INC_APPEND_HISTORY
 
+export GEM_HOME=$HOME/.gem
+export PATH=$GEM_HOME/bin:$HOME/.mint/bin:$PATH
+
+export CLICOLOR=1
+export LSCOLORS=ExfxcxdxBxegedabagacad
+export EXA_COLORS="uu=2;33:da=0;37"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
 alias c="clear"
 alias sz="exec zsh"
 alias grep="grep --color=auto"
@@ -39,6 +52,7 @@ alias funcs="functions"
 alias fnames="funcs + | fgrep -v iterm"
 alias shit="emulate -LR zsh"
 alias pip=pip3
+alias kick-ssh-agent="killall ssh-agent; eval `ssh-agent`"
 
 alias de="cd ~/Developer"
 alias dec="cd ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/Developer"
@@ -133,6 +147,13 @@ function dotfiles() {
     cd ~/Developer/dotfiles
 }
 
+function napp() {
+    cd ~/work/nomnom-app
+}
+function napi() {
+    cd ~/work/nomnom-api
+}
+
 setopt PROMPT_SUBST
 # allows git autocompletion
 autoload -Uz compinit && compinit
@@ -154,14 +175,16 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
-if [[ $(command -v nvm) ]]; then
+if [[ -d ~/.nvm || $(command -v nvm) ]]; then
     # nvm is installed
 else
     echo "NVM is not installed. Installing now"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    echo "Exporting NVM_DIR from zshrc"
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
     nvm install node
 fi
 # place this after nvm initialization!
@@ -193,6 +216,8 @@ else
 fi
 
 if [[ $(command -v rbenv) ]]; then
+    # rbenv is installed
+else
     eval "$(rbenv init - zsh)"
 fi
 
@@ -211,4 +236,6 @@ precmd() {
   # sets the tab title to current dir
   echo -ne "\e]1;${PWD##*/}\a"
 }
+
+typeset -U PATH # removes duplicate path variables in zsh
 
