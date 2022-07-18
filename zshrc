@@ -215,11 +215,7 @@ else
     sudo ln -s /Users/kaczmarn/Developer/dotfiles/bman /usr/local/bin
 fi
 
-if [[ $(command -v rbenv) ]]; then
-    # rbenv is installed
-else
-    eval "$(rbenv init - zsh)"
-fi
+eval "$(rbenv init - zsh)"
 
 if [ -f "${HOME}/.gpg-agent-info" ]; then
   . "${HOME}/.gpg-agent-info"
