@@ -2,7 +2,8 @@
     path = ~/.gitconfig-personal
 [includeIf "gitdir:~/Desktop/"]
     path = ~/.gitconfig-personal
-
+[includeIf "gitdir:~/Documents/"]
+    path = ~/.gitconfig-personal
 [includeIf "gitdir:~/work/"]
     path = ~/work/.gitconfig-work
 
@@ -30,6 +31,8 @@
 	pl =                pretty-log
 [pull]
 	rebase = true
+[fetch]
+	prune = true
 [init]
 	defaultBranch = main
 [rebase]

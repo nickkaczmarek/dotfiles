@@ -154,6 +154,28 @@ function napi() {
     cd ~/work/nomnom-api
 }
 
+function startdemo() {
+osascript <<END
+tell application "System Events"
+	set autohide menu bar of dock preferences to true
+	set dockhidestate to autohide of dock preferences
+	tell dock preferences to set autohide to true
+	do shell script "defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+end tell
+END
+}
+
+function enddemo() {
+osascript <<END
+tell application "System Events"
+	set autohide menu bar of dock preferences to false
+	set dockhidestate to autohide of dock preferences
+	tell dock preferences to set autohide to false
+	do shell script "defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+end tell
+END
+}
+
 setopt PROMPT_SUBST
 # allows git autocompletion
 autoload -Uz compinit && compinit

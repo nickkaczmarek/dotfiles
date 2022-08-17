@@ -71,7 +71,6 @@ mas "Keynote", id: 409183694
 mas "Magic Lasso", id: 1198047227
 mas "PiPifier", id: 1160374471
 mas "Playgrounds", id: 1496833156
-mas "Quests", id: 1447415753
 mas "Refined GitHub", id: 1519867270
 mas "Tweetbot", id: 1384080005
 mas "Userscripts", id: 1463298887
