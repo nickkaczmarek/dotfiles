@@ -1,0 +1,57 @@
+1Password.app
+1Password for Safari.app
+Acorn.app
+AirBuddy.app
+Amphetamine.app
+Apparency.app
+Bartender 4.app
+Battery Buddy.app
+BBEdit.app
+Cardhop.app
+DaisyDisk.app
+Developer.app
+Discord.app
+Drafts.app
+DuckDuckGo Privacy for Safari.app
+Fantastical.app
+Firefox.app
+Front and Center.app
+Hush.app
+iTerm.app
+Itsycal.app
+JSONPeep.app
+Keyboard Maestro.app
+KeyCastr.app
+Keynote.app
+Kite.app
+krisp.app
+Magic Lasso.app
+MarsEdit.app
+Micro.blog.app
+NetNewsWire.app
+Notchmeister.app
+Nova.app
+Overkill.app
+Proxyman.app
+QLMarkdown.app
+Rectangle.app
+Refined GitHub.app
+Retrobatch.app
+Rocket.app
+SF Symbols.app
+Slack.app
+Snk.app
+Soulver 2.app
+Soulver 3.app
+SoundSource.app
+Suspicious Package.app
+Tweetbot.app
+Unexpectedly.app
+Userscripts.app
+UTC Time.app
+Visual Studio Code.app
+VLC.app
+WWT Timex.app
+Xcodes.app
+xScope.app
+Zavala.app
