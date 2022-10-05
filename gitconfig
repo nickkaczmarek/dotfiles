@@ -52,9 +52,5 @@
     conflictstyle = diff3
 [diff]
     colorMoved = zebra
-
-# diff-so-fancy
-#[core]
-#	pager = diff-so-fancy | less --tabs=4 -RFX
-#[interactive]
-#	diffFilter = diff-so-fancy --patch
+[pager]
+	branch = false

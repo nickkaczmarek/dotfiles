@@ -257,3 +257,12 @@ precmd() {
 
 typeset -U PATH # removes duplicate path variables in zsh
 
+### Work
+
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.15.1.jdk/Contents/Home
+export ANDROID_SDK_ROOT=/Users/kaczmarn/Library/Android/sdk
+export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools/
+export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/
+export PATH=$PATH:$ANDROID_SDK_ROOT/emulator/
+export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/
+
