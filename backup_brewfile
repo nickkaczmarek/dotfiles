@@ -1,0 +1,112 @@
+tap "buo/cask-upgrade"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "macecchi/tap"
+tap "mongodb/brew"
+tap "robotsandpencils/made"
+brew "ack"
+brew "act"
+brew "aria2"
+brew "bat"
+brew "glib"
+brew "python@3.9"
+brew "carthage"
+brew "cloc"
+brew "ruby"
+brew "cocoapods"
+brew "gnutls"
+brew "colima"
+brew "diff-so-fancy"
+brew "docker"
+brew "docker-compose"
+brew "exa"
+brew "harfbuzz"
+brew "leptonica"
+brew "python@3.10"
+brew "gobject-introspection"
+brew "libass"
+brew "ffmpeg"
+brew "gdk-pixbuf"
+brew "gh"
+brew "git"
+brew "git-delta"
+brew "git-gui"
+brew "gnupg"
+brew "gradle"
+brew "htop"
+brew "libheif"
+brew "imagemagick"
+brew "ios-deploy"
+brew "jq"
+brew "kotlin"
+brew "pango"
+brew "librsvg"
+brew "llvm"
+brew "mas"
+brew "mint"
+brew "node@16"
+brew "mongosh"
+brew "nginx"
+brew "nmap"
+brew "node"
+brew "node@14"
+brew "pinentry-mac"
+brew "rbenv"
+brew "sourcekitten"
+brew "stern"
+brew "swiftlint"
+brew "tig"
+brew "tmux"
+brew "tree"
+brew "wget"
+brew "yarn"
+brew "youtube-dl"
+brew "mongodb/brew/mongodb-community"
+brew "robotsandpencils/made/xcodes", link: false
+cask "apparency"
+cask "font-fira-code"
+cask "font-meslo-lg-nerd-font"
+cask "keycastr"
+cask "lunar"
+cask "overkill"
+cask "postman"
+cask "qlcolorcode"
+cask "qlimagesize"
+cask "qlmarkdown"
+cask "qlstephen"
+cask "qlvideo"
+cask "quicklook-json"
+cask "quicklookase"
+cask "rectangle"
+cask "suspicious-package"
+cask "visual-studio-code"
+cask "xcodes"
+mas "1Password for Safari", id: 1569813296
+mas "Amphetamine", id: 937984704
+mas "BBEdit", id: 404009241
+mas "Boop", id: 1518425043
+mas "Cardhop", id: 1290358394
+mas "DaisyDisk", id: 411643860
+mas "Developer", id: 640199958
+mas "Drafts", id: 1435957248
+mas "DuckDuckGo Privacy for Safari", id: 1482920575
+mas "Fantastical", id: 975937182
+mas "Front and Center", id: 1493996622
+mas "Hush", id: 1544743900
+mas "JSONPeep", id: 1458969831
+mas "Keynote", id: 409183694
+mas "Magic Lasso", id: 1198047227
+mas "Microsoft Remote Desktop", id: 1295203466
+mas "Notchmeister", id: 1599169747
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "PiPifier", id: 1160374471
+mas "Refined GitHub", id: 1519867270
+mas "SQLPro for MySQL", id: 899174769
+mas "Tweetbot", id: 1384080005
+mas "Userscripts", id: 1463298887
+mas "UTC Time", id: 1538245904
+mas "Zavala", id: 1546457750
