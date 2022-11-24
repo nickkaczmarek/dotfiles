@@ -42,6 +42,7 @@
 # git-delta
 [core]
     pager = delta
+	excludesfile = /Users/nickka/.gitignore_global
 [interactive]
     diffFilter = delta --color-only
 [delta]

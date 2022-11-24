@@ -1,5 +1,8 @@
 [user]
 	name = Nick Kaczmarek
-	email = nick.kaczmarek@wwt.com
+	email = nickka@zillowgroup.com
+	signingkey = 5853984B70BF240D
 [commit]
-	gpgsign = false
+	gpgsign = true
+[gpg]
+	program = /opt/homebrew/bin/gpg

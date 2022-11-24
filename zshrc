@@ -39,9 +39,9 @@ export PATH=$GEM_HOME/bin:$HOME/.mint/bin:$PATH
 export CLICOLOR=1
 export LSCOLORS=ExfxcxdxBxegedabagacad
 export EXA_COLORS="uu=2;33:da=0;37"
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
 alias c="clear"
@@ -139,19 +139,8 @@ function commit() {
 }
 # end tt
 
-function sc() {
-    cd ~/Developer/SwiftCurrent
-}
-
 function dotfiles() {
     cd ~/Developer/dotfiles
-}
-
-function napp() {
-    cd ~/work/nomnom-app
-}
-function napi() {
-    cd ~/work/nomnom-api
 }
 
 function startdemo() {
@@ -176,9 +165,21 @@ end tell
 END
 }
 
+
+
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+  ## asdf
+	source /opt/homebrew/opt/asdf/libexec/asdf.sh
+
+  autoload -Uz compinit
+  compinit
+fi
+
 setopt PROMPT_SUBST
 # allows git autocompletion
-autoload -Uz compinit && compinit
+# autoload -Uz compinit && compinit
 GIT_PS1_SHOWUPSTREAM="verbose"
 GIT_PS1_SHOWDIRTYSTATE="auto"
 GIT_PS1_SHOWSTASHSTATE="auto"
@@ -197,48 +198,6 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
-if [[ -d ~/.nvm || $(command -v nvm) ]]; then
-    # nvm is installed
-else
-    echo "NVM is not installed. Installing now"
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-    echo "Exporting NVM_DIR from zshrc"
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-    nvm install node
-fi
-# place this after nvm initialization!
-autoload -U add-zsh-hook
-load-nvmrc() {
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
-    fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
-
-if [[ $(command -v bman) ]]; then
-    # bman is installed
-else
-    sudo ln -s /Users/kaczmarn/Developer/dotfiles/bman /usr/local/bin
-fi
-
-eval "$(rbenv init - zsh)"
-
 if [ -f "${HOME}/.gpg-agent-info" ]; then
   . "${HOME}/.gpg-agent-info"
   export GPG_AGENT_INFO
@@ -256,13 +215,3 @@ precmd() {
 }
 
 typeset -U PATH # removes duplicate path variables in zsh
-
-### Work
-
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.15.1.jdk/Contents/Home
-export ANDROID_SDK_ROOT=/Users/kaczmarn/Library/Android/sdk
-export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools/
-export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/
-export PATH=$PATH:$ANDROID_SDK_ROOT/emulator/
-export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/
-

@@ -6,37 +6,24 @@ tap "homebrew/bundle"
 tap "homebrew/core"
 tap "robotsandpencils/made"
 tap "homebrew/cask-fonts"
+# work
+brew "asdf"
 brew "aria2"
 brew "bat"
-brew "python@3.9"
-brew "glib"
 brew "cloc"
-brew "cocoapods"
 brew "exa"
 brew "gnutls"
-# https://github.com/libass/libass
-brew "libass"
-brew "ffmpeg"
 brew "gh"
-brew "git"
-brew "git-gui"
 brew "gnupg"
-brew "htop"
-brew "imagemagick"
 brew "jq"
 brew "llvm"
-brew "nmap"
-brew "node"
 brew "pinentry-mac"
-brew "rbenv"
 brew "swiftlint"
-brew "tmux"
 brew "tree"
 brew "wget"
-brew "robotsandpencils/made/xcodes", link: false
+brew "robotsandpencils/made/xcodes"
 brew "diff-so-fancy"
 brew "git-delta"
-brew "brightness"
 brew "mint"
 cask "apparency"
 cask "font-fira-code"
@@ -54,10 +41,9 @@ cask "suspicious-package"
 cask "visual-studio-code"
 cask "keycastr"
 cask "xcodes"
-mas "Amphetamine", id: 937984704
-mas "ApolloOne", id: 1044484672
+# quit apple music from opening
+cask "overkill"
 mas "BBEdit", id: 404009241
-mas "Boop", id: 1518425043
 mas "Color Picker", id: 1545870783
 mas "DaisyDisk", id: 411643860
 mas "Developer", id: 640199958
@@ -70,7 +56,6 @@ mas "JSONPeep", id: 1458969831
 mas "Keynote", id: 409183694
 mas "Magic Lasso", id: 1198047227
 mas "PiPifier", id: 1160374471
-mas "Playgrounds", id: 1496833156
 mas "Refined GitHub", id: 1519867270
 mas "Tweetbot", id: 1384080005
 mas "Userscripts", id: 1463298887
