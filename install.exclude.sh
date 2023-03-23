@@ -19,7 +19,7 @@ link () {
             ln -sfnv "$BASEDIR/vimrc" "$HOME/.vimrc"
             ln -sfnv "$BASEDIR/.macos" "$HOME/.macos"
             ln -sfnv "$BASEDIR/Brewfile" "$HOME/Brewfile"
-            ln -sfnv "$BASEDIR/.gitpairs" "$HOME/.gitpairs"
+            ln -sfnv "$BASEDIR/gitpairs" "$HOME/.gitpairs"
             ;;
         esac
         echo "Symlinking complete"

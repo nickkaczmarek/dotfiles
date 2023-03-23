@@ -1,8 +1,9 @@
 [user]
-	name = Nick Kaczmarek
-	email = nickka@zillowgroup.com
-	signingkey = 5853984B70BF240D
+    name = Nick Kaczmarek
+    email = nickka@zillowgroup.com
+    signingkey = 5853984B70BF240D
+    initials = nk
 [commit]
-	gpgsign = true
+    gpgsign = true
 [gpg]
-	program = /opt/homebrew/bin/gpg
+    program = /opt/homebrew/bin/gpg

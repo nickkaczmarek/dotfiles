@@ -8,41 +8,41 @@
     path = ~/work/.gitconfig-work
 
 [alias]
-	co =                checkout
-	st =                status
-	ci =                commit
-	br =                branch
-	cp =                cherry-pick
-	purge =             clean -fd
-	unstage =           restore --staged
-	amend =             ci --amend
-	publish =           push --set-upstream origin head
-	rst =               reset --hard HEAD
-	latest =            describe --abbrev=0
-	alias =             config --get-regexp alias
-	sorted-authors =    "!$HOME/Developer/dotfiles/git/list-authors"
-	pp =                "!$HOME/Developer/dotfiles/git/pull-push"
-	sa =                sorted-authors
-	list-authors =      shortlog -e -s -n
-	la =                list-authors
-	count-authors =     shortlog -s -n
-	ca =                count-authors
-	pretty-log =        log --pretty=format:'commit: %C(bold red)%h%Creset %C(red)<%H>%Creset %C(bold magenta)%d %Creset%ndate: %C(bold yellow)%cd %Creset%C(yellow)%cr%Creset%nauthor: %C(bold blue)%an%Creset %C(blue)<%ae>%Creset%n%C(cyan)%s%n%Creset'
-	pl =                pretty-log
+    co =                checkout
+    st =                status
+    ci =                commit
+    br =                branch
+    cp =                cherry-pick
+    purge =             clean -fdx
+    unstage =           restore --staged
+    amend =             ci --amend
+    publish =           push --set-upstream origin head
+    rst =               reset --hard HEAD
+    latest =            describe --abbrev=0
+    alias =             config --get-regexp alias
+    sorted-authors =    "!$HOME/Developer/dotfiles/git/list-authors"
+    pp =                "!$HOME/Developer/dotfiles/git/pull-push"
+    sa =                sorted-authors
+    list-authors =      shortlog -e -s -n
+    la =                list-authors
+    count-authors =     shortlog -s -n
+    ca =                count-authors
+    pretty-log =        log --pretty=format:'commit: %C(bold red)%h%Creset %C(red)<%H>%Creset %C(bold magenta)%d %Creset%ndate: %C(bold yellow)%cd %Creset%C(yellow)%cr%Creset%nauthor: %C(bold blue)%an%Creset %C(blue)<%ae>%Creset%n%C(cyan)%s%n%Creset'
+    pl =                pretty-log
 [pull]
-	rebase = true
+    rebase = true
 [fetch]
-	prune = true
+    prune = true
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [rebase]
-	autosquash = true
+    autosquash = true
 [branch]
-	sort = committerdate
+    sort = committerdate
 # git-delta
 [core]
     pager = delta
-	excludesfile = /Users/nickka/.gitignore_global
+    excludesfile = /Users/nickka/.gitignore_global
 [interactive]
     diffFilter = delta --color-only
 [delta]
@@ -53,5 +53,9 @@
     conflictstyle = diff3
 [diff]
     colorMoved = zebra
+    tool = vscode
 [pager]
-	branch = false
+    branch = false
+[user]
+    name = Nick Kaczmarek
+    initials = nk

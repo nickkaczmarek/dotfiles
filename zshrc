@@ -47,7 +47,7 @@ export EXA_COLORS="uu=2;33:da=0;37"
 alias c="clear"
 alias sz="exec zsh"
 alias grep="grep --color=auto"
-alias path='echo -e ${PATH//:/\\n}'
+alias path='echo -e ${PATH//:/\\n} | sort'
 alias funcs="functions"
 alias fnames="funcs + | fgrep -v iterm"
 alias shit="emulate -LR zsh"
@@ -63,42 +63,16 @@ alias bbdot="bbedit ~/Developer/dotfiles"
 alias ls="exa"
 alias l="ls -albhF --icons --git --no-permissions --color=always"
 # alias xcopen='xcopen -d'
-alias cat='bat --paging=never'
-
-# get-git-pairs
-# a function that looks through all the authors on a git repo
-# sorts, removes duplicates, and formats them like the git Co-authored-by syntax
-# example output: nk=Co-authored-by: Nick Kaczmarek <nickkaczmarek@me.com>
-# this is for work so I have my work email as the filter
-# LIMITATIONS
-# at the moment this only gets emails already in the git log
-# it also just grabs the first and last initial so
-# duplicates and collisions are a very real problem
-# FUTURE IDEAS
-# find a way to query a github org
-# find a way to specify custom initials
-# custom initials would require a user.email with a middle name
-# and then somehow the script would have to know how to look for that
-
-function get-git-pairs() {
-    local EMAIL="wwt"
-    git log \
-    --all \
-    --format='%aN <%cE>' \
-    | sort -uf | \
-    grep $EMAIL | \
-    grep -vi vault | \
-    grep -E "^\w.+\s\w.+<.+>$" | \
-    awk '{print tolower(substr($1, 0, 1) substr($2, 0, 1)) "=Co-authored-by: "$1 " " $2 " " $3}'
-}
+alias cat='bat'
+alias quitxcode="killall Xcode"
 
 function co-authors() {
-  local ME="nk"
+  local ME=`git config --global user.initials`
   # Set Initials here
   local -A initialsMap
   while IFS== read -r key value; do
     initialsMap[$key]=$value
-  done < <(get-git-pairs)
+  done < "${HOME}/.gitpairs"
   # Parse parameters
   local parsed=("${(@s/-/)${*}}")
   local newline=$'\n'
@@ -113,7 +87,7 @@ function co-authors() {
     echo "${RED}No initials found." 1>&2;
     return 1
   fi
-  initialsList=("${(@)initialsList:#$ME}")
+  initialsList=("${(@)initialsList:#$ME}")  
   coAuthors=""
   [ ${#initialsList[@]} -eq 0 ] && return 0;
   coAuthors="${newline}"
@@ -130,12 +104,12 @@ function co-authors() {
 
 function wip() {
   co-authors ${*} || return 1;
-  git commit -S -m "[skip ci] `git rev-parse --abbrev-ref HEAD` - ${*}${coAuthors}"
+  git commit -S -m "[skip ci] `basename $(git symbolic-ref -q --short HEAD)` - ${*}${coAuthors}"
 }
 
 function commit() {
   co-authors ${*} || return 1;
-  git commit -S -m "[`git rev-parse --abbrev-ref HEAD`] - ${*}${coAuthors}"
+  git commit -S -m "[`basename $(git symbolic-ref -q --short HEAD)`] - ${*}${coAuthors}"
 }
 # end tt
 
@@ -209,9 +183,15 @@ export GPG_TTY=$(tty)
 
 DISABLE_AUTO_TITLE="true"
 
+if [ $ITERM_SESSION_ID ]; then
 precmd() {
-  # sets the tab title to current dir
-  echo -ne "\e]1;${PWD##*/}\a"
+  echo -ne "\033]0;${PWD##*/}\007"
 }
+fi
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 typeset -U PATH # removes duplicate path variables in zsh
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C $HOME/.asdf/installs/terraform/1.3.7/bin/terraform terraform
