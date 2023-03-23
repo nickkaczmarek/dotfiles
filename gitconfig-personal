@@ -1,7 +1,7 @@
 [user]
 	name = Nick Kaczmarek
 	email = nickkaczmarek@me.com
-	signingkey = 71032C8E9C94953E
+	signingkey = 9ABFE3533F61516A
 [commit]
 	gpgsign = true
 [gpg]

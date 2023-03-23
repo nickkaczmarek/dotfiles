@@ -33,21 +33,15 @@ setopt APPEND_HISTORY
 # adds commands as they are typed, not at shell exit
 setopt INC_APPEND_HISTORY
 
-export GEM_HOME=$HOME/.gem
-export PATH=$GEM_HOME/bin:$HOME/.mint/bin:$PATH
-
-export CLICOLOR=1
-export LSCOLORS=ExfxcxdxBxegedabagacad
-export EXA_COLORS="uu=2;33:da=0;37"
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 
 alias c="clear"
 alias sz="exec zsh"
 alias grep="grep --color=auto"
 alias path='echo -e ${PATH//:/\\n} | sort'
+alias mypath='echo -e ${MYPATH//:/\\n} | sort'
 alias funcs="functions"
 alias fnames="funcs + | fgrep -v iterm"
 alias shit="emulate -LR zsh"
@@ -63,7 +57,7 @@ alias bbdot="bbedit ~/Developer/dotfiles"
 alias ls="exa"
 alias l="ls -albhF --icons --git --no-permissions --color=always"
 # alias xcopen='xcopen -d'
-alias cat='bat'
+alias cat='bat --theme=Dracula'
 alias quitxcode="killall Xcode"
 
 function co-authors() {
@@ -87,7 +81,7 @@ function co-authors() {
     echo "${RED}No initials found." 1>&2;
     return 1
   fi
-  initialsList=("${(@)initialsList:#$ME}")  
+  initialsList=("${(@)initialsList:#$ME}")
   coAuthors=""
   [ ${#initialsList[@]} -eq 0 ] && return 0;
   coAuthors="${newline}"
@@ -180,6 +174,7 @@ if [ -f "${HOME}/.gpg-agent-info" ]; then
 fi
 
 export GPG_TTY=$(tty)
+gpgconf --launch gpg-agent
 
 DISABLE_AUTO_TITLE="true"
 
