@@ -1,11 +1,18 @@
-[includeIf "gitdir:~/Developer/"]
+[includeIf "gitdir:/Users/kerams/Developer/"]
     path = ~/.gitconfig-personal
-[includeIf "gitdir:~/Desktop/"]
+[includeIf "gitdir:/Users/kerams/Desktop/"]
     path = ~/.gitconfig-personal
-[includeIf "gitdir:~/Documents/"]
+[includeIf "gitdir:/Users/kerams/Documents/"]
     path = ~/.gitconfig-personal
 [includeIf "gitdir:~/work/"]
     path = ~/work/.gitconfig-work
+
+[includeIf "gitdir:/Users/nickka/Developer/"]
+    path = ~/.gitconfig-personal-work
+[includeIf "gitdir:/Users/nickka/Desktop/"]
+    path = ~/.gitconfig-personal-work
+[includeIf "gitdir:/Users/nickka/Documents/"]
+    path = ~/.gitconfig-personal-work
 
 [alias]
     co =                checkout

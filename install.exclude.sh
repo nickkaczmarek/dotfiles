@@ -16,6 +16,7 @@ link () {
             ln -sfnv "$BASEDIR/gitconfig" "$HOME/.gitconfig"
             ln -sfnv "$BASEDIR/gitconfig-personal" "$HOME/.gitconfig-personal"
             ln -sfnv "$BASEDIR/gitconfig-work" "$HOME/work/.gitconfig-work"
+            ln -sfnv "$BASEDIR/gitconfig-personal-work" "$HOME/.gitconfig-personal-work"
             ln -sfnv "$BASEDIR/vimrc" "$HOME/.vimrc"
             ln -sfnv "$BASEDIR/.macos" "$HOME/.macos"
             ln -sfnv "$BASEDIR/Brewfile" "$HOME/Brewfile"
