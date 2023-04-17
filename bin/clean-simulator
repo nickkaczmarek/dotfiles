@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+xcrun simctl listapps booted \
+| plutil -convert json -o - -- - \
+| jq -r '. | keys | .[] | select(. | startswith("com.apple") | not)' \
+| while read -r line; do xcrun simctl uninstall booted $line; done
