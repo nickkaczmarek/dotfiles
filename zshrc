@@ -63,10 +63,6 @@ alias quitxcode="killall Xcode"
 alias bbexport="defaults export com.barebones.bbedit ~/Desktop/MyBBEditPreferences.plist"
 alias bbimport="defaults import com.barebones.bbedit ~/Desktop/MyBBEditPreferences.plist"
 
-function delete_derived_data() {
-  rm -rf $DERIVED_DATA && afplay $ICLOUD/Documents/Sounds/BOTW_Fanfares_20180509/BOTW_Fanfare_SpiritOrb.wav
-}
-
 function co-authors() {
   local ME=`git config --global user.initials`
   # Set Initials here
