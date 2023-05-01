@@ -33,10 +33,6 @@ setopt APPEND_HISTORY
 # adds commands as they are typed, not at shell exit
 setopt INC_APPEND_HISTORY
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 alias c="clear"
 alias sz="exec zsh"
 alias grep="grep --color=auto"
@@ -51,12 +47,11 @@ alias kick-ssh-agent="killall ssh-agent; eval `ssh-agent`"
 alias de="cd ~/Developer"
 alias dec="cd ~/Library/Mobile\ Documents/com\~apple\~CloudDocs/Developer"
 alias work="cd ~/work"
-alias bbdot="bbedit ~/Developer/dotfiles"
+alias bbdot="bbedit $DOTFILES"
 
 # shamelessly stolen from tyler-keith-thompson
 alias ls="exa"
 alias l="ls -albhF --icons --git --no-permissions --color=always"
-# alias xcopen='xcopen -d'
 alias cat='bat --theme=Dracula'
 alias quitxcode="killall Xcode"
 
@@ -109,10 +104,6 @@ function commit() {
   git commit -S -m "[`basename $(git symbolic-ref -q --short HEAD)`] - ${*}${coAuthors}"
 }
 # end tt
-
-function dotfiles() {
-    cd ~/Developer/dotfiles
-}
 
 function startdemo() {
 osascript <<END
