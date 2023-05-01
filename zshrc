@@ -96,12 +96,18 @@ function co-authors() {
 
 function wip() {
   co-authors ${*} || return 1;
-  git commit -S -m "[skip ci] `basename $(git symbolic-ref -q --short HEAD)` - ${*}${coAuthors}"
+  git commit -S \
+  -m "${*}" \
+  -m "[skip ci] [`basename $(git symbolic-ref -q --short HEAD)`]" \
+  -m "${coAuthors}"
 }
 
 function commit() {
   co-authors ${*} || return 1;
-  git commit -S -m "[`basename $(git symbolic-ref -q --short HEAD)`] - ${*}${coAuthors}"
+  git commit -S \
+  -m "${*}" \
+  -m "[`basename $(git symbolic-ref -q --short HEAD)`]" \
+  -m "${coAuthors}"
 }
 # end tt
 
