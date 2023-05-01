@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-# play audio in the background (&) then disown the job
 function delete_derived_data() {
     rm -rf $DERIVED_DATA && \
-    afplay "$@" \
-    & disown
+    afplay --volume 0.25 "$@"
 }
 
 audio_file="$ICLOUD/Documents/Sounds/BOTW_Fanfares_20180509/BOTW_Fanfare_SpiritOrb.wav"
