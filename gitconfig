@@ -38,6 +38,7 @@
     pl =                pretty-log
     log-no-merges =     log --no-merges --first-parent
     pl-no-merges =      pl --no-merges --first-parent
+    reset-to-server =   "!$HOME/Developer/dotfiles/git/reset-to-server"
 [pull]
     rebase = true
 [fetch]

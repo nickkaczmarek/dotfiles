@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# reset current branch to what is on server
+git reset --hard origin/$(git symbolic-ref -q --short HEAD)
