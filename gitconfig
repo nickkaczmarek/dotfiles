@@ -39,8 +39,10 @@
     log-no-merges =     log --no-merges --first-parent
     pl-no-merges =      pl --no-merges --first-parent
     reset-to-server =   "!$HOME/Developer/dotfiles/git/reset-to-server"
+    ui =                "!$DOTBIN/git-ui.zsh"
+    delete-remote =     push origin --delete
 [pull]
-    rebase = true
+    rebase = false
 [fetch]
     prune = true
 [init]
@@ -61,11 +63,22 @@
     line-numbers = true
 [merge]
     conflictstyle = diff3
+	tool = Kaleidoscope
 [diff]
     colorMoved = zebra
-    tool = vscode
+	tool = Kaleidoscope
 [pager]
     branch = false
 [user]
     name = Nick Kaczmarek
     initials = nk
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
+	trustExitCode = true
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
+[mergetool]
+	prompt = false

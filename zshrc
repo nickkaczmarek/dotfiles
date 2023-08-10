@@ -53,7 +53,9 @@ alias bbdot="bbedit $DOTFILES"
 alias ls="exa"
 alias l="ls -albhF --icons --git --no-permissions --color=always"
 alias cat='bat --theme=Dracula'
-alias quitxcode="killall Xcode"
+
+alias xcquit="killall Xcode"
+alias xcopen="open -a /Applications/Xcode.app . -F"
 
 alias bbexport="defaults export com.barebones.bbedit ~/Desktop/MyBBEditPreferences.plist"
 alias bbimport="defaults import com.barebones.bbedit ~/Desktop/MyBBEditPreferences.plist"

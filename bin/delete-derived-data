@@ -2,9 +2,7 @@
 
 function delete_derived_data() {
     rm -rf $DERIVED_DATA && \
-    afplay --volume 0.25 "$@"
+    say "[[volm 0.4]] ATTENTION NICK: derived data is deleted"
 }
 
-audio_file="$ICLOUD/Documents/Sounds/BOTW_Fanfares_20180509/BOTW_Fanfare_SpiritOrb.wav"
-
-delete_derived_data "${audio_file}"
+delete_derived_data
