@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 function delete_derived_data() {
-    rm -rf $DERIVED_DATA && \
+    if [ -d $DERIVED_DATA ]
+    then
+        rm -rf $DERIVED_DATA
+    fi
     say "[[volm 0.4]] ATTENTION NICK: derived data is deleted"
 }
 
