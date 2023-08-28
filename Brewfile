@@ -1,9 +1,7 @@
-tap "homebrew/cask"
 tap "buo/cask-upgrade"
 brew "mas"
 
 tap "homebrew/bundle"
-tap "homebrew/core"
 tap "robotsandpencils/made"
 tap "homebrew/cask-fonts"
 # work
@@ -44,7 +42,6 @@ mas "Drafts", id: 1435957248
 mas "DuckDuckGo Privacy Essentials", id: 1482920575
 mas "Front and Center", id: 1493996622
 mas "Hush", id: 1544743900
-mas "Home Assistant", id: 1099568401
 mas "JSONPeep", id: 1458969831
 mas "Keynote", id: 409183694
 mas "Magic Lasso", id: 1198047227
