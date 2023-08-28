@@ -55,10 +55,43 @@ alias l="ls -albhF --icons --git --no-permissions --color=always"
 alias cat='bat --theme=Dracula'
 
 alias xcquit="killall Xcode"
-alias xcopen="open -a /Applications/Xcode.app . -F"
 
 alias bbexport="defaults export com.barebones.bbedit ~/Desktop/MyBBEditPreferences.plist"
 alias bbimport="defaults import com.barebones.bbedit ~/Desktop/MyBBEditPreferences.plist"
+alias dotfiles="cd $DOTFILES"
+
+alias zil="cd work/ZillowMap"
+
+function xcopen() {
+    local xcode_version="/Applications/Xcode.app"
+    while test $# -gt 0; do
+        case "$1" in
+            -h|--help)
+                echo "xcopen - open Xcode"
+                echo " "
+                echo "xcopen [options] [directory]"
+                echo " "
+                echo "options:"
+                echo "-h, --help        show brief help"
+                echo "--beta            open latest Xcode beta"
+                echo " "
+                echo "directory:"
+                echo "Opens in current directory or you can supply one"
+                return 0
+                ;;
+            --beta)
+                xcode_version="/Applications/$(ls -a /Applications | rg Xcode.+Beta | tail -1)"
+                shift
+                break
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
+    open -a $xcode_version ${1:-"."} -F
+}
 
 function co-authors() {
   local ME=`git config --global user.initials`
