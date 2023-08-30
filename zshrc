@@ -63,7 +63,8 @@ alias dotfiles="cd $DOTFILES"
 alias zil="cd work/ZillowMap"
 
 function xcopen() {
-    local xcode_version="/Applications/Xcode.app"
+    # use xcode-select to return whatever Xcode command line tools are defaulted
+    local xcode_version="$(xcode-select -p | rg '(.+Xcode.+\.app)' -or '$1')"
     while test $# -gt 0; do
         case "$1" in
             -h|--help)
