@@ -4,7 +4,8 @@ protected_branch='main'
 
 if read local_ref local_sha remote_ref remote_sha; then
     if [[ "$remote_ref" == *"$protected_branch"* ]]; then
-        say "WARNING WILL ROGER!"
+        # make some noise
+        tput bel
         echo -en "\033[1;33mYou're about to push to ${protected_branch}, is that what you intended? [y|n] \033[0m"
         echo -en "\033[1m"
         read -n 1 -r < /dev/tty
