@@ -1,6 +1,6 @@
 #!/bin/bash
 
-protected_branch='$(git rev-parse --abbrev-ref origin/HEAD | sed 's/origin\///')'
+protected_branch=$(git rev-parse --abbrev-ref origin/HEAD | sed 's/origin\///')
 
 if read local_ref local_sha remote_ref remote_sha; then
     if [[ "$remote_ref" == *"$protected_branch"* ]]; then
