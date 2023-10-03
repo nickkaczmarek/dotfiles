@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+function spinner() {
+  spin=("-" "\\" "|" "/")
+
+  while true
+  do
+    for i in "${spin[@]}"
+    do
+#           echo -ne "\b$i "
+          printf "\b$i"
+          # printf '%s\r' "$(date +%H:%M:%S)"
+          sleep 0.1
+    done
+  done
+}
