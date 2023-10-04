@@ -7,6 +7,11 @@ setopt PROMPT_SUBST
 # homebrew only needs to have this done if we're not on intel architecture
 arch=$(/usr/bin/arch)
 
+autoload -Uz compinit && compinit
+
+# enable case insensitive tab completion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
 if [[ "$arch" -eq "arm64" ]]; then
     if [[ $(command -v brew) ]]; then
     else
