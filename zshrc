@@ -65,7 +65,7 @@ alias bbexport="defaults export com.barebones.bbedit ~/Desktop/MyBBEditPreferenc
 alias bbimport="defaults import com.barebones.bbedit ~/Desktop/MyBBEditPreferences.plist"
 alias dotfiles="cd $DOTFILES"
 
-alias zil="cd work/ZillowMap"
+alias zil="cd ~/work/ZillowMap"
 
 function xcopen() {
     # use xcode-select to return whatever Xcode command line tools are defaulted
