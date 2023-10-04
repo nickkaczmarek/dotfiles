@@ -68,35 +68,28 @@ alias dotfiles="cd $DOTFILES"
 alias zil="cd ~/work/ZillowMap"
 
 function xcopen() {
-    # use xcode-select to return whatever Xcode command line tools are defaulted
-    local xcode_version="$(xcode-select -p | rg '(.+Xcode.+\.app)' -or '$1')"
-    while test $# -gt 0; do
-        case "$1" in
-            -h|--help)
-                echo "xcopen - open Xcode"
-                echo " "
-                echo "xcopen [options] [directory]"
-                echo " "
-                echo "options:"
-                echo "-h, --help        show brief help"
-                echo "--beta            open latest Xcode beta"
-                echo " "
-                echo "directory:"
-                echo "Opens in current directory or you can supply one"
-                return 0
-                ;;
-            --beta)
-                xcode_version="/Applications/$(ls -a /Applications | rg Xcode.+Beta | tail -1)"
-                shift
-                break
-                ;;
-            *)
-                break
-                ;;
-        esac
-    done
-
-    open -a $xcode_version ${1:-"."} -F
+	local xcode_version="$(xcode-select -p | rg '(.+Xcode.+\.app|.+Xcode\.app)' -or '$1')"
+	while test $# -gt 0
+	do
+		case "$1" in
+			(-h | --help) echo "xcopen - open Xcode"
+				echo " "
+				echo "xcopen [options] [directory]"
+				echo " "
+				echo "options:"
+				echo "-h, --help        show brief help"
+				echo "--beta            open latest Xcode beta"
+				echo " "
+				echo "directory:"
+				echo "Opens in current directory or you can supply one"
+				return 0 ;;
+			(--beta) xcode_version="/Applications/$(ls -a /Applications | rg Xcode.+Beta | tail -1)"
+				shift
+				break ;;
+			(*) break ;;
+		esac
+	done
+	open -a $xcode_version ${1:-"."} -F
 }
 
 function co-authors() {
