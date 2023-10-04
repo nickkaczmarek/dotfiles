@@ -221,3 +221,11 @@ typeset -U PATH # removes duplicate path variables in zsh
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C $HOME/.asdf/installs/terraform/1.3.7/bin/terraform terraform
+
+# autoload zsh functions from zshfunctions folder
+typeset -U fpath
+my_functions=$DOTFILES/zshfunctions
+if [[ -z ${fpath[(r)$my_functions]} ]] ; then
+    fpath=($my_functions $fpath)
+    autoload -Uz ${my_functions}/*(:t)
+fi

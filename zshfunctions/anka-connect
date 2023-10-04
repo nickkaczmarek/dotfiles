@@ -1,0 +1,5 @@
+function anka-connect() {
+    ip=$(print $1 | sed 's/-/\./g')
+    ssh -i ~/.ssh/anka-zillow-velocity.pem ec2-user@$ip
+}
+
