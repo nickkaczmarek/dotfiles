@@ -22,18 +22,25 @@ brew "wget"
 brew "robotsandpencils/made/xcodes"
 brew "diff-so-fancy"
 brew "git-delta"
-brew "mint"
-cask "apparency"
-cask "font-fira-code"
-cask "font-meslo-lg-nerd-font"
-cask "postman"
+brew "fzf"
+
+cask "xcodes"
 cask "rectangle"
-cask "suspicious-package"
 cask "visual-studio-code"
 cask "keycastr"
-cask "xcodes"
+cask "postman"
+
+# Mothers Ruin software
+cask "apparency"
+cask "suspicious-package"
+cask "archaeology"
+
+# fonts
+cask "font-fira-code"
+cask "font-meslo-lg-nerd-font"
 # quit apple music from opening
 cask "overkill"
+
 mas "BBEdit", id: 404009241
 mas "Color Picker", id: 1545870783
 mas "DaisyDisk", id: 411643860
@@ -47,7 +54,6 @@ mas "Keynote", id: 409183694
 mas "Magic Lasso", id: 1198047227
 mas "PiPifier", id: 1160374471
 mas "Refined GitHub", id: 1519867270
-mas "Tweetbot", id: 1384080005
 mas "Userscripts", id: 1463298887
 mas "UTC Time", id: 1538245904
 mas "Zavala", id: 1546457750

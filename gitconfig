@@ -41,6 +41,7 @@
     reset-to-server =   "!$HOME/Developer/dotfiles/git/reset-to-server"
     ui =                "!$DOTBIN/git-ui.zsh"
     delete-remote =     push origin --delete
+    fco =               "!$DOTBIN/fuzzy-checkout"
 [pull]
     rebase = false
 [fetch]
