@@ -174,9 +174,6 @@ then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
   ## asdf
 	source /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-  autoload -Uz compinit
-  compinit
 fi
 
 setopt PROMPT_SUBST
