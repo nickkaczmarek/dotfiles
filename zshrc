@@ -68,28 +68,28 @@ alias dotfiles="cd $DOTFILES"
 alias zil="cd ~/work/ZillowMap"
 
 function xcopen() {
-	local xcode_version="$(xcode-select -p | rg '(.+Xcode.+\.app|.+Xcode\.app)' -or '$1')"
-	while test $# -gt 0
-	do
-		case "$1" in
-			(-h | --help) echo "xcopen - open Xcode"
-				echo " "
-				echo "xcopen [options] [directory]"
-				echo " "
-				echo "options:"
-				echo "-h, --help        show brief help"
-				echo "--beta            open latest Xcode beta"
-				echo " "
-				echo "directory:"
-				echo "Opens in current directory or you can supply one"
-				return 0 ;;
-			(--beta) xcode_version="/Applications/$(ls -a /Applications | rg Xcode.+Beta | tail -1)"
-				shift
-				break ;;
-			(*) break ;;
-		esac
-	done
-	open -a $xcode_version ${1:-"."} -F
+  local xcode_version="$(xcode-select -p | rg '(.+Xcode.+\.app|.+Xcode\.app)' -or '$1')"
+  while test $# -gt 0
+  do
+    case "$1" in
+      (-h | --help) echo "xcopen - open Xcode"
+        echo " "
+        echo "xcopen [options] [directory]"
+        echo " "
+        echo "options:"
+        echo "-h, --help        show brief help"
+        echo "--beta            open latest Xcode beta"
+        echo " "
+        echo "directory:"
+        echo "Opens in current directory or you can supply one"
+        return 0 ;;
+      (--beta) xcode_version="/Applications/$(ls -a /Applications | rg Xcode.+Beta | tail -1)"
+        shift
+        break ;;
+      (*) break ;;
+    esac
+  done
+  open -a $xcode_version ${1:-"."} -F
 }
 
 function co-authors() {
@@ -148,10 +148,10 @@ function commit() {
 function startdemo() {
 osascript <<END
 tell application "System Events"
-	set autohide menu bar of dock preferences to true
-	set dockhidestate to autohide of dock preferences
-	tell dock preferences to set autohide to true
-	do shell script "defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+  set autohide menu bar of dock preferences to true
+  set dockhidestate to autohide of dock preferences
+  tell dock preferences to set autohide to true
+  do shell script "defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 end tell
 END
 }
@@ -159,10 +159,10 @@ END
 function enddemo() {
 osascript <<END
 tell application "System Events"
-	set autohide menu bar of dock preferences to false
-	set dockhidestate to autohide of dock preferences
-	tell dock preferences to set autohide to false
-	do shell script "defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+  set autohide menu bar of dock preferences to false
+  set dockhidestate to autohide of dock preferences
+  tell dock preferences to set autohide to false
+  do shell script "defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 end tell
 END
 }
@@ -173,7 +173,7 @@ if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
   ## asdf
-	source /opt/homebrew/opt/asdf/libexec/asdf.sh
+  source /opt/homebrew/opt/asdf/libexec/asdf.sh
 fi
 
 setopt PROMPT_SUBST
