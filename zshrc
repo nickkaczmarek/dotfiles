@@ -67,6 +67,10 @@ alias dotfiles="cd $DOTFILES"
 
 alias zil="cd ~/work/ZillowMap"
 
+function notes() {
+    bbedit ~/Documents/work/notes/$(date -I).md
+}
+
 function xcopen() {
   local xcode_version="$(xcode-select -p | rg '(.+Xcode.+\.app|.+Xcode\.app)' -or '$1')"
   while test $# -gt 0
