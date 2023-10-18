@@ -68,7 +68,16 @@ alias dotfiles="cd $DOTFILES"
 alias zil="cd ~/work/ZillowMap"
 
 function notes() {
+    bbedit ~/Documents/work/notes
+}
+
+function today() {
     bbedit ~/Documents/work/notes/$(date -I).md
+}
+
+function yesterday() {
+    yesterday=$(date -v-1d +"%Y-%m-%d")
+    bbedit ~/Documents/work/notes/${yesterday}.md
 }
 
 function xcopen() {
