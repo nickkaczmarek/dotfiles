@@ -1,3 +1,7 @@
+python3 from powerline.vim import setup as powerline_setup
+python3 powerline_setup()
+python3 del powerline_setup
+
 set nocompatible              " be iMproved, required
 filetype off                  " required
 set path+=**
@@ -14,17 +18,11 @@ set incsearch     " incremental searching
 set hlsearch      " highlighting for search
 
 " Theme
- syntax enable
- set background=dark    " Setting dark mode
+syntax enable
+set background=dark    " Setting dark mode
 " for vim 7
- set t_Co=256
-
-" for vim 8
- if (has("termguicolors"))
-  set termguicolors
- endif
-
-"colorscheme gruvbox
+set t_Co=256
+colorscheme xcode
 
 set laststatus=2
 set number numberwidth=1
