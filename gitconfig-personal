@@ -3,5 +3,7 @@
 	signingkey = 9ABFE3533F61516A
 [commit]
 	gpgsign = true
+[tag]
+    gpgsign = true
 [gpg]
 	program = /opt/homebrew/bin/gpg
