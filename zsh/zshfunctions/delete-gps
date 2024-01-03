@@ -1,0 +1,8 @@
+function delete-gps() {
+  if command -v exiftool &> /dev/null
+  then
+    exiftool "-gps*=" $@
+  else
+    echo "exiftool not found"
+  fi
+}
