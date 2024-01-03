@@ -11,6 +11,8 @@ autoload -Uz compinit && compinit
 
 # enable case insensitive tab completion
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+fpath=(/usr/local/share/zsh-completions $fpath)
+source $DOTFILES/zsh-completions/_arduino_cli
 
 if [[ "$arch" -eq "arm64" ]]; then
     if [[ $(command -v brew) ]]; then
@@ -67,6 +69,8 @@ alias dotfiles="cd $DOTFILES"
 
 alias zil="cd ~/work/ZillowMap"
 
+alias vim="nvim"
+alias vi="nvim"
 function notes() {
     bbedit ~/Documents/work/notes
 }

@@ -1,18 +1,18 @@
-[includeIf "gitdir:/Users/kerams/Developer/"]
-    path = ~/.gitconfig-personal
-[includeIf "gitdir:/Users/kerams/Desktop/"]
-    path = ~/.gitconfig-personal
-[includeIf "gitdir:/Users/kerams/Documents/"]
-    path = ~/.gitconfig-personal
-[includeIf "gitdir:~/work/"]
-    path = ~/work/.gitconfig-work
-
-[includeIf "gitdir:/Users/nickka/Developer/"]
-    path = ~/.gitconfig-personal-work
-[includeIf "gitdir:/Users/nickka/Desktop/"]
-    path = ~/.gitconfig-personal-work
-[includeIf "gitdir:/Users/nickka/Documents/"]
-    path = ~/.gitconfig-personal-work
+# [includeIf "gitdir:/Users/kerams/Developer/"]
+#     path = ~/.gitconfig-personal
+# [includeIf "gitdir:/Users/kerams/Desktop/"]
+#     path = ~/.gitconfig-personal
+# [includeIf "gitdir:/Users/kerams/Documents/"]
+#     path = ~/.gitconfig-personal
+# [includeIf "gitdir:~/work/"]
+#     path = ~/work/.gitconfig-work
+#
+# [includeIf "gitdir:/Users/nickka/Developer/"]
+#     path = ~/.gitconfig-personal-work
+# [includeIf "gitdir:/Users/nickka/Desktop/"]
+#     path = ~/.gitconfig-personal-work
+# [includeIf "gitdir:/Users/nickka/Documents/"]
+#     path = ~/.gitconfig-personal-work
 
 [alias]
     co =                checkout
@@ -52,6 +52,17 @@
     autosquash = true
 [branch]
     sort = committerdate
+[user]
+    name = Nick Kaczmarek
+    initials = nk
+    email = nickkaczmarek@me.com
+    signingkey = 9ABFE3533F61516A
+[commit]
+	gpgsign = true
+[tag]
+    gpgsign = true
+[gpg]
+	program = /opt/homebrew/bin/gpg
 # git-delta
 [core]
     pager = delta
@@ -70,9 +81,6 @@
 	tool = Kaleidoscope
 [pager]
     branch = false
-[user]
-    name = Nick Kaczmarek
-    initials = nk
 [difftool "Kaleidoscope"]
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [difftool]
