@@ -203,7 +203,7 @@ GIT_PS1_SHOWUNTRACKEDFILES="auto"
 GIT_PS1_SHOWCOLORHINTS="auto"
 GIT_PS1_DESCRIBE_STYLE="branch"
 
-PROMPT='%(?.%B%F{010}√.%B%F{009}?%?%f) %F{014}%1~%f%F{013}$(__git_ps1)%f %F{011}%(!.||>.|>)%f%b '
+PROMPT='%(?.%B%F{010}√.%B%F{009}?%?%f) %F{014}%1~%f%F{013}$(__git_ps1)%f %F{011}%(!.|►.►)%f%b '
 RPROMPT='%B%F{012}%*%f%b'
 
 # Search up and down through history
