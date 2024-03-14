@@ -1,0 +1,5 @@
+ffmpeg \
+    -display_rotation $1 \
+    -i $2 \
+    -codec copy \
+    $3
