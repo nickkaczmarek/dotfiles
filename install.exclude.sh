@@ -9,13 +9,11 @@ link () {
         case $SHELL in
         */zsh)
             ln -sfnv "$BASEDIR/zshrc" "$HOME/.zshrc"
-            ln -sfnv "$BASEDIR/zlogin" "$HOME/.zlogin"
-            ln -sfnv "$BASEDIR/zlogout" "$HOME/.zlogout"
             ln -sfnv "$BASEDIR/zshenv" "$HOME/.zshenv"
             ln -sfnv "$BASEDIR/git-prompt" "$HOME/.git-prompt.sh"
             ln -sfnv "$BASEDIR/gitconfig" "$HOME/.gitconfig"
             ln -sfnv "$BASEDIR/gitconfig-personal" "$HOME/.gitconfig-personal"
-            ln -sfnv "$BASEDIR/gitconfig-work" "$HOME/work/.gitconfig-work"
+            ln -sfnv "$BASEDIR/gitconfig-work" "$HOME/.gitconfig-work"
             ln -sfnv "$BASEDIR/gitconfig-personal-work" "$HOME/.gitconfig-personal-work"
             ln -sfnv "$BASEDIR/vimrc" "$HOME/.vimrc"
             ln -sfnv "$BASEDIR/gvimrc" "$HOME/.gvimrc"
@@ -24,6 +22,7 @@ link () {
             ln -sfnv "$BASEDIR/gitpairs" "$HOME/.gitpairs"
             ln -sFnv "$BASEDIR/vim" "$HOME/.vim"
             ln -sFnv "$BASEDIR/.p10k.zsh" "$HOME/.p10k.zsh"
+            ln -sFnv "$BASEDIR/.gitmessage" "$HOME/.gitmessage"
             ;;
         esac
         echo "Symlinking complete"

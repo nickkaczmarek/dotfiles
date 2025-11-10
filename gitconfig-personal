@@ -1,7 +1,3 @@
 [user]
-	email = nickkaczmarek@me.com
-	signingkey = 9ABFE3533F61516A
-[commit]
-	gpgsign = true
-[gpg]
-	program = /opt/homebrew/bin/gpg
+    email = nickkaczmarek@me.com
+    signingkey = 9ABFE3533F61516A

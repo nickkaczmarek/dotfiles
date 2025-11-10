@@ -1,7 +1,3 @@
 [user]
     email = nickka@zillowgroup.com
-    signingkey = 5853984B70BF240D
-[commit]
-    gpgsign = true
-[gpg]
-    program = /opt/homebrew/bin/gpg
+    signingkey = E959FD60A2B3EAF954AACF705853984B70BF240D
