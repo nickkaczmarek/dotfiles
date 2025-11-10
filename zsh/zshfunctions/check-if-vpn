@@ -1,0 +1,8 @@
+vpnScript="/opt/cisco/secureclient/bin/vpn"
+
+if [[ "{$($vpnScript status)[0]}" != *"Disconnected"* ]]; then
+    return 0
+else
+    echo "You are not connected to VPN"
+    return 1
+fi

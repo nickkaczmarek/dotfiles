@@ -1,0 +1,41 @@
+# Show help text if no arguments or -h/--help is passed
+show_help() {
+    cat << 'EOF'
+codesearch - Search code with formatted output
+
+USAGE:
+    codesearch <search_term>
+
+DESCRIPTION:
+    This script uses ripgrep to search through code and formats the output
+    to be more readable. Each match will be displayed as:
+        filename:line_number
+        matched_content
+
+    The output preserves:
+    • ANSI colors from ripgrep
+    • Colons within the matched content
+    • Proper alignment (no leading whitespace)
+
+EXAMPLES:
+    codesearch SomeType
+    codesearch "function main"
+    codesearch "class.*Controller"
+
+The script uses ripgrep (rg) internally with the following options:
+    --no-heading     : Don't group matches by file
+    --line-number    : Show line numbers
+    --color always   : Preserve color output
+
+EOF
+}
+
+search_code() {
+    if [ -z "$1" ]; then
+        echo "Usage: $0 <search_term>"
+        return 1
+    fi
+
+    rg --no-heading --line-number --color always "$1" | \
+        GREP_COLORS="mt=01;31" perl -pe 's/^(.*?:.*?):\s*(.*)/\1\n$2/'
+}

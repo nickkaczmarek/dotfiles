@@ -23,6 +23,7 @@ link () {
             ln -sfnv "$BASEDIR/Brewfile" "$HOME/Brewfile"
             ln -sfnv "$BASEDIR/gitpairs" "$HOME/.gitpairs"
             ln -sFnv "$BASEDIR/vim" "$HOME/.vim"
+            ln -sFnv "$BASEDIR/.p10k.zsh" "$HOME/.p10k.zsh"
             ;;
         esac
         echo "Symlinking complete"

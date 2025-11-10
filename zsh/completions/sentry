@@ -1,0 +1,4061 @@
+#compdef sentry-cli
+
+autoload -U is-at-least
+
+_sentry-cli() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" \
+'--url=[Fully qualified URL to the Sentry server.{n}\[default\: https\://sentry.io/\]]:URL: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--api-key=[Use the given Sentry API key.]:API_KEY: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'-V[Print version]' \
+'--version[Print version]' \
+":: :_sentry-cli_commands" \
+"*::: :->sentry-cli" \
+&& ret=0
+    case $state in
+    (sentry-cli)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-command-$line[1]:"
+        case $line[1] in
+            (completions)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::shell -- The shell to print completions for.:(bash elvish fish powershell zsh)' \
+&& ret=0
+;;
+(bash-hook)
+_arguments "${_arguments_options[@]}" \
+'--cli=[Explicitly set/override the sentry-cli command]:CMD: ' \
+'--traceback=[]:PATH: ' \
+'*--tag=[Add tags (key\:value) to the event.]:KEY:VALUE: ' \
+'--release=[Define release version for the event.]:RELEASE: ' \
+'--log=[]:PATH: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--no-exit[Do not turn on -e (exit immediately) flag automatically]' \
+'--no-environ[Do not send environment variables along]' \
+'--send-event[]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(debug-files)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__debug-files_commands" \
+"*::: :->debug-files" \
+&& ret=0
+
+    case $state in
+    (debug-files)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-debug-files-command-$line[1]:"
+        case $line[1] in
+            (bundle-sources)
+_arguments "${_arguments_options[@]}" \
+'-o+[The path to the output folder.  If not provided the file is placed next to the input file.]:PATH: ' \
+'--output=[The path to the output folder.  If not provided the file is placed next to the input file.]:PATH: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths -- The path to the input debug info files.:' \
+&& ret=0
+;;
+(check)
+_arguments "${_arguments_options[@]}" \
+'-t+[Explicitly set the type of the debug info file. This should not be needed as files are auto detected.]:TYPE:(dsym elf pe pdb portablepdb sourcebundle breakpad proguard wasm jvm)' \
+'--type=[Explicitly set the type of the debug info file. This should not be needed as files are auto detected.]:TYPE:(dsym elf pe pdb portablepdb sourcebundle breakpad proguard wasm jvm)' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--json[Format outputs as JSON.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':path -- The path to the debug info file.:' \
+&& ret=0
+;;
+(bundle-jvm)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'--output=[The path to the output folder.]:PATH:_files' \
+'--debug-id=[Debug ID (UUID) to use for the source bundle.]:UUID: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':path -- The directory containing source files to bundle.:_files' \
+&& ret=0
+;;
+(find)
+_arguments "${_arguments_options[@]}" \
+'*-t+[Only consider debug information files of the given type.  By default all types are considered.]:TYPE:(dsym elf pe pdb portablepdb sourcebundle breakpad proguard wasm jvm)' \
+'*--type=[Only consider debug information files of the given type.  By default all types are considered.]:TYPE:(dsym elf pe pdb portablepdb sourcebundle breakpad proguard wasm jvm)' \
+'*-p+[Add a path to search recursively for debug info files.]:PATH: ' \
+'*--path=[Add a path to search recursively for debug info files.]:PATH: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--no-well-known[Do not look for debug symbols in well known locations.]' \
+'--no-cwd[Do not look for debug symbols in the current working directory.]' \
+'--json[Format outputs as JSON.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::ids -- The debug identifiers of the files to search for.:' \
+&& ret=0
+;;
+(print-sources)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':path -- The path to the debug info file.:' \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'*-t+[Only consider debug information files of the given type.  By default, all types are considered.]:TYPE:(bcsymbolmap breakpad dsym elf jvm pdb pe portablepdb sourcebundle wasm)' \
+'*--type=[Only consider debug information files of the given type.  By default, all types are considered.]:TYPE:(bcsymbolmap breakpad dsym elf jvm pdb pe portablepdb sourcebundle wasm)' \
+'*--id=[Search for specific debug identifiers.]:ID: ' \
+'--symbol-maps=[Optional path to BCSymbolMap files which are used to resolve hidden symbols in dSYM files downloaded from iTunes Connect.  This requires the dsymutil tool to be available.  This should not be used when using the App Store Connect integration, the .bcsymbolmap files needed for the integration are uploaded without this option if they are found in the PATH searched for symbol files.]:PATH: ' \
+'--info-plist=[Optional path to the Info.plist.{n}We will try to find this automatically if run from Xcode.  Providing this information will associate the debug symbols with a specific ITC application and build in Sentry.  Note that if you provide the plist explicitly it must already be processed.]:PATH: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.]:SECS: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--no-unwind[Do not scan for stack unwinding information. Specify this flag for builds with disabled FPO, or when stackwalking occurs on the device. This usually excludes executables and dynamic libraries. They might still be uploaded, if they contain additional processable information (see other flags).]' \
+'(--no-unwind)--no-debug[Do not scan for debugging information. This will usually exclude debug companion files. They might still be uploaded, if they contain additional processable information (see other flags).]' \
+'--no-sources[Do not scan for source information. This will usually exclude source bundle files. They might still be uploaded, if they contain additional processable information (see other flags).]' \
+'--require-all[Errors if not all identifiers specified with --id could be found.]' \
+'--derived-data[Search for debug symbols in Xcode'\''s derived data.]' \
+'--no-zips[Do not search in ZIP files.]' \
+'--no-reprocessing[Do not trigger reprocessing after uploading.]' \
+'--no-upload[Disable the actual upload.{n}This runs all steps for the processing but does not trigger the upload (this also automatically disables reprocessing).  This is useful if you just want to verify the setup or skip the upload in tests.]' \
+'--force-foreground[Wait for the process to finish.{n}By default, the upload process will detach and continue in the background when triggered from Xcode.  When an error happens, a dialog is shown.  If this parameter is passed Xcode will wait for the process to finish before the build finishes and output will be shown in the Xcode build output.]' \
+'--include-sources[Include sources from the local file system and upload them as source bundles.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.]' \
+'--upload-symbol-maps[]' \
+'--il2cpp-mapping[Compute il2cpp line mappings and upload them along with sources.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths -- A path to search recursively for symbol files.:' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__debug-files__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-debug-files-help-command-$line[1]:"
+        case $line[1] in
+            (bundle-sources)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(check)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(bundle-jvm)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(find)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(print-sources)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(deploys)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__deploys_commands" \
+"*::: :->deploys" \
+&& ret=0
+
+    case $state in
+    (deploys)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-deploys-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-e+[Set the environment for this release.{n}This argument is required.  Values that make sense here would be '\''production'\'' or '\''staging'\''.]:ENV: ' \
+'--env=[Set the environment for this release.{n}This argument is required.  Values that make sense here would be '\''production'\'' or '\''staging'\''.]:ENV: ' \
+'-n+[Optional human readable name for this deployment.]:NAME: ' \
+'--name=[Optional human readable name for this deployment.]:NAME: ' \
+'-u+[Optional URL that points to the deployment.]:URL: ' \
+'--url=[Optional URL that points to the deployment.]:URL: ' \
+'--started=[Optional unix timestamp when the deployment started.]:TIMESTAMP: ' \
+'--finished=[Optional unix timestamp when the deployment finished.]:TIMESTAMP: ' \
+'-t+[Optional deployment duration in seconds.{n}This can be specified alternatively to \`--started\` and \`--finished\`.]:SECONDS: ' \
+'--time=[Optional deployment duration in seconds.{n}This can be specified alternatively to \`--started\` and \`--finished\`.]:SECONDS: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__deploys__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-deploys-help-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(events)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__events_commands" \
+"*::: :->events" \
+&& ret=0
+
+    case $state in
+    (events)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-events-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+'--max-rows=[Maximum number of rows to print.]:MAX_ROWS: ' \
+'--pages=[Maximum number of pages to fetch (100 events/page).]:PAGES: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-U[Display the Users column.]' \
+'--show-user[Display the Users column.]' \
+'-T[Display the Tags column.]' \
+'--show-tags[Display the Tags column.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__events__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-events-help-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(files)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__files_commands" \
+"*::: :->files" \
+&& ret=0
+
+    case $state in
+    (files)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-files-command-$line[1]:"
+        case $line[1] in
+            (upload-sourcemaps)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-u+[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-prefix=[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-suffix=[The URL suffix to append to all filenames.]:SUFFIX: ' \
+'-d+[Optional distribution identifier for the sourcemaps.]:DISTRIBUTION: ' \
+'--dist=[Optional distribution identifier for the sourcemaps.]:DISTRIBUTION: ' \
+'--note=[Adds an optional note to the uploaded artifact bundle.]:NOTE: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds.]:SECS: ' \
+'(--no-rewrite)*--strip-prefix=[Strips the given prefix from all sources references inside the upload sourcemaps (paths used within the sourcemap content, to map minified code to it'\''s original source). Only sources that start with the given prefix will be stripped.{n}This will not modify the uploaded sources paths. To do that, point the upload or upload-sourcemaps command to a more precise directory instead.]:PREFIX: ' \
+'*-i+[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'*--ignore=[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'-I+[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'--ignore-file=[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'()--bundle=[Path to the application bundle (indexed, file, or regular)]:BUNDLE: ' \
+'()--bundle-sourcemap=[Path to the bundle sourcemap]:BUNDLE_SOURCEMAP: ' \
+'*-x+[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.{n}Defaults to\: \`--ext=js --ext=map --ext=jsbundle --ext=bundle\`]:EXT: ' \
+'*--ext=[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.{n}Defaults to\: \`--ext=js --ext=map --ext=jsbundle --ext=bundle\`]:EXT: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--validate[Enable basic sourcemap validation.]' \
+'--decompress[Enable files gzip decompression prior to upload.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files.]' \
+'--no-sourcemap-reference[Disable emitting of automatic sourcemap references.{n}By default the tool will store a '\''Sourcemap'\'' header with minified files so that sourcemaps are located automatically if the tool can detect a link. If this causes issues it can be disabled.]' \
+'--debug-id-reference[Enable emitting of automatic debug id references.{n}By default Debug ID reference has to be present both in the source and the related sourcemap. But in cases of binary bundles, the tool can'\''t verify presence of the Debug ID. This flag allows use of Debug ID from the linked sourcemap.]' \
+'--no-rewrite[Disables rewriting of matching sourcemaps. By default the tool will rewrite sources, so that indexed maps are flattened and missing sources are inlined if possible.{n}This fundamentally changes the upload process to be based on sourcemaps and minified files exclusively and comes in handy for setups like react-native that generate sourcemaps that would otherwise not work for sentry.]' \
+'(--no-rewrite)--strip-common-prefix[Similar to --strip-prefix but strips the most common prefix on all sources references.]' \
+'--no-dedupe[Skip artifacts deduplication prior to uploading. This will force all artifacts to be uploaded, no matter whether they are already present on the server.]' \
+'--use-artifact-bundle[Use new Artifact Bundles upload, that enables the use of Debug IDs for Source Maps discovery.]' \
+'--rewrite[]' \
+'-v[]' \
+'--verbose[]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths -- The files to upload.:' \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-A[Delete all files.]' \
+'--all[Delete all files.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::names -- Filenames to delete.:' \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-d+[Optional distribution identifier for this file.]:DISTRIBUTION: ' \
+'--dist=[Optional distribution identifier for this file.]:DISTRIBUTION: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds.]:SECS: ' \
+'*-H+[Store a header with this file.]:KEY VALUE: ' \
+'*--file-header=[Store a header with this file.]:KEY VALUE: ' \
+'-u+[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-prefix=[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-suffix=[The URL suffix to append to all filenames.]:SUFFIX: ' \
+'*-i+[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'*--ignore=[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'-I+[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'--ignore-file=[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'*-x+[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.]:EXT: ' \
+'*--ext=[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.]:EXT: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--decompress[Enable files gzip decompression prior to upload.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':path -- The path to the file or directory to upload.:' \
+'::name -- The name of the file on the server.:' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__files__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-files-help-command-$line[1]:"
+        case $line[1] in
+            (upload-sourcemaps)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(info)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--config-status-json[Return the status of the config that sentry-cli loads as JSON dump. This can be used by external tools to aid the user towards configuration.]' \
+'--no-defaults[Skip default organization and project checks. This allows you to verify your authentication method, without the need for setting other defaults.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(issues)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'-s+[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'--status=[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'*-i+[Select the issue with the given ID.]:ID: ' \
+'*--id=[Select the issue with the given ID.]:ID: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-a[Select all issues (this might be limited).]' \
+'--all[Select all issues (this might be limited).]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__issues_commands" \
+"*::: :->issues" \
+&& ret=0
+
+    case $state in
+    (issues)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-issues-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+'--max-rows=[Maximum number of rows to print.]:MAX_ROWS: ' \
+'--pages=[Maximum number of pages to fetch (100 issues/page).]:PAGES: ' \
+'--query=[Query to pass at the request. An example is "is\:unresolved"]:QUERY: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'-s+[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'--status=[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'*-i+[Select the issue with the given ID.]:ID: ' \
+'*--id=[Select the issue with the given ID.]:ID: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-a[Select all issues (this might be limited).]' \
+'--all[Select all issues (this might be limited).]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(mute)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'-s+[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'--status=[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'*-i+[Select the issue with the given ID.]:ID: ' \
+'*--id=[Select the issue with the given ID.]:ID: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-a[Select all issues (this might be limited).]' \
+'--all[Select all issues (this might be limited).]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(resolve)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'-s+[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'--status=[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'*-i+[Select the issue with the given ID.]:ID: ' \
+'*--id=[Select the issue with the given ID.]:ID: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-n[Only select issues in the next release.]' \
+'--next-release[Only select issues in the next release.]' \
+'-a[Select all issues (this might be limited).]' \
+'--all[Select all issues (this might be limited).]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(unresolve)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'-s+[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'--status=[Select all issues matching a given status.]:STATUS:(resolved muted unresolved)' \
+'*-i+[Select the issue with the given ID.]:ID: ' \
+'*--id=[Select the issue with the given ID.]:ID: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-a[Select all issues (this might be limited).]' \
+'--all[Select all issues (this might be limited).]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__issues__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-issues-help-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(mute)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(resolve)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(unresolve)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(login)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-g[Store authentication token globally rather than locally.]' \
+'--global[Store authentication token globally rather than locally.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(monitors)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__monitors_commands" \
+"*::: :->monitors" \
+&& ret=0
+
+    case $state in
+    (monitors)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-monitors-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(run)
+_arguments "${_arguments_options[@]}" \
+'-e+[Specify the environment of the monitor.]: : ' \
+'-s+[Configure the cron monitor with the given schedule (crontab format). Enclose the schedule in quotes to ensure your command line environment parses the argument correctly.]: : ' \
+'--schedule=[Configure the cron monitor with the given schedule (crontab format). Enclose the schedule in quotes to ensure your command line environment parses the argument correctly.]: : ' \
+'--check-in-margin=[The allowed margin of minutes after the expected check-in time that the monitor will not be considered missed for. Requires --schedule.]: : ' \
+'--max-runtime=[The allowed duration in minutes that the monitor may be in progress for before being considered failed due to timeout. Requires --schedule.]: : ' \
+'--timezone=[A tz database string (e.g. "Europe/Vienna") representing the monitor'\''s execution schedule'\''s timezone. Requires --schedule.]: : ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-f[Run provided command even when Sentry reports an error.]' \
+'--allow-failure[Run provided command even when Sentry reports an error.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':monitor_slug -- The monitor slug.:' \
+'*::args:' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__monitors__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-monitors-help-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(run)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(organizations)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__organizations_commands" \
+"*::: :->organizations" \
+&& ret=0
+
+    case $state in
+    (organizations)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-organizations-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__organizations__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-organizations-help-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(projects)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__projects_commands" \
+"*::: :->projects" \
+&& ret=0
+
+    case $state in
+    (projects)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-projects-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__projects__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-projects-help-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(react-native)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__react-native_commands" \
+"*::: :->react-native" \
+&& ret=0
+
+    case $state in
+    (react-native)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-react-native-command-$line[1]:"
+        case $line[1] in
+            (gradle)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'--sourcemap=[The path to a sourcemap that should be uploaded.]:PATH: ' \
+'--bundle=[The path to a bundle that should be uploaded.]:PATH: ' \
+'--release=[The name of the release to publish.]:RELEASE: ' \
+'*--dist=[The names of the distributions to publish. Can be supplied multiple times.]:DISTRIBUTION: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds.]:SECS: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(appcenter)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'--deployment=[The name of the deployment. \[Production, Staging\]]:DEPLOYMENT: ' \
+'--bundle-id=[Explicitly provide the bundle ID instead of parsing the source projects.  This allows you to push codepush releases for iOS on platforms without Xcode or codepush releases for Android when you use different bundle IDs for release and debug etc.]:BUNDLE_ID: ' \
+'--version-name=[Override version name in release name]:VERSION_NAME: ' \
+'*--dist=[The names of the distributions to publish. Can be supplied multiple times.]:DISTRIBUTION: ' \
+'(--bundle-id --version-name)--release-name=[Override the entire release-name]:RELEASE_NAME: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds.]:SECS: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--print-release-name[Print the release name instead.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':app_name -- The name of the AppCenter application.:' \
+':platform -- The name of the app platform. \[ios, android\]:' \
+'*::paths -- A list of folders with assets that should be processed.:' \
+&& ret=0
+;;
+(xcode)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'--fetch-from=[Set the URL to fetch sourcemaps from.{n}The default is http\://127.0.0.1\:8081/, where the react-native packager runs by default.]:URL: ' \
+'*--dist=[The names of the distributions to publish. Can be supplied multiple times.]:DISTRIBUTION: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds.]:SECS: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-f[Force the script to run, even in debug configuration.{n}This rarely does what you want because the default build script does not actually produce any information that the sentry build tool could pick up on.]' \
+'--force[Force the script to run, even in debug configuration.{n}This rarely does what you want because the default build script does not actually produce any information that the sentry build tool could pick up on.]' \
+'--allow-fetch[Enable sourcemap fetching from the packager.{n}If this is enabled the react native packager needs to run and sourcemaps are downloade from it if the simulator platform is detected.]' \
+'--force-foreground[Wait for the process to finish.{n}By default part of the build process will when triggered from Xcode detach and continue in the background.  When an error happens, a dialog is shown.  If this parameter is passed, Xcode will wait for the process to finish before the build finishes and output will be shown in the Xcode build output.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files.]' \
+'--no-auto-release[Don'\''t try to automatically read release from Xcode project files.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::build_script -- Optional path to the build script.{n}This is the path to the `react-native-xcode.sh` script you want to use.  By default the bundled build script is used.:' \
+'*::args -- Optional arguments to pass to the build script.:' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__react-native__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-react-native-help-command-$line[1]:"
+        case $line[1] in
+            (gradle)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(appcenter)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(xcode)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(releases)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__releases_commands" \
+"*::: :->releases" \
+&& ret=0
+
+    case $state in
+    (releases)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-releases-command-$line[1]:"
+        case $line[1] in
+            (files)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::version -- The version of the release:' \
+":: :_sentry-cli__releases__files_commands" \
+"*::: :->files" \
+&& ret=0
+
+    case $state in
+    (files)
+        words=($line[2] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-releases-files-command-$line[2]:"
+        case $line[2] in
+            (upload-sourcemaps)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-u+[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-prefix=[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-suffix=[The URL suffix to append to all filenames.]:SUFFIX: ' \
+'-d+[Optional distribution identifier for the sourcemaps.]:DISTRIBUTION: ' \
+'--dist=[Optional distribution identifier for the sourcemaps.]:DISTRIBUTION: ' \
+'--note=[Adds an optional note to the uploaded artifact bundle.]:NOTE: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds.]:SECS: ' \
+'(--no-rewrite)*--strip-prefix=[Strips the given prefix from all sources references inside the upload sourcemaps (paths used within the sourcemap content, to map minified code to it'\''s original source). Only sources that start with the given prefix will be stripped.{n}This will not modify the uploaded sources paths. To do that, point the upload or upload-sourcemaps command to a more precise directory instead.]:PREFIX: ' \
+'*-i+[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'*--ignore=[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'-I+[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'--ignore-file=[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'()--bundle=[Path to the application bundle (indexed, file, or regular)]:BUNDLE: ' \
+'()--bundle-sourcemap=[Path to the bundle sourcemap]:BUNDLE_SOURCEMAP: ' \
+'*-x+[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.{n}Defaults to\: \`--ext=js --ext=map --ext=jsbundle --ext=bundle\`]:EXT: ' \
+'*--ext=[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.{n}Defaults to\: \`--ext=js --ext=map --ext=jsbundle --ext=bundle\`]:EXT: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--validate[Enable basic sourcemap validation.]' \
+'--decompress[Enable files gzip decompression prior to upload.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files.]' \
+'--no-sourcemap-reference[Disable emitting of automatic sourcemap references.{n}By default the tool will store a '\''Sourcemap'\'' header with minified files so that sourcemaps are located automatically if the tool can detect a link. If this causes issues it can be disabled.]' \
+'--debug-id-reference[Enable emitting of automatic debug id references.{n}By default Debug ID reference has to be present both in the source and the related sourcemap. But in cases of binary bundles, the tool can'\''t verify presence of the Debug ID. This flag allows use of Debug ID from the linked sourcemap.]' \
+'--no-rewrite[Disables rewriting of matching sourcemaps. By default the tool will rewrite sources, so that indexed maps are flattened and missing sources are inlined if possible.{n}This fundamentally changes the upload process to be based on sourcemaps and minified files exclusively and comes in handy for setups like react-native that generate sourcemaps that would otherwise not work for sentry.]' \
+'(--no-rewrite)--strip-common-prefix[Similar to --strip-prefix but strips the most common prefix on all sources references.]' \
+'--no-dedupe[Skip artifacts deduplication prior to uploading. This will force all artifacts to be uploaded, no matter whether they are already present on the server.]' \
+'--use-artifact-bundle[Use new Artifact Bundles upload, that enables the use of Debug IDs for Source Maps discovery.]' \
+'--rewrite[]' \
+'-v[]' \
+'--verbose[]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths -- The files to upload.:' \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-A[Delete all files.]' \
+'--all[Delete all files.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::names -- Filenames to delete.:' \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-d+[Optional distribution identifier for this file.]:DISTRIBUTION: ' \
+'--dist=[Optional distribution identifier for this file.]:DISTRIBUTION: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds.]:SECS: ' \
+'*-H+[Store a header with this file.]:KEY VALUE: ' \
+'*--file-header=[Store a header with this file.]:KEY VALUE: ' \
+'-u+[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-prefix=[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-suffix=[The URL suffix to append to all filenames.]:SUFFIX: ' \
+'*-i+[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'*--ignore=[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'-I+[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'--ignore-file=[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'*-x+[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.]:EXT: ' \
+'*--ext=[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.]:EXT: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--decompress[Enable files gzip decompression prior to upload.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':path -- The path to the file or directory to upload.:' \
+'::name -- The name of the file on the server.:' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__releases__files__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-releases-files-help-command-$line[1]:"
+        case $line[1] in
+            (upload-sourcemaps)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(deploys)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::version -- The version of the release:' \
+":: :_sentry-cli__releases__deploys_commands" \
+"*::: :->deploys" \
+&& ret=0
+
+    case $state in
+    (deploys)
+        words=($line[2] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-releases-deploys-command-$line[2]:"
+        case $line[2] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-e+[Set the environment for this release.{n}This argument is required.  Values that make sense here would be '\''production'\'' or '\''staging'\''.]:ENV: ' \
+'--env=[Set the environment for this release.{n}This argument is required.  Values that make sense here would be '\''production'\'' or '\''staging'\''.]:ENV: ' \
+'-n+[Optional human readable name for this deployment.]:NAME: ' \
+'--name=[Optional human readable name for this deployment.]:NAME: ' \
+'-u+[Optional URL that points to the deployment.]:URL: ' \
+'--url=[Optional URL that points to the deployment.]:URL: ' \
+'--started=[Optional unix timestamp when the deployment started.]:TIMESTAMP: ' \
+'--finished=[Optional unix timestamp when the deployment finished.]:TIMESTAMP: ' \
+'-t+[Optional deployment duration in seconds.{n}This can be specified alternatively to \`--started\` and \`--finished\`.]:SECONDS: ' \
+'--time=[Optional deployment duration in seconds.{n}This can be specified alternatively to \`--started\` and \`--finished\`.]:SECONDS: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__releases__deploys__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-releases-deploys-help-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(archive)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':version -- The version of the release:' \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':version -- The version of the release:' \
+&& ret=0
+;;
+(finalize)
+_arguments "${_arguments_options[@]}" \
+'--url=[Optional URL to the release for information purposes.]:URL: ' \
+'--started=[Set the release start date.]:TIMESTAMP: ' \
+'--released=[Set the release time. \[defaults to the current time\]]:TIMESTAMP: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':version -- The version of the release:' \
+&& ret=0
+;;
+(info)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-P[Display the Projects column]' \
+'--show-projects[Display the Projects column]' \
+'-C[Display the Commits column]' \
+'--show-commits[Display the Commits column]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':version -- The version of the release:' \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+'-D+[Delimiter for the --raw flag]: : ' \
+'--delimiter=[Delimiter for the --raw flag]: : ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-P[Display the Projects column]' \
+'--show-projects[Display the Projects column]' \
+'-R[Print raw, delimiter separated list of releases. \[defaults to new line\]]' \
+'--raw[Print raw, delimiter separated list of releases. \[defaults to new line\]]' \
+'--no-abbrev[]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+'--url=[Optional URL to the release for information purposes.]:URL: ' \
+'--ref=[]: : ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--finalize[Immediately finalize the release. (sets it to released)]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':version -- The version of the release:' \
+&& ret=0
+;;
+(propose-version)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(restore)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':version -- The version of the release:' \
+&& ret=0
+;;
+(set-commits)
+_arguments "${_arguments_options[@]}" \
+'--initial-depth=[Set the number of commits of the initial release. The default is 20.]:INITIAL DEPTH: ' \
+'*-c+[Defines a single commit for a repo as identified by the repo name in the remote Sentry config. If no commit has been specified sentry-cli will attempt to auto discover that repository in the local git repo and then use the HEAD commit.  This will either use the current git repository or attempt to auto discover a submodule with a compatible URL.
+
+The value can be provided as \`REPO\` in which case sentry-cli will auto-discover the commit based on reachable repositories. Alternatively it can be provided as \`REPO#PATH\` in which case the current commit of the repository at the given PATH is assumed.  To override the revision \`@REV\` can be appended which will force the revision to a certain value.]:SPEC: ' \
+'*--commit=[Defines a single commit for a repo as identified by the repo name in the remote Sentry config. If no commit has been specified sentry-cli will attempt to auto discover that repository in the local git repo and then use the HEAD commit.  This will either use the current git repository or attempt to auto discover a submodule with a compatible URL.
+
+The value can be provided as \`REPO\` in which case sentry-cli will auto-discover the commit based on reachable repositories. Alternatively it can be provided as \`REPO#PATH\` in which case the current commit of the repository at the given PATH is assumed.  To override the revision \`@REV\` can be appended which will force the revision to a certain value.]:SPEC: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--clear[Clear all current commits from the release.]' \
+'--auto[Enable completely automated commit management.{n}This requires that the command is run from within a git repository.  sentry-cli will then automatically find remotely configured repositories and discover commits.]' \
+'--ignore-missing[When the flag is set and the previous release commit was not found in the repository, will create a release with the default commits count (or the one specified with \`--initial-depth\`) instead of failing the command.]' \
+'(--auto --clear -c --commit)--local[Set commits of a release from local git.{n}This requires that the command is run from within a git repository.  sentry-cli will then automatically find remotely configured repositories and discover commits.]' \
+'--ignore-empty[]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':version -- The version of the release:' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__releases__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-releases-help-command-$line[1]:"
+        case $line[1] in
+            (files)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__releases__help__files_commands" \
+"*::: :->files" \
+&& ret=0
+
+    case $state in
+    (files)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-releases-help-files-command-$line[1]:"
+        case $line[1] in
+            (upload-sourcemaps)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(deploys)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__releases__help__deploys_commands" \
+"*::: :->deploys" \
+&& ret=0
+
+    case $state in
+    (deploys)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-releases-help-deploys-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(archive)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(finalize)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(info)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(propose-version)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(restore)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(set-commits)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(repos)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__repos_commands" \
+"*::: :->repos" \
+&& ret=0
+
+    case $state in
+    (repos)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-repos-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__repos__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-repos-help-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(send-event)
+_arguments "${_arguments_options[@]}" \
+'-l+[Optional event severity/log level. (debug|info|warning|error|fatal) \[defaults to '\''error'\''\]]:LEVEL: ' \
+'--level=[Optional event severity/log level. (debug|info|warning|error|fatal) \[defaults to '\''error'\''\]]:LEVEL: ' \
+'--timestamp=[Optional event timestamp in one of supported formats\: unix timestamp, RFC2822 or RFC3339.]:TIMESTAMP: ' \
+'-r+[Optional identifier of the release.]:RELEASE: ' \
+'--release=[Optional identifier of the release.]:RELEASE: ' \
+'-d+[Set the distribution.]:DISTRIBUTION: ' \
+'--dist=[Set the distribution.]:DISTRIBUTION: ' \
+'-E+[Send with a specific environment.]:ENVIRONMENT: ' \
+'--env=[Send with a specific environment.]:ENVIRONMENT: ' \
+'*-m+[The event message.]:MESSAGE: ' \
+'*--message=[The event message.]:MESSAGE: ' \
+'*-a+[Arguments for the event message.]:MESSAGE_ARG: ' \
+'*--message-arg=[Arguments for the event message.]:MESSAGE_ARG: ' \
+'-p+[Override the default '\''other'\'' platform specifier.]:PLATFORM: ' \
+'--platform=[Override the default '\''other'\'' platform specifier.]:PLATFORM: ' \
+'*-t+[Add a tag (key\:value) to the event.]:KEY:VALUE: ' \
+'*--tag=[Add a tag (key\:value) to the event.]:KEY:VALUE: ' \
+'*-e+[Add extra information (key\:value) to the event.]:KEY:VALUE: ' \
+'*--extra=[Add extra information (key\:value) to the event.]:KEY:VALUE: ' \
+'*-u+[Add user information (key\:value) to the event. \[eg\: id\:42, username\:foo\]]:KEY:VALUE: ' \
+'*--user=[Add user information (key\:value) to the event. \[eg\: id\:42, username\:foo\]]:KEY:VALUE: ' \
+'*-f+[Change the fingerprint of the event.]:FINGERPRINT: ' \
+'*--fingerprint=[Change the fingerprint of the event.]:FINGERPRINT: ' \
+'--logfile=[Send a logfile as breadcrumbs with the event (last 100 records)]:PATH: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--raw[Send events using an envelope without attempting to parse their contents.]' \
+'--no-environ[Do not send environment variables along]' \
+'--with-categories[Parses off a leading category for breadcrumbs from the logfile]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'::path -- The path or glob to the file(s) in JSON format to send as event(s). When provided, all other arguments are ignored.:' \
+&& ret=0
+;;
+(send-envelope)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--raw[Send envelopes without attempting to parse their contents.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+':path -- The path or glob to the file(s) in envelope format to send as envelope(s).:' \
+&& ret=0
+;;
+(sourcemaps)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_sentry-cli__sourcemaps_commands" \
+"*::: :->sourcemaps" \
+&& ret=0
+
+    case $state in
+    (sourcemaps)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-sourcemaps-command-$line[1]:"
+        case $line[1] in
+            (explain)
+_arguments "${_arguments_options[@]}" \
+'--frame=[Position of the frame that should be used for source map resolution.]: : ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-f[Force full validation flow, even when event is already source mapped.]' \
+'--force[Force full validation flow, even when event is already source mapped.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':event -- ID of an event to be explained.:' \
+&& ret=0
+;;
+(inject)
+_arguments "${_arguments_options[@]}" \
+'*-i+[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'*--ignore=[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'-I+[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'--ignore-file=[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'*-x+[Set the file extensions of JavaScript files that are considered for injection.  This overrides the default extensions (js, cjs, mjs).  To add an extension, all default extensions must be repeated.  Specify once per extension.  Source maps are discovered via those files.]:EXT: ' \
+'*--ext=[Set the file extensions of JavaScript files that are considered for injection.  This overrides the default extensions (js, cjs, mjs).  To add an extension, all default extensions must be repeated.  Specify once per extension.  Source maps are discovered via those files.]:EXT: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--dry-run[Don'\''t modify files on disk.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'*::paths -- A path to recursively search for javascript files that should be processed.:' \
+&& ret=0
+;;
+(resolve)
+_arguments "${_arguments_options[@]}" \
+'-l+[Line number for minified source.]:LINE: ' \
+'--line=[Line number for minified source.]:LINE: ' \
+'-c+[Column number for minified source.]:COLUMN: ' \
+'--column=[Column number for minified source.]:COLUMN: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::path -- The sourcemap to resolve.:' \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+'--version=[]: : ' \
+'-u+[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-prefix=[The URL prefix to prepend to all filenames.]:PREFIX: ' \
+'--url-suffix=[The URL suffix to append to all filenames.]:SUFFIX: ' \
+'-d+[Optional distribution identifier for the sourcemaps.]:DISTRIBUTION: ' \
+'--dist=[Optional distribution identifier for the sourcemaps.]:DISTRIBUTION: ' \
+'--note=[Adds an optional note to the uploaded artifact bundle.]:NOTE: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds.]:SECS: ' \
+'(--no-rewrite)*--strip-prefix=[Strips the given prefix from all sources references inside the upload sourcemaps (paths used within the sourcemap content, to map minified code to it'\''s original source). Only sources that start with the given prefix will be stripped.{n}This will not modify the uploaded sources paths. To do that, point the upload or upload-sourcemaps command to a more precise directory instead.]:PREFIX: ' \
+'*-i+[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'*--ignore=[Ignores all files and folders matching the given glob]:IGNORE: ' \
+'-I+[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'--ignore-file=[Ignore all files and folders specified in the given ignore file, e.g. .gitignore.]:IGNORE_FILE: ' \
+'()--bundle=[Path to the application bundle (indexed, file, or regular)]:BUNDLE: ' \
+'()--bundle-sourcemap=[Path to the bundle sourcemap]:BUNDLE_SOURCEMAP: ' \
+'*-x+[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.{n}Defaults to\: \`--ext=js --ext=map --ext=jsbundle --ext=bundle\`]:EXT: ' \
+'*--ext=[Set the file extensions that are considered for upload. This overrides the default extensions. To add an extension, all default extensions must be repeated. Specify once per extension.{n}Defaults to\: \`--ext=js --ext=map --ext=jsbundle --ext=bundle\`]:EXT: ' \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'*-p+[The project slug.]:PROJECT: ' \
+'*--project=[The project slug.]:PROJECT: ' \
+'-r+[The release slug.]:RELEASE: ' \
+'--release=[The release slug.]:RELEASE: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--validate[Enable basic sourcemap validation.]' \
+'--decompress[Enable files gzip decompression prior to upload.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files.]' \
+'--no-sourcemap-reference[Disable emitting of automatic sourcemap references.{n}By default the tool will store a '\''Sourcemap'\'' header with minified files so that sourcemaps are located automatically if the tool can detect a link. If this causes issues it can be disabled.]' \
+'--debug-id-reference[Enable emitting of automatic debug id references.{n}By default Debug ID reference has to be present both in the source and the related sourcemap. But in cases of binary bundles, the tool can'\''t verify presence of the Debug ID. This flag allows use of Debug ID from the linked sourcemap.]' \
+'--no-rewrite[Disables rewriting of matching sourcemaps. By default the tool will rewrite sources, so that indexed maps are flattened and missing sources are inlined if possible.{n}This fundamentally changes the upload process to be based on sourcemaps and minified files exclusively and comes in handy for setups like react-native that generate sourcemaps that would otherwise not work for sentry.]' \
+'(--no-rewrite)--strip-common-prefix[Similar to --strip-prefix but strips the most common prefix on all sources references.]' \
+'--no-dedupe[Skip artifacts deduplication prior to uploading. This will force all artifacts to be uploaded, no matter whether they are already present on the server.]' \
+'--use-artifact-bundle[Use new Artifact Bundles upload, that enables the use of Debug IDs for Source Maps discovery.]' \
+'--rewrite[]' \
+'-v[]' \
+'--verbose[]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths -- The files to upload.:' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__sourcemaps__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-sourcemaps-help-command-$line[1]:"
+        case $line[1] in
+            (explain)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(inject)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(resolve)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(uninstall)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--confirm[Skip uninstall confirmation prompt.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(update)
+_arguments "${_arguments_options[@]}" \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'-f[Force the update even if the latest version is already installed.]' \
+'--force[Force the update even if the latest version is already installed.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(upload-dif)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'*-t+[Only consider debug information files of the given type.  By default, all types are considered.]:TYPE:(bcsymbolmap breakpad dsym elf jvm pdb pe portablepdb sourcebundle wasm)' \
+'*--type=[Only consider debug information files of the given type.  By default, all types are considered.]:TYPE:(bcsymbolmap breakpad dsym elf jvm pdb pe portablepdb sourcebundle wasm)' \
+'*--id=[Search for specific debug identifiers.]:ID: ' \
+'--symbol-maps=[Optional path to BCSymbolMap files which are used to resolve hidden symbols in dSYM files downloaded from iTunes Connect.  This requires the dsymutil tool to be available.  This should not be used when using the App Store Connect integration, the .bcsymbolmap files needed for the integration are uploaded without this option if they are found in the PATH searched for symbol files.]:PATH: ' \
+'--info-plist=[Optional path to the Info.plist.{n}We will try to find this automatically if run from Xcode.  Providing this information will associate the debug symbols with a specific ITC application and build in Sentry.  Note that if you provide the plist explicitly it must already be processed.]:PATH: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.]:SECS: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--no-unwind[Do not scan for stack unwinding information. Specify this flag for builds with disabled FPO, or when stackwalking occurs on the device. This usually excludes executables and dynamic libraries. They might still be uploaded, if they contain additional processable information (see other flags).]' \
+'(--no-unwind)--no-debug[Do not scan for debugging information. This will usually exclude debug companion files. They might still be uploaded, if they contain additional processable information (see other flags).]' \
+'--no-sources[Do not scan for source information. This will usually exclude source bundle files. They might still be uploaded, if they contain additional processable information (see other flags).]' \
+'--require-all[Errors if not all identifiers specified with --id could be found.]' \
+'--derived-data[Search for debug symbols in Xcode'\''s derived data.]' \
+'--no-zips[Do not search in ZIP files.]' \
+'--no-reprocessing[Do not trigger reprocessing after uploading.]' \
+'--no-upload[Disable the actual upload.{n}This runs all steps for the processing but does not trigger the upload (this also automatically disables reprocessing).  This is useful if you just want to verify the setup or skip the upload in tests.]' \
+'--force-foreground[Wait for the process to finish.{n}By default, the upload process will detach and continue in the background when triggered from Xcode.  When an error happens, a dialog is shown.  If this parameter is passed Xcode will wait for the process to finish before the build finishes and output will be shown in the Xcode build output.]' \
+'--include-sources[Include sources from the local file system and upload them as source bundles.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.]' \
+'--upload-symbol-maps[]' \
+'--il2cpp-mapping[Compute il2cpp line mappings and upload them along with sources.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths -- A path to search recursively for symbol files.:' \
+&& ret=0
+;;
+(upload-dsym)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'*-t+[Only consider debug information files of the given type.  By default, all types are considered.]:TYPE:(bcsymbolmap breakpad dsym elf jvm pdb pe portablepdb sourcebundle wasm)' \
+'*--type=[Only consider debug information files of the given type.  By default, all types are considered.]:TYPE:(bcsymbolmap breakpad dsym elf jvm pdb pe portablepdb sourcebundle wasm)' \
+'*--id=[Search for specific debug identifiers.]:ID: ' \
+'--symbol-maps=[Optional path to BCSymbolMap files which are used to resolve hidden symbols in dSYM files downloaded from iTunes Connect.  This requires the dsymutil tool to be available.  This should not be used when using the App Store Connect integration, the .bcsymbolmap files needed for the integration are uploaded without this option if they are found in the PATH searched for symbol files.]:PATH: ' \
+'--info-plist=[Optional path to the Info.plist.{n}We will try to find this automatically if run from Xcode.  Providing this information will associate the debug symbols with a specific ITC application and build in Sentry.  Note that if you provide the plist explicitly it must already be processed.]:PATH: ' \
+'(--wait)--wait-for=[Wait for the server to fully process uploaded files, but at most for the given number of seconds. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.]:SECS: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--no-unwind[Do not scan for stack unwinding information. Specify this flag for builds with disabled FPO, or when stackwalking occurs on the device. This usually excludes executables and dynamic libraries. They might still be uploaded, if they contain additional processable information (see other flags).]' \
+'(--no-unwind)--no-debug[Do not scan for debugging information. This will usually exclude debug companion files. They might still be uploaded, if they contain additional processable information (see other flags).]' \
+'--no-sources[Do not scan for source information. This will usually exclude source bundle files. They might still be uploaded, if they contain additional processable information (see other flags).]' \
+'--require-all[Errors if not all identifiers specified with --id could be found.]' \
+'--derived-data[Search for debug symbols in Xcode'\''s derived data.]' \
+'--no-zips[Do not search in ZIP files.]' \
+'--no-reprocessing[Do not trigger reprocessing after uploading.]' \
+'--no-upload[Disable the actual upload.{n}This runs all steps for the processing but does not trigger the upload (this also automatically disables reprocessing).  This is useful if you just want to verify the setup or skip the upload in tests.]' \
+'--force-foreground[Wait for the process to finish.{n}By default, the upload process will detach and continue in the background when triggered from Xcode.  When an error happens, a dialog is shown.  If this parameter is passed Xcode will wait for the process to finish before the build finishes and output will be shown in the Xcode build output.]' \
+'--include-sources[Include sources from the local file system and upload them as source bundles.]' \
+'(--wait-for)--wait[Wait for the server to fully process uploaded files. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.]' \
+'--upload-symbol-maps[]' \
+'--il2cpp-mapping[Compute il2cpp line mappings and upload them along with sources.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths -- A path to search recursively for symbol files.:' \
+&& ret=0
+;;
+(upload-proguard)
+_arguments "${_arguments_options[@]}" \
+'-o+[The organization slug]:ORG: ' \
+'--org=[The organization slug]:ORG: ' \
+'-p+[The project slug.]:PROJECT: ' \
+'--project=[The project slug.]:PROJECT: ' \
+'--version=[Optionally associate the mapping files with a human readable version.{n}This helps you understand which ProGuard files go with which version of your app.]:VERSION: ' \
+'--version-code=[Optionally associate the mapping files with a version code.{n}This helps you understand which ProGuard files go with which version of your app.]:VERSION_CODE: ' \
+'--app-id=[Optionally associate the mapping files with an application ID.{n}If you have multiple apps in one sentry project, you can then easily tell them apart.]:APP_ID: ' \
+'--platform=[Optionally defines the platform for the app association. \[defaults to '\''android'\''\]]:PLATFORM: ' \
+'(--app-id)--android-manifest=[Read version and version code from an Android manifest file.]:PATH: ' \
+'--write-properties=[Write the UUIDs for the processed mapping files into the given properties file.]:PATH: ' \
+'-u+[Explicitly override the UUID of the mapping file with another one.{n}This should be used with caution as it means that you can upload multiple mapping files if you don'\''t take care.  This however can be useful if you have a build process in which you need to know the UUID of the proguard file before it was created.  If you upload a file with a forced UUID you can only upload a single proguard file.]:UUID: ' \
+'--uuid=[Explicitly override the UUID of the mapping file with another one.{n}This should be used with caution as it means that you can upload multiple mapping files if you don'\''t take care.  This however can be useful if you have a build process in which you need to know the UUID of the proguard file before it was created.  If you upload a file with a forced UUID you can only upload a single proguard file.]:UUID: ' \
+'*--header=[Custom headers that should be attached to all requests{n}in key\:value format.]:KEY:VALUE: ' \
+'--auth-token=[Use the given Sentry auth token.]:AUTH_TOKEN: ' \
+'--log-level=[Set the log output verbosity.]:LOG_LEVEL:(trace debug info warn error)' \
+'--no-reprocessing[Do not trigger reprocessing after upload.]' \
+'--no-upload[Disable the actual upload.{n}This runs all steps for the processing but does not trigger the upload (this also automatically disables reprocessing).  This is useful if you just want to verify the mapping files and write the proguard UUIDs into a properties file.]' \
+'--require-one[Requires at least one file to upload or the command will error.]' \
+'--quiet[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--silent[Do not print any output while preserving correct exit code. This flag is currently implemented only for selected subcommands.]' \
+'--allow-failure[Always return 0 exit code.]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::paths -- The path to the mapping files.:' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-command-$line[1]:"
+        case $line[1] in
+            (completions)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(bash-hook)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(debug-files)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__debug-files_commands" \
+"*::: :->debug-files" \
+&& ret=0
+
+    case $state in
+    (debug-files)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-debug-files-command-$line[1]:"
+        case $line[1] in
+            (bundle-sources)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(check)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(bundle-jvm)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(find)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(print-sources)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(deploys)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__deploys_commands" \
+"*::: :->deploys" \
+&& ret=0
+
+    case $state in
+    (deploys)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-deploys-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(events)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__events_commands" \
+"*::: :->events" \
+&& ret=0
+
+    case $state in
+    (events)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-events-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(files)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__files_commands" \
+"*::: :->files" \
+&& ret=0
+
+    case $state in
+    (files)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-files-command-$line[1]:"
+        case $line[1] in
+            (upload-sourcemaps)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(info)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(issues)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__issues_commands" \
+"*::: :->issues" \
+&& ret=0
+
+    case $state in
+    (issues)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-issues-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(mute)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(resolve)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(unresolve)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(login)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(monitors)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__monitors_commands" \
+"*::: :->monitors" \
+&& ret=0
+
+    case $state in
+    (monitors)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-monitors-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(run)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(organizations)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__organizations_commands" \
+"*::: :->organizations" \
+&& ret=0
+
+    case $state in
+    (organizations)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-organizations-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(projects)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__projects_commands" \
+"*::: :->projects" \
+&& ret=0
+
+    case $state in
+    (projects)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-projects-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(react-native)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__react-native_commands" \
+"*::: :->react-native" \
+&& ret=0
+
+    case $state in
+    (react-native)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-react-native-command-$line[1]:"
+        case $line[1] in
+            (gradle)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(appcenter)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(xcode)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(releases)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__releases_commands" \
+"*::: :->releases" \
+&& ret=0
+
+    case $state in
+    (releases)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-releases-command-$line[1]:"
+        case $line[1] in
+            (files)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__releases__files_commands" \
+"*::: :->files" \
+&& ret=0
+
+    case $state in
+    (files)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-releases-files-command-$line[1]:"
+        case $line[1] in
+            (upload-sourcemaps)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(deploys)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__releases__deploys_commands" \
+"*::: :->deploys" \
+&& ret=0
+
+    case $state in
+    (deploys)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-releases-deploys-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(archive)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(delete)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(finalize)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(info)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(propose-version)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(restore)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(set-commits)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(repos)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__repos_commands" \
+"*::: :->repos" \
+&& ret=0
+
+    case $state in
+    (repos)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-repos-command-$line[1]:"
+        case $line[1] in
+            (list)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(send-event)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(send-envelope)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(sourcemaps)
+_arguments "${_arguments_options[@]}" \
+":: :_sentry-cli__help__sourcemaps_commands" \
+"*::: :->sourcemaps" \
+&& ret=0
+
+    case $state in
+    (sourcemaps)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:sentry-cli-help-sourcemaps-command-$line[1]:"
+        case $line[1] in
+            (explain)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(inject)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(resolve)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(uninstall)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(update)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload-dif)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload-dsym)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(upload-proguard)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+}
+
+(( $+functions[_sentry-cli_commands] )) ||
+_sentry-cli_commands() {
+    local commands; commands=(
+'completions:Generate completions for the specified shell.' \
+'bash-hook:Prints out a bash script that does error handling.' \
+'debug-files:Locate, analyze or upload debug information files.' \
+'dif:Locate, analyze or upload debug information files.' \
+'deploys:Manage deployments for Sentry releases.' \
+'events:Manage events on Sentry.' \
+'files:Manage release artifacts.' \
+'info:Print information about the configuration and verify authentication.' \
+'issues:Manage issues in Sentry.' \
+'login:Authenticate with the Sentry server.' \
+'monitors:Manage monitors on Sentry \[beta\].' \
+'organizations:Manage organizations on Sentry.' \
+'projects:Manage projects on Sentry.' \
+'react-native:Upload build artifacts for react-native projects.' \
+'releases:Manage releases on Sentry.' \
+'repos:Manage repositories on Sentry.' \
+'send-event:Send a manual event to Sentry.' \
+'send-envelope:Send a stored envelope to Sentry.' \
+'sourcemaps:Manage sourcemaps for Sentry releases.' \
+'uninstall:Uninstall the sentry-cli executable.' \
+'update:Update the sentry-cli executable.' \
+'upload-dif:Upload debugging information files.' \
+'upload-dsym:Upload debugging information files.' \
+'upload-proguard:Upload ProGuard mapping files to a project.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__react-native__appcenter_commands] )) ||
+_sentry-cli__help__react-native__appcenter_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help react-native appcenter commands' commands "$@"
+}
+(( $+functions[_sentry-cli__react-native__appcenter_commands] )) ||
+_sentry-cli__react-native__appcenter_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli react-native appcenter commands' commands "$@"
+}
+(( $+functions[_sentry-cli__react-native__help__appcenter_commands] )) ||
+_sentry-cli__react-native__help__appcenter_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli react-native help appcenter commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__archive_commands] )) ||
+_sentry-cli__help__releases__archive_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases archive commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__archive_commands] )) ||
+_sentry-cli__releases__archive_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases archive commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__archive_commands] )) ||
+_sentry-cli__releases__help__archive_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help archive commands' commands "$@"
+}
+(( $+functions[_sentry-cli__bash-hook_commands] )) ||
+_sentry-cli__bash-hook_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli bash-hook commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__bash-hook_commands] )) ||
+_sentry-cli__help__bash-hook_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help bash-hook commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__bundle-jvm_commands] )) ||
+_sentry-cli__debug-files__bundle-jvm_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files bundle-jvm commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__help__bundle-jvm_commands] )) ||
+_sentry-cli__debug-files__help__bundle-jvm_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files help bundle-jvm commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__debug-files__bundle-jvm_commands] )) ||
+_sentry-cli__help__debug-files__bundle-jvm_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help debug-files bundle-jvm commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__bundle-sources_commands] )) ||
+_sentry-cli__debug-files__bundle-sources_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files bundle-sources commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__help__bundle-sources_commands] )) ||
+_sentry-cli__debug-files__help__bundle-sources_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files help bundle-sources commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__debug-files__bundle-sources_commands] )) ||
+_sentry-cli__help__debug-files__bundle-sources_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help debug-files bundle-sources commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__check_commands] )) ||
+_sentry-cli__debug-files__check_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files check commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__help__check_commands] )) ||
+_sentry-cli__debug-files__help__check_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files help check commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__debug-files__check_commands] )) ||
+_sentry-cli__help__debug-files__check_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help debug-files check commands' commands "$@"
+}
+(( $+functions[_sentry-cli__completions_commands] )) ||
+_sentry-cli__completions_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli completions commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__completions_commands] )) ||
+_sentry-cli__help__completions_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help completions commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files_commands] )) ||
+_sentry-cli__debug-files_commands() {
+    local commands; commands=(
+'bundle-sources:Create a source bundle for a given debug information file' \
+'check:Check the debug info file at a given path.' \
+'bundle-jvm:Create a source bundle for the given JVM based source files (e.g. Java, Kotlin, ...)' \
+'find:Locate debug information files for given debug identifiers.' \
+'print-sources:Print source files linked by the given debug info file.' \
+'upload:Upload debugging information files.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli debug-files commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__debug-files_commands] )) ||
+_sentry-cli__help__debug-files_commands() {
+    local commands; commands=(
+'bundle-sources:Create a source bundle for a given debug information file' \
+'check:Check the debug info file at a given path.' \
+'bundle-jvm:Create a source bundle for the given JVM based source files (e.g. Java, Kotlin, ...)' \
+'find:Locate debug information files for given debug identifiers.' \
+'print-sources:Print source files linked by the given debug info file.' \
+'upload:Upload debugging information files.' \
+    )
+    _describe -t commands 'sentry-cli help debug-files commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__delete_commands] )) ||
+_sentry-cli__files__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli files delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__help__delete_commands] )) ||
+_sentry-cli__files__help__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli files help delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__files__delete_commands] )) ||
+_sentry-cli__help__files__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help files delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__delete_commands] )) ||
+_sentry-cli__help__releases__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__files__delete_commands] )) ||
+_sentry-cli__help__releases__files__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases files delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__delete_commands] )) ||
+_sentry-cli__releases__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__delete_commands] )) ||
+_sentry-cli__releases__files__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases files delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__help__delete_commands] )) ||
+_sentry-cli__releases__files__help__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases files help delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__delete_commands] )) ||
+_sentry-cli__releases__help__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__files__delete_commands] )) ||
+_sentry-cli__releases__help__files__delete_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help files delete commands' commands "$@"
+}
+(( $+functions[_sentry-cli__deploys_commands] )) ||
+_sentry-cli__deploys_commands() {
+    local commands; commands=(
+'list:List all deployments of a release.' \
+'new:Creates a new release deployment.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli deploys commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__deploys_commands] )) ||
+_sentry-cli__help__deploys_commands() {
+    local commands; commands=(
+'list:List all deployments of a release.' \
+'new:Creates a new release deployment.' \
+    )
+    _describe -t commands 'sentry-cli help deploys commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__deploys_commands] )) ||
+_sentry-cli__help__releases__deploys_commands() {
+    local commands; commands=(
+'list:List all deployments of a release.' \
+'new:Creates a new release deployment.' \
+    )
+    _describe -t commands 'sentry-cli help releases deploys commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__deploys_commands] )) ||
+_sentry-cli__releases__deploys_commands() {
+    local commands; commands=(
+'list:List all deployments of a release.' \
+'new:Creates a new release deployment.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli releases deploys commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__deploys_commands] )) ||
+_sentry-cli__releases__help__deploys_commands() {
+    local commands; commands=(
+'list:List all deployments of a release.' \
+'new:Creates a new release deployment.' \
+    )
+    _describe -t commands 'sentry-cli releases help deploys commands' commands "$@"
+}
+(( $+functions[_sentry-cli__events_commands] )) ||
+_sentry-cli__events_commands() {
+    local commands; commands=(
+'list:List all events in your organization.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli events commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__events_commands] )) ||
+_sentry-cli__help__events_commands() {
+    local commands; commands=(
+'list:List all events in your organization.' \
+    )
+    _describe -t commands 'sentry-cli help events commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__sourcemaps__explain_commands] )) ||
+_sentry-cli__help__sourcemaps__explain_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help sourcemaps explain commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__explain_commands] )) ||
+_sentry-cli__sourcemaps__explain_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli sourcemaps explain commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__help__explain_commands] )) ||
+_sentry-cli__sourcemaps__help__explain_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli sourcemaps help explain commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files_commands] )) ||
+_sentry-cli__files_commands() {
+    local commands; commands=(
+'upload-sourcemaps:Upload sourcemaps for a release.' \
+'delete:Delete a release file.' \
+'list:List all release files.' \
+'upload:Upload files for a release.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli files commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__files_commands] )) ||
+_sentry-cli__help__files_commands() {
+    local commands; commands=(
+'upload-sourcemaps:Upload sourcemaps for a release.' \
+'delete:Delete a release file.' \
+'list:List all release files.' \
+'upload:Upload files for a release.' \
+    )
+    _describe -t commands 'sentry-cli help files commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__files_commands] )) ||
+_sentry-cli__help__releases__files_commands() {
+    local commands; commands=(
+'upload-sourcemaps:Upload sourcemaps for a release.' \
+'delete:Delete a release file.' \
+'list:List all release files.' \
+'upload:Upload files for a release.' \
+    )
+    _describe -t commands 'sentry-cli help releases files commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files_commands] )) ||
+_sentry-cli__releases__files_commands() {
+    local commands; commands=(
+'upload-sourcemaps:Upload sourcemaps for a release.' \
+'delete:Delete a release file.' \
+'list:List all release files.' \
+'upload:Upload files for a release.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli releases files commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__files_commands] )) ||
+_sentry-cli__releases__help__files_commands() {
+    local commands; commands=(
+'upload-sourcemaps:Upload sourcemaps for a release.' \
+'delete:Delete a release file.' \
+'list:List all release files.' \
+'upload:Upload files for a release.' \
+    )
+    _describe -t commands 'sentry-cli releases help files commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__finalize_commands] )) ||
+_sentry-cli__help__releases__finalize_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases finalize commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__finalize_commands] )) ||
+_sentry-cli__releases__finalize_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases finalize commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__finalize_commands] )) ||
+_sentry-cli__releases__help__finalize_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help finalize commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__find_commands] )) ||
+_sentry-cli__debug-files__find_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files find commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__help__find_commands] )) ||
+_sentry-cli__debug-files__help__find_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files help find commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__debug-files__find_commands] )) ||
+_sentry-cli__help__debug-files__find_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help debug-files find commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__react-native__gradle_commands] )) ||
+_sentry-cli__help__react-native__gradle_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help react-native gradle commands' commands "$@"
+}
+(( $+functions[_sentry-cli__react-native__gradle_commands] )) ||
+_sentry-cli__react-native__gradle_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli react-native gradle commands' commands "$@"
+}
+(( $+functions[_sentry-cli__react-native__help__gradle_commands] )) ||
+_sentry-cli__react-native__help__gradle_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli react-native help gradle commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__help_commands] )) ||
+_sentry-cli__debug-files__help_commands() {
+    local commands; commands=(
+'bundle-sources:Create a source bundle for a given debug information file' \
+'check:Check the debug info file at a given path.' \
+'bundle-jvm:Create a source bundle for the given JVM based source files (e.g. Java, Kotlin, ...)' \
+'find:Locate debug information files for given debug identifiers.' \
+'print-sources:Print source files linked by the given debug info file.' \
+'upload:Upload debugging information files.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli debug-files help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__help__help_commands] )) ||
+_sentry-cli__debug-files__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__deploys__help_commands] )) ||
+_sentry-cli__deploys__help_commands() {
+    local commands; commands=(
+'list:List all deployments of a release.' \
+'new:Creates a new release deployment.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli deploys help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__deploys__help__help_commands] )) ||
+_sentry-cli__deploys__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli deploys help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__events__help_commands] )) ||
+_sentry-cli__events__help_commands() {
+    local commands; commands=(
+'list:List all events in your organization.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli events help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__events__help__help_commands] )) ||
+_sentry-cli__events__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli events help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__help_commands] )) ||
+_sentry-cli__files__help_commands() {
+    local commands; commands=(
+'upload-sourcemaps:Upload sourcemaps for a release.' \
+'delete:Delete a release file.' \
+'list:List all release files.' \
+'upload:Upload files for a release.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli files help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__help__help_commands] )) ||
+_sentry-cli__files__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli files help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help_commands] )) ||
+_sentry-cli__help_commands() {
+    local commands; commands=(
+'completions:Generate completions for the specified shell.' \
+'bash-hook:Prints out a bash script that does error handling.' \
+'debug-files:Locate, analyze or upload debug information files.' \
+'deploys:Manage deployments for Sentry releases.' \
+'events:Manage events on Sentry.' \
+'files:Manage release artifacts.' \
+'info:Print information about the configuration and verify authentication.' \
+'issues:Manage issues in Sentry.' \
+'login:Authenticate with the Sentry server.' \
+'monitors:Manage monitors on Sentry \[beta\].' \
+'organizations:Manage organizations on Sentry.' \
+'projects:Manage projects on Sentry.' \
+'react-native:Upload build artifacts for react-native projects.' \
+'releases:Manage releases on Sentry.' \
+'repos:Manage repositories on Sentry.' \
+'send-event:Send a manual event to Sentry.' \
+'send-envelope:Send a stored envelope to Sentry.' \
+'sourcemaps:Manage sourcemaps for Sentry releases.' \
+'uninstall:Uninstall the sentry-cli executable.' \
+'update:Update the sentry-cli executable.' \
+'upload-dif:Upload debugging information files.' \
+'upload-dsym:Upload debugging information files.' \
+'upload-proguard:Upload ProGuard mapping files to a project.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__help_commands] )) ||
+_sentry-cli__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__help_commands] )) ||
+_sentry-cli__issues__help_commands() {
+    local commands; commands=(
+'list:List all issues in your organization.' \
+'mute:Bulk mute all selected issues.' \
+'resolve:Bulk resolve all selected issues.' \
+'unresolve:Bulk unresolve all selected issues.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli issues help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__help__help_commands] )) ||
+_sentry-cli__issues__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli issues help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__monitors__help_commands] )) ||
+_sentry-cli__monitors__help_commands() {
+    local commands; commands=(
+'list:List all monitors for an organization.' \
+'run:Wraps a command' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli monitors help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__monitors__help__help_commands] )) ||
+_sentry-cli__monitors__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli monitors help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__organizations__help_commands] )) ||
+_sentry-cli__organizations__help_commands() {
+    local commands; commands=(
+'list:List all organizations available to the authenticated token.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli organizations help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__organizations__help__help_commands] )) ||
+_sentry-cli__organizations__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli organizations help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__projects__help_commands] )) ||
+_sentry-cli__projects__help_commands() {
+    local commands; commands=(
+'list:List all projects for an organization.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli projects help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__projects__help__help_commands] )) ||
+_sentry-cli__projects__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli projects help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__react-native__help_commands] )) ||
+_sentry-cli__react-native__help_commands() {
+    local commands; commands=(
+'gradle:Upload react-native projects in a gradle build step.' \
+'appcenter:Upload react-native projects for AppCenter.' \
+'xcode:Upload react-native projects in a Xcode build step.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli react-native help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__react-native__help__help_commands] )) ||
+_sentry-cli__react-native__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli react-native help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__deploys__help_commands] )) ||
+_sentry-cli__releases__deploys__help_commands() {
+    local commands; commands=(
+'list:List all deployments of a release.' \
+'new:Creates a new release deployment.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli releases deploys help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__deploys__help__help_commands] )) ||
+_sentry-cli__releases__deploys__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases deploys help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__help_commands] )) ||
+_sentry-cli__releases__files__help_commands() {
+    local commands; commands=(
+'upload-sourcemaps:Upload sourcemaps for a release.' \
+'delete:Delete a release file.' \
+'list:List all release files.' \
+'upload:Upload files for a release.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli releases files help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__help__help_commands] )) ||
+_sentry-cli__releases__files__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases files help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help_commands] )) ||
+_sentry-cli__releases__help_commands() {
+    local commands; commands=(
+'files:Manage release artifacts.' \
+'deploys:Manage deployments for Sentry releases.' \
+'archive:Archive a release.' \
+'delete:Delete a release.' \
+'finalize:Mark a release as finalized and released.' \
+'info:Print information about a release.' \
+'list:List the most recent releases.' \
+'new:Create a new release.' \
+'propose-version:Propose a version name for a new release.' \
+'restore:Restore a release.' \
+'set-commits:Set commits of a release.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli releases help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__help_commands] )) ||
+_sentry-cli__releases__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__repos__help_commands] )) ||
+_sentry-cli__repos__help_commands() {
+    local commands; commands=(
+'list:List all repositories in your organization.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli repos help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__repos__help__help_commands] )) ||
+_sentry-cli__repos__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli repos help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__help_commands] )) ||
+_sentry-cli__sourcemaps__help_commands() {
+    local commands; commands=(
+'explain:Explain why sourcemaps are not working for a given event.' \
+'inject:Fixes up JavaScript source files and sourcemaps with debug ids.' \
+'resolve:Resolve sourcemap for a given line/column position.' \
+'upload:Upload sourcemaps for a release.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli sourcemaps help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__help__help_commands] )) ||
+_sentry-cli__sourcemaps__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli sourcemaps help help commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__info_commands] )) ||
+_sentry-cli__help__info_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help info commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__info_commands] )) ||
+_sentry-cli__help__releases__info_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases info commands' commands "$@"
+}
+(( $+functions[_sentry-cli__info_commands] )) ||
+_sentry-cli__info_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli info commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__info_commands] )) ||
+_sentry-cli__releases__help__info_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help info commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__info_commands] )) ||
+_sentry-cli__releases__info_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases info commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__sourcemaps__inject_commands] )) ||
+_sentry-cli__help__sourcemaps__inject_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help sourcemaps inject commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__help__inject_commands] )) ||
+_sentry-cli__sourcemaps__help__inject_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli sourcemaps help inject commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__inject_commands] )) ||
+_sentry-cli__sourcemaps__inject_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli sourcemaps inject commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__issues_commands] )) ||
+_sentry-cli__help__issues_commands() {
+    local commands; commands=(
+'list:List all issues in your organization.' \
+'mute:Bulk mute all selected issues.' \
+'resolve:Bulk resolve all selected issues.' \
+'unresolve:Bulk unresolve all selected issues.' \
+    )
+    _describe -t commands 'sentry-cli help issues commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues_commands] )) ||
+_sentry-cli__issues_commands() {
+    local commands; commands=(
+'list:List all issues in your organization.' \
+'mute:Bulk mute all selected issues.' \
+'resolve:Bulk resolve all selected issues.' \
+'unresolve:Bulk unresolve all selected issues.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli issues commands' commands "$@"
+}
+(( $+functions[_sentry-cli__deploys__help__list_commands] )) ||
+_sentry-cli__deploys__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli deploys help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__deploys__list_commands] )) ||
+_sentry-cli__deploys__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli deploys list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__events__help__list_commands] )) ||
+_sentry-cli__events__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli events help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__events__list_commands] )) ||
+_sentry-cli__events__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli events list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__help__list_commands] )) ||
+_sentry-cli__files__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli files help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__list_commands] )) ||
+_sentry-cli__files__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli files list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__deploys__list_commands] )) ||
+_sentry-cli__help__deploys__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help deploys list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__events__list_commands] )) ||
+_sentry-cli__help__events__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help events list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__files__list_commands] )) ||
+_sentry-cli__help__files__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help files list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__issues__list_commands] )) ||
+_sentry-cli__help__issues__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help issues list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__monitors__list_commands] )) ||
+_sentry-cli__help__monitors__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help monitors list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__organizations__list_commands] )) ||
+_sentry-cli__help__organizations__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help organizations list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__projects__list_commands] )) ||
+_sentry-cli__help__projects__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help projects list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__deploys__list_commands] )) ||
+_sentry-cli__help__releases__deploys__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases deploys list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__files__list_commands] )) ||
+_sentry-cli__help__releases__files__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases files list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__list_commands] )) ||
+_sentry-cli__help__releases__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__repos__list_commands] )) ||
+_sentry-cli__help__repos__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help repos list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__help__list_commands] )) ||
+_sentry-cli__issues__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli issues help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__list_commands] )) ||
+_sentry-cli__issues__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli issues list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__monitors__help__list_commands] )) ||
+_sentry-cli__monitors__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli monitors help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__monitors__list_commands] )) ||
+_sentry-cli__monitors__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli monitors list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__organizations__help__list_commands] )) ||
+_sentry-cli__organizations__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli organizations help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__organizations__list_commands] )) ||
+_sentry-cli__organizations__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli organizations list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__projects__help__list_commands] )) ||
+_sentry-cli__projects__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli projects help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__projects__list_commands] )) ||
+_sentry-cli__projects__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli projects list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__deploys__help__list_commands] )) ||
+_sentry-cli__releases__deploys__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases deploys help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__deploys__list_commands] )) ||
+_sentry-cli__releases__deploys__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases deploys list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__help__list_commands] )) ||
+_sentry-cli__releases__files__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases files help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__list_commands] )) ||
+_sentry-cli__releases__files__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases files list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__deploys__list_commands] )) ||
+_sentry-cli__releases__help__deploys__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help deploys list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__files__list_commands] )) ||
+_sentry-cli__releases__help__files__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help files list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__list_commands] )) ||
+_sentry-cli__releases__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__list_commands] )) ||
+_sentry-cli__releases__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__repos__help__list_commands] )) ||
+_sentry-cli__repos__help__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli repos help list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__repos__list_commands] )) ||
+_sentry-cli__repos__list_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli repos list commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__login_commands] )) ||
+_sentry-cli__help__login_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help login commands' commands "$@"
+}
+(( $+functions[_sentry-cli__login_commands] )) ||
+_sentry-cli__login_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli login commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__monitors_commands] )) ||
+_sentry-cli__help__monitors_commands() {
+    local commands; commands=(
+'list:List all monitors for an organization.' \
+'run:Wraps a command' \
+    )
+    _describe -t commands 'sentry-cli help monitors commands' commands "$@"
+}
+(( $+functions[_sentry-cli__monitors_commands] )) ||
+_sentry-cli__monitors_commands() {
+    local commands; commands=(
+'list:List all monitors for an organization.' \
+'run:Wraps a command' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli monitors commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__issues__mute_commands] )) ||
+_sentry-cli__help__issues__mute_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help issues mute commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__help__mute_commands] )) ||
+_sentry-cli__issues__help__mute_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli issues help mute commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__mute_commands] )) ||
+_sentry-cli__issues__mute_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli issues mute commands' commands "$@"
+}
+(( $+functions[_sentry-cli__deploys__help__new_commands] )) ||
+_sentry-cli__deploys__help__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli deploys help new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__deploys__new_commands] )) ||
+_sentry-cli__deploys__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli deploys new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__deploys__new_commands] )) ||
+_sentry-cli__help__deploys__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help deploys new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__deploys__new_commands] )) ||
+_sentry-cli__help__releases__deploys__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases deploys new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__new_commands] )) ||
+_sentry-cli__help__releases__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__deploys__help__new_commands] )) ||
+_sentry-cli__releases__deploys__help__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases deploys help new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__deploys__new_commands] )) ||
+_sentry-cli__releases__deploys__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases deploys new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__deploys__new_commands] )) ||
+_sentry-cli__releases__help__deploys__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help deploys new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__new_commands] )) ||
+_sentry-cli__releases__help__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__new_commands] )) ||
+_sentry-cli__releases__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases new commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__organizations_commands] )) ||
+_sentry-cli__help__organizations_commands() {
+    local commands; commands=(
+'list:List all organizations available to the authenticated token.' \
+    )
+    _describe -t commands 'sentry-cli help organizations commands' commands "$@"
+}
+(( $+functions[_sentry-cli__organizations_commands] )) ||
+_sentry-cli__organizations_commands() {
+    local commands; commands=(
+'list:List all organizations available to the authenticated token.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli organizations commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__help__print-sources_commands] )) ||
+_sentry-cli__debug-files__help__print-sources_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files help print-sources commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__print-sources_commands] )) ||
+_sentry-cli__debug-files__print-sources_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files print-sources commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__debug-files__print-sources_commands] )) ||
+_sentry-cli__help__debug-files__print-sources_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help debug-files print-sources commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__projects_commands] )) ||
+_sentry-cli__help__projects_commands() {
+    local commands; commands=(
+'list:List all projects for an organization.' \
+    )
+    _describe -t commands 'sentry-cli help projects commands' commands "$@"
+}
+(( $+functions[_sentry-cli__projects_commands] )) ||
+_sentry-cli__projects_commands() {
+    local commands; commands=(
+'list:List all projects for an organization.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli projects commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__propose-version_commands] )) ||
+_sentry-cli__help__releases__propose-version_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases propose-version commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__propose-version_commands] )) ||
+_sentry-cli__releases__help__propose-version_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help propose-version commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__propose-version_commands] )) ||
+_sentry-cli__releases__propose-version_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases propose-version commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__react-native_commands] )) ||
+_sentry-cli__help__react-native_commands() {
+    local commands; commands=(
+'gradle:Upload react-native projects in a gradle build step.' \
+'appcenter:Upload react-native projects for AppCenter.' \
+'xcode:Upload react-native projects in a Xcode build step.' \
+    )
+    _describe -t commands 'sentry-cli help react-native commands' commands "$@"
+}
+(( $+functions[_sentry-cli__react-native_commands] )) ||
+_sentry-cli__react-native_commands() {
+    local commands; commands=(
+'gradle:Upload react-native projects in a gradle build step.' \
+'appcenter:Upload react-native projects for AppCenter.' \
+'xcode:Upload react-native projects in a Xcode build step.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli react-native commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases_commands] )) ||
+_sentry-cli__help__releases_commands() {
+    local commands; commands=(
+'files:Manage release artifacts.' \
+'deploys:Manage deployments for Sentry releases.' \
+'archive:Archive a release.' \
+'delete:Delete a release.' \
+'finalize:Mark a release as finalized and released.' \
+'info:Print information about a release.' \
+'list:List the most recent releases.' \
+'new:Create a new release.' \
+'propose-version:Propose a version name for a new release.' \
+'restore:Restore a release.' \
+'set-commits:Set commits of a release.' \
+    )
+    _describe -t commands 'sentry-cli help releases commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases_commands] )) ||
+_sentry-cli__releases_commands() {
+    local commands; commands=(
+'files:Manage release artifacts.' \
+'deploys:Manage deployments for Sentry releases.' \
+'archive:Archive a release.' \
+'delete:Delete a release.' \
+'finalize:Mark a release as finalized and released.' \
+'info:Print information about a release.' \
+'list:List the most recent releases.' \
+'new:Create a new release.' \
+'propose-version:Propose a version name for a new release.' \
+'restore:Restore a release.' \
+'set-commits:Set commits of a release.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli releases commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__repos_commands] )) ||
+_sentry-cli__help__repos_commands() {
+    local commands; commands=(
+'list:List all repositories in your organization.' \
+    )
+    _describe -t commands 'sentry-cli help repos commands' commands "$@"
+}
+(( $+functions[_sentry-cli__repos_commands] )) ||
+_sentry-cli__repos_commands() {
+    local commands; commands=(
+'list:List all repositories in your organization.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli repos commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__issues__resolve_commands] )) ||
+_sentry-cli__help__issues__resolve_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help issues resolve commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__sourcemaps__resolve_commands] )) ||
+_sentry-cli__help__sourcemaps__resolve_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help sourcemaps resolve commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__help__resolve_commands] )) ||
+_sentry-cli__issues__help__resolve_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli issues help resolve commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__resolve_commands] )) ||
+_sentry-cli__issues__resolve_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli issues resolve commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__help__resolve_commands] )) ||
+_sentry-cli__sourcemaps__help__resolve_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli sourcemaps help resolve commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__resolve_commands] )) ||
+_sentry-cli__sourcemaps__resolve_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli sourcemaps resolve commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__restore_commands] )) ||
+_sentry-cli__help__releases__restore_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases restore commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__restore_commands] )) ||
+_sentry-cli__releases__help__restore_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help restore commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__restore_commands] )) ||
+_sentry-cli__releases__restore_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases restore commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__monitors__run_commands] )) ||
+_sentry-cli__help__monitors__run_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help monitors run commands' commands "$@"
+}
+(( $+functions[_sentry-cli__monitors__help__run_commands] )) ||
+_sentry-cli__monitors__help__run_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli monitors help run commands' commands "$@"
+}
+(( $+functions[_sentry-cli__monitors__run_commands] )) ||
+_sentry-cli__monitors__run_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli monitors run commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__send-envelope_commands] )) ||
+_sentry-cli__help__send-envelope_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help send-envelope commands' commands "$@"
+}
+(( $+functions[_sentry-cli__send-envelope_commands] )) ||
+_sentry-cli__send-envelope_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli send-envelope commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__send-event_commands] )) ||
+_sentry-cli__help__send-event_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help send-event commands' commands "$@"
+}
+(( $+functions[_sentry-cli__send-event_commands] )) ||
+_sentry-cli__send-event_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli send-event commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__set-commits_commands] )) ||
+_sentry-cli__help__releases__set-commits_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases set-commits commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__set-commits_commands] )) ||
+_sentry-cli__releases__help__set-commits_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help set-commits commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__set-commits_commands] )) ||
+_sentry-cli__releases__set-commits_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases set-commits commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__sourcemaps_commands] )) ||
+_sentry-cli__help__sourcemaps_commands() {
+    local commands; commands=(
+'explain:Explain why sourcemaps are not working for a given event.' \
+'inject:Fixes up JavaScript source files and sourcemaps with debug ids.' \
+'resolve:Resolve sourcemap for a given line/column position.' \
+'upload:Upload sourcemaps for a release.' \
+    )
+    _describe -t commands 'sentry-cli help sourcemaps commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps_commands] )) ||
+_sentry-cli__sourcemaps_commands() {
+    local commands; commands=(
+'explain:Explain why sourcemaps are not working for a given event.' \
+'inject:Fixes up JavaScript source files and sourcemaps with debug ids.' \
+'resolve:Resolve sourcemap for a given line/column position.' \
+'upload:Upload sourcemaps for a release.' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'sentry-cli sourcemaps commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__uninstall_commands] )) ||
+_sentry-cli__help__uninstall_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help uninstall commands' commands "$@"
+}
+(( $+functions[_sentry-cli__uninstall_commands] )) ||
+_sentry-cli__uninstall_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli uninstall commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__issues__unresolve_commands] )) ||
+_sentry-cli__help__issues__unresolve_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help issues unresolve commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__help__unresolve_commands] )) ||
+_sentry-cli__issues__help__unresolve_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli issues help unresolve commands' commands "$@"
+}
+(( $+functions[_sentry-cli__issues__unresolve_commands] )) ||
+_sentry-cli__issues__unresolve_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli issues unresolve commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__update_commands] )) ||
+_sentry-cli__help__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help update commands' commands "$@"
+}
+(( $+functions[_sentry-cli__update_commands] )) ||
+_sentry-cli__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli update commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__help__upload_commands] )) ||
+_sentry-cli__debug-files__help__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files help upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__debug-files__upload_commands] )) ||
+_sentry-cli__debug-files__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli debug-files upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__help__upload_commands] )) ||
+_sentry-cli__files__help__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli files help upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__upload_commands] )) ||
+_sentry-cli__files__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli files upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__debug-files__upload_commands] )) ||
+_sentry-cli__help__debug-files__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help debug-files upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__files__upload_commands] )) ||
+_sentry-cli__help__files__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help files upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__files__upload_commands] )) ||
+_sentry-cli__help__releases__files__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases files upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__sourcemaps__upload_commands] )) ||
+_sentry-cli__help__sourcemaps__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help sourcemaps upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__help__upload_commands] )) ||
+_sentry-cli__releases__files__help__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases files help upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__upload_commands] )) ||
+_sentry-cli__releases__files__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases files upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__files__upload_commands] )) ||
+_sentry-cli__releases__help__files__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help files upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__help__upload_commands] )) ||
+_sentry-cli__sourcemaps__help__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli sourcemaps help upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__sourcemaps__upload_commands] )) ||
+_sentry-cli__sourcemaps__upload_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli sourcemaps upload commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__upload-dif_commands] )) ||
+_sentry-cli__help__upload-dif_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help upload-dif commands' commands "$@"
+}
+(( $+functions[_sentry-cli__upload-dif_commands] )) ||
+_sentry-cli__upload-dif_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli upload-dif commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__upload-dsym_commands] )) ||
+_sentry-cli__help__upload-dsym_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help upload-dsym commands' commands "$@"
+}
+(( $+functions[_sentry-cli__upload-dsym_commands] )) ||
+_sentry-cli__upload-dsym_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli upload-dsym commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__upload-proguard_commands] )) ||
+_sentry-cli__help__upload-proguard_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help upload-proguard commands' commands "$@"
+}
+(( $+functions[_sentry-cli__upload-proguard_commands] )) ||
+_sentry-cli__upload-proguard_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli upload-proguard commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__help__upload-sourcemaps_commands] )) ||
+_sentry-cli__files__help__upload-sourcemaps_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli files help upload-sourcemaps commands' commands "$@"
+}
+(( $+functions[_sentry-cli__files__upload-sourcemaps_commands] )) ||
+_sentry-cli__files__upload-sourcemaps_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli files upload-sourcemaps commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__files__upload-sourcemaps_commands] )) ||
+_sentry-cli__help__files__upload-sourcemaps_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help files upload-sourcemaps commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__releases__files__upload-sourcemaps_commands] )) ||
+_sentry-cli__help__releases__files__upload-sourcemaps_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help releases files upload-sourcemaps commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__help__upload-sourcemaps_commands] )) ||
+_sentry-cli__releases__files__help__upload-sourcemaps_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases files help upload-sourcemaps commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__files__upload-sourcemaps_commands] )) ||
+_sentry-cli__releases__files__upload-sourcemaps_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases files upload-sourcemaps commands' commands "$@"
+}
+(( $+functions[_sentry-cli__releases__help__files__upload-sourcemaps_commands] )) ||
+_sentry-cli__releases__help__files__upload-sourcemaps_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli releases help files upload-sourcemaps commands' commands "$@"
+}
+(( $+functions[_sentry-cli__help__react-native__xcode_commands] )) ||
+_sentry-cli__help__react-native__xcode_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli help react-native xcode commands' commands "$@"
+}
+(( $+functions[_sentry-cli__react-native__help__xcode_commands] )) ||
+_sentry-cli__react-native__help__xcode_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli react-native help xcode commands' commands "$@"
+}
+(( $+functions[_sentry-cli__react-native__xcode_commands] )) ||
+_sentry-cli__react-native__xcode_commands() {
+    local commands; commands=()
+    _describe -t commands 'sentry-cli react-native xcode commands' commands "$@"
+}
+
+if [ "$funcstack[1]" = "_sentry-cli" ]; then
+    _sentry-cli "$@"
+else
+    compdef _sentry-cli sentry-cli
+fi

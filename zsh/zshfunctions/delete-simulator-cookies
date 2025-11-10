@@ -1,0 +1,15 @@
+if read -q "REPLY?You are about to delete cookies on all simulators, are you sure you want to do that?"; then
+else
+  return 0
+fi
+
+OLDIFS=$IFS
+IFS=$'\n'
+list_of_ids=($(xcrun simctl list devices -j | jq -r ".devices.[] | map(.udid) | flatten | .[]"))
+
+for id in $list_of_ids; do
+  for cookies in $(find ~/Library/Developer/CoreSimulator/Devices/${id}/data/ -name "*cookies*"); do
+    rm $cookies
+  done
+done
+IFS=$OLDIFS

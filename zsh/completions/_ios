@@ -1,0 +1,1841 @@
+#compdef ios
+
+__ios_complete() {
+    local -ar non_empty_completions=("${@:#(|:*)}")
+    local -ar empty_completions=("${(M)@:#(|:*)}")
+    _describe -V '' non_empty_completions -- empty_completions -P $'\'\''
+}
+
+__ios_custom_complete() {
+    local -a completions
+    completions=("${(@f)"$("${command_name}" "${@}" "${command_line[@]}")"}")
+    if [[ "${#completions[@]}" -gt 1 ]]; then
+        __ios_complete "${completions[@]:0:-1}"
+    fi
+}
+
+__ios_cursor_index_in_current_word() {
+    if [[ -z "${QIPREFIX}${IPREFIX}${PREFIX}" ]]; then
+        printf 0
+    else
+        printf %s "${#${(z)LBUFFER}[-1]}"
+    fi
+}
+
+_ios() {
+    emulate -RL zsh -G
+    setopt extendedglob nullglob numericglobsort
+    unsetopt aliases banghist
+
+    local -xr SAP_SHELL=zsh
+    local -x SAP_SHELL_VERSION
+    SAP_SHELL_VERSION="$(builtin emulate zsh -c 'printf %s "${ZSH_VERSION}"')"
+    local -r SAP_SHELL_VERSION
+
+    local context state state_descr line
+    local -A opt_args
+
+    local -r command_name="${words[1]}"
+    local -ar command_line=("${words[@]}")
+    local -ir current_word_index="$((CURRENT - 1))"
+
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'create-module:Walk a user through defining a new module'
+            'generate:Generates a project/workspace of a module'
+            'generate-docs:Generates documentation for modules'
+            'sync:Syncs and silently re-generates all the modules in the repo'
+            'version:Returns the version of the installed ios-cli tool'
+            'edit:Edits manifest files'
+            'clean:Modules cleaning tool'
+            'upgrade:Upgrades the ios-cli'
+            'score:Evaluates and scores the quality of a given module'
+            'score-config:Commands for module score configuration'
+            'debug:Edits manifest files'
+            'fix:Tries to run some automated fixes for working in the monorepo'
+            'graph:Creates a JSON representation of the graph of module dependencies'
+            'compliance:Umbrella command that encompasses a collection of sub-commands related to compliance'
+            'gitlab:This is the subcommand that namespaces things related to gitlab CI generation'
+            'check:This is the subcommand that namespaces checks and verification jobs'
+            'run-tests:Generates, builds, and tests module unit tests.'
+            'auth:Authenticates the local workstation with Tuist Cloud server'
+            'upload-activitylogs:A tool to send xcactivitylog files for a specific build to S3 via a custom service'
+            'codeowner:'
+            'install:Install external dependencies for project generation.'
+            'module:'
+            'flaky-test:'
+            'artifactory:A CLI to perform actions with artifactory.'
+            'json-schema:This is the subcommand that namespaces json-schema jobs'
+            'repo:A group of commands related to repo management'
+            'help:Show subcommand help information.'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        create-module|generate|generate-docs|sync|version|edit|clean|upgrade|score|score-config|debug|fix|graph|compliance|gitlab|check|run-tests|auth|upload-activitylogs|codeowner|install|module|flaky-test|artifactory|json-schema|repo|help)
+            "_ios_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_create-module() {
+    local -i ret=1
+    local -ar ___type=('generic' 'zgGraph')
+    local -ar ___extra_targets=('library' 'unittests' 'mocks' 'graphQLCodegen' 'swiftUIApplication' 'uikitApplication')
+    local -ar arg_specs=(
+        '--name[The module'\''s name; if not specified will ask for interactive input.]:name:'
+        '--team[The team name owning this module; if not specified will ask for interactive input.]:team:'
+        '--type[The module type to generate; if not specified will ask for interactive input or default to generic.]:type:{__ios_complete "${___type[@]}"}'
+        '*'{--extra-targets,-e}'[Extra targets to add, optional.]:extra-targets:{__ios_complete "${___extra_targets[@]}"}'
+        '--apple-id[The Apple ID to use to sign example apps (if present); if not specified will ask for interative input or default to empty.]:apple-id:'
+        '--resources[Indicates if the module will host resources, default is false, in interactive mode will ask input from the user]:resources:'
+        '--docc[Indicates if the module should include Documentation.docc folders in the initial target, default is false, in interactive mode will ask input from the user]:docc:'
+        '--swift6-mode[Add all the upcoming Swift 6 features]'
+        '--skip-generation[Skip project generation after module creation]'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_generate() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:globs:_path_files -g "*"'
+        '--app'
+        '--module'
+        '--automatic'
+        '(--retry -r)'{--retry,-r}'[Optional retries to indicate the command should retry if failed.]:retry:'
+        '(--binary-cache -b)'{--binary-cache,-b}'[Will cause Tuist to use a binary cache or not, not relevant for --release-mode, default to true]'
+        '--no-binary-cache[Will cause Tuist to use a binary cache or not, not relevant for --release-mode, default to true]'
+        '--release-mode[Will cause the generate command to produce a release like project, default to false, note does not work with the binary cache option]'
+        '--prod[The Tuist Cloud environment one wishes to work against.]'
+        '--dev[The Tuist Cloud environment one wishes to work against.]'
+        '--tuist-cloud[The Tuist Cloud environment one wishes to work against.]'
+        '--enable-liquid-glass-ui[Disables/Enables Liquid Glass UI for Application targets (Debug builds only, release builds default to OFF)]'
+        '--disable-liquid-glass-ui[Disables/Enables Liquid Glass UI for Application targets (Debug builds only, release builds default to OFF)]'
+        '--sparse[EXPERIMENTAL feature to enable sparse checkout of generated modules]'
+        '--enable-skip-quarantined-tests[Disable/Enable local skipping of quarantined tests]'
+        '--disable-skip-quarantined-tests[Disable/Enable local skipping of quarantined tests]'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--swift6-mode[Add all the upcoming Swift 6 features. Example\: `--swift6-mode`]'
+        '--swift6-modules[Set a list of modules that are known to support swift 6. Example\: `--swift6-modules=ModuleA ModuleB`.]:swift6-modules:'
+        '--no-open[Tuist generation flags, to allow fine grain control over the underlying `tuist generate` command]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_generate-docs() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:modules:'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_sync() {
+    local -i ret=1
+    local -ar ___type=('shallow' 'deep' 'full')
+    local -ar arg_specs=(
+        '--skip-modules[Set a list of modules to skip syncing. Example\: `--skip-modules=ModuleA ModuleB`.]:skip-modules:'
+        '(--retry -r)'{--retry,-r}'[Optional retries to indicate the command should retry if failed. Example\: `-r=3`.]:retry:'
+        '(--type -t)'{--type,-t}'[The type of sync we wish to run, each of which has its function\:
+        `shallow`\: generates Package.swift only.
+        `deep`\: generated Package.swift and runs `ios generate` on modules that their Package.swift was changed.
+        `full`\: runs `ios generate` on all modules in the system.
+        Use like `-t=deep`]:type:{__ios_complete "${___type[@]}"}'
+        '(--dependencies-filter -d)'{--dependencies-filter,-d}'[An optional dependencies list to filter by.
+        One can indicate one or more packages names that were updated to improve the sync process
+        Example\: -d=ZUIKit Constellation]:dependencies-filter:'
+        '(--avoid-parallel-sync -a)'{--avoid-parallel-sync,-a}'[Should avoid parallel syncing, would cause slower sync, default to false]'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--swift6-mode[Add all the upcoming Swift 6 features. Example\: `--swift6-mode`]'
+        '--swift6-modules[Set a list of modules that are known to support swift 6. Example\: `--swift6-modules=ModuleA ModuleB`.]:swift6-modules:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_version() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_edit() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(--path -p)'{--path,-p}'[The path to the module to edit.]:path:_files -/'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_clean() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(--path -p)'{--path,-p}'[Optional path to recursively iterate and clean]:path:'
+        '-g[Run deep git clan `git clean -ffxd`.]'
+        '-d[Deletes derived data, in combination with --fast/-f will just send it to the Trash.]'
+        '-s[Deletes SPM artifacts, in combination with --fast/-f will just send it to the Trash.]'
+        '-c[Cleans Tuist cache related artifacts binaries, dependencies.]'
+        '-x[Kills all xcode related process in the system.]'
+        '--fast[Making folder deletion fast!]'
+        '--stash[Automatically stash git changes, mainly relevant to the --git-clean/-g flag.]'
+        '*--git-clean-excludes[Paths to excluding when running git clean. Only relevant when -g is used. Defaults to \[".cursor", ".cursorrules", ".claude", "CLAUDE.md", "CLAUDE.local.md", "AGENT.md", "AGENTS.md", "GEMINI.md", "crush.json", ".crush.json", ".crush", ".rules", ".windsurfrules", ".clinerules", ".vscode", ".zed", "buildserver.json"\]]:git-clean-excludes:'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_upgrade() {
+    local -i ret=1
+    local -ar ___formulas=('ios' 'muter' 'tuist')
+    local -ar arg_specs=(
+        '--update[Indicates whether "brew update" should be run.]'
+        '--no-update[Indicates whether "brew update" should be run.]'
+        '(--force -f)'{--force,-f}'[Force upgrades, even if no upgrade is detected as needed]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '*--formulas[The desired formulas to upgrade, default all cases - \[ModuleCLI.EnumerableHomebrewFormula.ios, ModuleCLI.EnumerableHomebrewFormula.muter, ModuleCLI.EnumerableHomebrewFormula.tuist\]]:formulas:{__ios_complete "${___formulas[@]}"}'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_score() {
+    local -i ret=1
+    local -ar ___metrics=('codeCoverage' 'codeowners' 'dependencyAnalysis' 'publicSymbols' 'mutationTesting' 'deadCodeAnalysis')
+    local -ar arg_specs=(
+        '--score-config[The path to a config file defining which modules to score]:score-config:'
+        '*:paths:'
+        '--team[If this option is passed, then all apps and modules that are owned by that team (based on CODEOWNERS) are scored.
+        This option is ignored if specific modules or apps are passed via the "paths" argument.]:team:'
+        '--static[Run the score using static analysis (this is the fastest, but least accurate score).]'
+        '--single-pass[Run the score using a dynamic analysis, but expect every metric in the score to build/test/etc only once (moderate accuracy, but could be a bit of a wait).]'
+        '--detailed[Run the most accurate and detailed score, regardless of the time it takes (depending on module complexity this could take many hours, might be the kind of thing you run on Friday and check on Monday).]'
+        '--format[Generates the report in the passed format.
+        Some formats will print to stdout by default (text, csv), while others will generate files and/or folders by default (html).
+        The "output" flag may be used to modify the location of where the report is generated.]:format:'
+        '(--output -o)'{--output,-o}'[A path to an optional output location. If specified, will print the report to this file instead of stdout.
+        For report types that only output to a file or folder, if this value is not specified, the default ".report" will be used.]:output:'
+        '(--input -i)'{--input,-i}'[A path to an input JSON file. If provided, the score does not re-calculate metrics, but rather uses the JSON data to generate a new report.
+        This file should have be generated by running the score previously with "--format json".]:input:'
+        '(--metrics -m)'{--metrics,-m}'[A list of metric to evaluate for this report.
+        If metrics are specified explicitly, then those metrics will be included regardless of the "accuracy" flag passed to the report.]:metrics:{__ios_complete "${___metrics[@]}"}'
+        '--skip-generation[An option to skip project generation when running the score in single-pass or detailed mode (project generation is not run in static mode).
+        You can add this flag if you'\''ve already generated the project yourself.]'
+        '--skip-clean[An option to skip xcodebuild cleaning.]'
+        '--skip-build[An option to skip xcodebuild building (implies that cleaning should be skipped).]'
+        '--include-apps[When running the score for multiple modules (e.g. for a team), this flag indicates that it should include apps.]'
+        '--exclude-apps[When running the score for multiple modules (e.g. for a team), this flag indicates that it should exclude apps.]'
+        '--include-fixtures[When running the score for multiple modules (e.g. for a team), this flag indicates that it should include fixtures.]'
+        '--exclude-fixtures[When running the score for multiple modules (e.g. for a team), this flag indicates that it should exclude fixtures.]'
+        '--excluding[An option to exclude modules with a path that contains any of the passed substring values.]:excluding:'
+        '--incremental[Indicates that the score can attempt to utilize file artifacts in the .modulecli/score from previous runs.
+        This is an advanced feature; do not use unless you understand how the file artifacts affect score behavior.]'
+        '--plan-only[Only print out the module scoring plan, without running.]'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--force[Force running the report for unsupported paths. This is not a recommended feature.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_score-config() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'validate:Validates module score configs'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        validate)
+            "_ios_score-config_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_score-config_validate() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':path:'
+        '--config-path[The directory containing the config files
+        This value is ignored if --path is passed.]:config-path:'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_debug() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_fix() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '-t[Fix tuist installation.]'
+        '-c[Fix ios-cli installation.]'
+        '-x[Will make sure the relevant xcode cli tools are selected, and will reinstall tuist and the ios-cli tool.]'
+        '-r[Verify and install Rosetta if needed.]'
+        '-b[Will run bundle install making sure all dependencies are installed.]'
+        '--all[Will run all of the fixes.]'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_graph() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:globs:'
+        '(--local-modules-only -l)'{--local-modules-only,-l}'[Emits only locally defined modules; excluding remote modules.]'
+        '(--reverse -r)'{--reverse,-r}'[Reverses the hierarchy of nodes in the graph. Is done after `localModulesOnly` if that option is also specified.]'
+        '(--output -o)'{--output,-o}'[Writes the output to the specific path instead of `stdout`]:output:'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_compliance() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'vulnerability-scanner:This command checks module dependencies and compare them against the GitHub Advisory Database to find known vulnerabilities'
+            'validate-dependencies:Validates that the apps are using only approved 3rd party packages'
+            'check-copyright:Ensures code is correctly owned and copyrighted to Zillow'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        vulnerability-scanner|validate-dependencies|check-copyright)
+            "_ios_compliance_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_compliance_vulnerability-scanner() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:globs:'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_compliance_validate-dependencies() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:globs:'
+        '(--ignore-known-exception-list -i)'{--ignore-known-exception-list,-i}'[Skips the processing of known exceptions. Meaning they will be flagged as errors in the results.]'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_compliance_check-copyright() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'generate:A tool to generate a CI yml based on changed files, pipeline source and pipeline type'
+            'inflate:A tool to inflate all jobs in a gitlab ci yaml that extend a .auto- template'
+            'dump-templates:A tool to dump gitlab templates to a file'
+            'dump-always-inflated-ci-yamls:A tool to dump ci.yml files that should always be inflated under various conditions to a file'
+            'dump-code-coverage:A tool to dump code coverage information to a file, intended for use in reporting coverage for gitlab jobs'
+            'cache:A tool to cache binary modules and external libraries in CI, based on changed files, pipeline source and pipeline type'
+            'tuist-prepare-for-parallel:Runs a tuist dump command to prepare tuist for running stuff in parallel'
+            'label-tickets:A tool used to label JIRA tickets with a certain release tag and version'
+            'generate-rollback-pipeline:A tool to generate ci yml definitions for a rollback pipeline'
+            'update-scheduled-pipelines:'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        generate|inflate|dump-templates|dump-always-inflated-ci-yamls|dump-code-coverage|cache|tuist-prepare-for-parallel|label-tickets|generate-rollback-pipeline|update-scheduled-pipelines)
+            "_ios_gitlab_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_gitlab_generate() {
+    local -i ret=1
+    local -ar ___source=('mergeTrain' 'mergeRequest' 'branch')
+    local -ar ___type=('standard' 'scheduled')
+    local -ar arg_specs=(
+        '(--source -s)'{--source,-s}'[The source of the pipeline (options\: mergeRequest, mergeTrain, main). If no value is supplied, the CLI will attempt to infer it using environment values]:source:{__ios_complete "${___source[@]}"}'
+        '(--type -t)'{--type,-t}'[The type of the pipeline (options\: standard, scheduled). If no value is supplied, the CLI will attempt to infer it using environment values]:type:{__ios_complete "${___type[@]}"}'
+        '(--branch -b)'{--branch,-b}'[The name of the branch we are generating CI for. If no value is supplied, the CLI will attempt to infer it using environment values]:branch:'
+        '--inflate-all-yamls[Should we inflate all ci.yml files in the repo. By default, will use dependency analysis to only inflate ci.yml files in the dependency tree]'
+        '(--output-prefix -o)'{--output-prefix,-o}'[Output filename prefix]:output-prefix:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab_inflate() {
+    local -i ret=1
+    local -ar ___source=('mergeTrain' 'mergeRequest' 'branch')
+    local -ar ___type=('standard' 'scheduled')
+    local -ar arg_specs=(
+        '(--source -s)'{--source,-s}'[The source of the pipeline (options\: mergeRequest, mergeTrain, main). If no value is supplied, will default to mergeRequest]:source:{__ios_complete "${___source[@]}"}'
+        '(--type -t)'{--type,-t}'[The type of the pipeline (options\: standard, scheduled). If no value is supplied, will default to standard]:type:{__ios_complete "${___type[@]}"}'
+        '(--branch -b)'{--branch,-b}'[The name of the branch we are generating CI for. If no value is supplied, will default to an empty string]:branch:'
+        '--include-stages[When passed, stages are included in the output yaml]'
+        '--infer-from-environment[When passed, CI settings (source, type, branch) are inferred from the environment, instead of using defaults]'
+        '*'{--changed-files,-c}'[A list of changed files to simulate the inflation with. If no value is supplied, will default to the location of the input file]:changed-files:'
+        '(--output -o)'{--output,-o}'[Output filename]:output:'
+        '--graph[Manually specify whether a dependency graph should be created and/or skipped.
+        This command will automatically detects whether a graph is needed, based on whether dependencies should be considered when inflating yamls.
+        This flag is useful if you'\''d like to inflate a module'\''s yaml without considering its dependencies.]'
+        '--no-graph[Manually specify whether a dependency graph should be created and/or skipped.
+        This command will automatically detects whether a graph is needed, based on whether dependencies should be considered when inflating yamls.
+        This flag is useful if you'\''d like to inflate a module'\''s yaml without considering its dependencies.]'
+        ':input-file:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab_dump-templates() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(--output -o)'{--output,-o}'[The path to output the file to. Defaults to pipeline-templates.yml]:output:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab_dump-always-inflated-ci-yamls() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab_dump-code-coverage() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(--xcresult-path -x)'{--xcresult-path,-x}'[Path to the xcresult file]:xcresult-path:'
+        '(--module-path -m)'{--module-path,-m}'[Path to the module the xcresult file was generated for]:module-path:'
+        '(--output -o)'{--output,-o}'[Where you would like the file to be dumped to]:output:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab_cache() {
+    local -i ret=1
+    local -ar ___source=('mergeTrain' 'mergeRequest' 'branch')
+    local -ar ___type=('standard' 'scheduled')
+    local -ar arg_specs=(
+        '(--all -a)'{--all,-a}''
+        '(--source -s)'{--source,-s}'[The source of the pipeline (options\: mergeRequest, mergeTrain, main). If no value is supplied, the CLI will attempt to infer it using environment values]:source:{__ios_complete "${___source[@]}"}'
+        '(--type -t)'{--type,-t}'[The type of the pipeline (options\: standard, scheduled). If no value is supplied, the CLI will attempt to infer it using environment values]:type:{__ios_complete "${___type[@]}"}'
+        '(--branch -b)'{--branch,-b}'[The name of the branch we are generating CI for. If no value is supplied, the CLI will attempt to infer it using environment values]:branch:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--prod[The Tuist Cloud environment one wishes to work against.]'
+        '--dev[The Tuist Cloud environment one wishes to work against.]'
+        '--tuist-cloud[The Tuist Cloud environment one wishes to work against.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab_tuist-prepare-for-parallel() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab_label-tickets() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--config-path[The path to the config file, relative to repo root.]:config-path:'
+        '(--release-config-key -r)'{--release-config-key,-r}'[The key of the appConfig within the provided config file to work with]:release-config-key:'
+        '--version[The version to tag the tickets with]:version:'
+        '(--commits -c)'{--commits,-c}'[A fallback number of commits to fetch from Gitlab to search tickets for in case of non-existing tag. This is mainly to support an initial release where a tag doesn'\''t exist yet.]:commits:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab_generate-rollback-pipeline() {
+    local -i ret=1
+    local -ar ___source=('mergeTrain' 'mergeRequest' 'branch')
+    local -ar ___type=('standard' 'scheduled')
+    local -ar arg_specs=(
+        '--release-config-path[The path to the release config file, relative to repo root.]:release-config-path:'
+        '(--release-config-key -r)'{--release-config-key,-r}'[The key of the appConfig within the provided config file to work with]:release-config-key:'
+        '(--source -s)'{--source,-s}'[The source of the pipeline (options\: mergeRequest, mergeTrain, main). If no value is supplied, the CLI will attempt to infer it using environment values]:source:{__ios_complete "${___source[@]}"}'
+        '(--type -t)'{--type,-t}'[The type of the pipeline (options\: standard, scheduled). If no value is supplied, the CLI will attempt to infer it using environment values]:type:{__ios_complete "${___type[@]}"}'
+        '(--branch -b)'{--branch,-b}'[The name of the branch we are generating CI for. If no value is supplied, the CLI will attempt to infer it using environment values]:branch:'
+        '(--output-prefix -o)'{--output-prefix,-o}'[Output filename prefix]:output-prefix:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_gitlab_update-scheduled-pipelines() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--config-folder[The folder in which to look for schedule configs]:config-folder:'
+        '--gitlab-project-id[The gitlab project ID for the project in which to create the scheduled pipelines. Attempts to read from CI_PROJECT_ID if not provided.]:gitlab-project-id:'
+        '--gitlab-api-url[The gitlab API URL to use when creating the scheduled pipelines. Attempts to read from CI_API_V4_URL if not provided.]:gitlab-api-url:'
+        '--gitlab-api-token[The gitlab API token to use when creating the scheduled pipelines. Attempts to read from GITLAB_API_TOKEN if not provided.]:gitlab-api-token:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'ci-yaml-extends:Verifies that all ci.yml files in the repo only extend from valid script/when templates as defined in pipeline-templates.yml'
+            'file-names:Verifies that all files in the repo have a valid file name'
+            'always-inflated-ci-yamls:A tool to verify that the always inflated ci ymls file is up to date'
+            'lock-files:Verifies that all of our lock files are up to date'
+            'implicit-imports:Verifies implicit imports for an already generated module.
+Please make sure to run `ios generate...` with the desired module(s) before running this command.
+
+No need to supply with underlying modules, run `ios check implicit-imports` after generation, and that is it.'
+            'subrepo-dependencies:Verifies that subrepos have valid dependencies.'
+            'no-empty-test-runs:Verifies that a given xcresult file, test count is not zero. This allows us to make sure test run is not empty (i.e. that no tests were run)'
+            'no-empty-tests:Verifies that a module does not have any empty test targets.'
+            'prebuilt-cli-hash:A tool to verify that a prebuilt CLI we have committed to the repo is up to date'
+            'no-conflict-markers:A tool for checking whether any files in a folder have conflict markers.'
+            'no-git-changes:A tool to make sure that there are no git changes in specific files'
+            'ios-deployment-version:A tool for verifying the deployment version for all targets in an xcodeproj.'
+            'cursor-rules:Verifies that Cursor rules do not contain any hidden malicious characters potentially usable to inject poisoned code.'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        ci-yaml-extends|file-names|always-inflated-ci-yamls|lock-files|implicit-imports|subrepo-dependencies|no-empty-test-runs|no-empty-tests|prebuilt-cli-hash|no-conflict-markers|no-git-changes|ios-deployment-version|cursor-rules)
+            "_ios_check_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_check_ci-yaml-extends() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_file-names() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_always-inflated-ci-yamls() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_lock-files() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_implicit-imports() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--include-known-issues[Should we include dependencies that are known issues.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_subrepo-dependencies() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_no-empty-test-runs() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':xcresult:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_no-empty-tests() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:globs:'
+        '*--excluding[A list of regexes to use to exclude modules.]:excluding:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_prebuilt-cli-hash() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--cli-name[The name of the CLI to check]:cli-name:'
+        '--module-path[The path to the module]:module-path:'
+        '--fix[When passed, the clicache binary is automatically fixed]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_no-conflict-markers() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':folder:'
+        '*--markers[The conflict markers to check for. Defaults to the standard git conflict markers]:markers:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_no-git-changes() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:files:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_ios-deployment-version() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':xcodeproj:'
+        '--version[The ios deployment version to verify]:version:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_check_cursor-rules() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        ':path:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_run-tests() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:globs:'
+        '--release-mode[Generate a release project for testing (unable to utilize Tuist'\''s binary cache)]'
+        '--excluding[A list of regexes to use to exclude modules.]:excluding:'
+        '--workspace[The name to use for the generated workspace, if generating with Tuist binaries.]:workspace:'
+        '(--output -o)'{--output,-o}'[The directory in which to store xcresult and log output.]:output:'
+        '--repetitions[An option to specify a number of test repetitions. Defaults to no repetitions.]:repetitions:'
+        '--relaunch-on-repetition[A flag to specify to relaunch tests on repetition. Defaults to false.]'
+        '--only-testing[An option to pass a value for -only-testing to xcodebuild. This option is only valid if running on a single module.
+        As of Xcode 16.1, this format of this value is `TestTarget\[/TestClass\[/TestMethod\]\]`, e.g. `UserServiceTests/UserServiceConsumerTests/testUserServiceCanLogout`.
+        Check out `man xcodebuild` for the most up-to-date documentation on this option.]:only-testing:'
+        '--block-mr-on-failure[Whether failure should manually block the current MR (based on CI environment variables).]'
+        '--upload-to-artifactory[Whether the results of running the command should be uploaded to artifactory (CI only)]'
+        '--quarantine-failures[Whether test failures should be quarantined using Trunk (utilized CI environment variables).]'
+        '--skip-generation[If passed, all project generation steps will be skipped.]'
+        '--skip-build[If passed, all test scheme build steps will be skipped.]'
+        '--skip-derived-data-clean[If passed, derived data cleanup will be skipped.]'
+        '--randomized-order[Randomizes the order of module testing]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--swift6-mode[Add all the upcoming Swift 6 features. Example\: `--swift6-mode`]'
+        '--swift6-modules[Set a list of modules that are known to support swift 6. Example\: `--swift6-modules=ModuleA ModuleB`.]:swift6-modules:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_auth() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'login:Logs in the local workstation with Tuist Cloud server'
+            'logout:Logs out the user'\''s local workstation from Tuist Cloud server'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        login|logout)
+            "_ios_auth_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_auth_login() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--prod[The Tuist Cloud environment one wishes to work against.]'
+        '--dev[The Tuist Cloud environment one wishes to work against.]'
+        '--tuist-cloud[The Tuist Cloud environment one wishes to work against.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_auth_logout() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--prod[The Tuist Cloud environment one wishes to work against.]'
+        '--dev[The Tuist Cloud environment one wishes to work against.]'
+        '--tuist-cloud[The Tuist Cloud environment one wishes to work against.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_upload-activitylogs() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':build-dir:'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_codeowner() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'diff:Returns a list of codeowners for changed files on current branch'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        diff)
+            "_ios_codeowner_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_codeowner_diff() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(--target-path -t)'{--target-path,-t}'[Path to for branch to compare with, defaults to origin/main]:target-path:'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--owners[Show just the CODEOWNERS that will be affected by the changes.]'
+        '--files[Show the CODEOWNERS and files that will be affected by the changes.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_install() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--prod[The Tuist Cloud environment one wishes to work against.]'
+        '--dev[The Tuist Cloud environment one wishes to work against.]'
+        '--tuist-cloud[The Tuist Cloud environment one wishes to work against.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_module() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'create:Walk a user through defining a new module'
+            'generate-mocks:Generates mocks for a module without actually generating and building the module'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        create|generate-mocks)
+            "_ios_module_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_module_create() {
+    local -i ret=1
+    local -ar ___type=('generic' 'zgGraph')
+    local -ar ___extra_targets=('library' 'unittests' 'mocks' 'graphQLCodegen' 'swiftUIApplication' 'uikitApplication')
+    local -ar arg_specs=(
+        '--name[The module'\''s name; if not specified will ask for interactive input.]:name:'
+        '--team[The team name owning this module; if not specified will ask for interactive input.]:team:'
+        '--type[The module type to generate; if not specified will ask for interactive input or default to generic.]:type:{__ios_complete "${___type[@]}"}'
+        '*'{--extra-targets,-e}'[Extra targets to add, optional.]:extra-targets:{__ios_complete "${___extra_targets[@]}"}'
+        '--apple-id[The Apple ID to use to sign example apps (if present); if not specified will ask for interative input or default to empty.]:apple-id:'
+        '--resources[Indicates if the module will host resources, default is false, in interactive mode will ask input from the user]:resources:'
+        '--docc[Indicates if the module should include Documentation.docc folders in the initial target, default is false, in interactive mode will ask input from the user]:docc:'
+        '--swift6-mode[Add all the upcoming Swift 6 features]'
+        '--skip-generation[Skip project generation after module creation]'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_module_generate-mocks() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:globs:'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_flaky-test() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'download:Downloads the Trunk CLI for future use'
+            'upload:Uploads xcresult data to Trunk'
+            'quarantine:Quarantines the xcresult test output based on Trunk'\''s determination of tests to suppress'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        download|upload|quarantine)
+            "_ios_flaky-test_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_flaky-test_download() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_flaky-test_upload() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--xcresult[The name of the xcresult to parse]:xcresult:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_flaky-test_quarantine() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--xcresult[The name of the xcresult to parse]:xcresult:'
+        '--test-status[The exit status of the test command]:test-status:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_artifactory() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'deploy:'
+            'delete:'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        deploy|delete)
+            "_ios_artifactory_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_artifactory_deploy() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':url:'
+        ':path:'
+        '(--username -u)'{--username,-u}'[The username to use for authentication.]:username:'
+        '(--password -p)'{--password,-p}'[The password to use for authentication.]:password:'
+        '--url[The base URL to use for artifactory.
+        Defaults to "https\://artifactory.zgtools.net/artifactory" if no URL supplied.]:url:'
+        '(--repo -r)'{--repo,-r}'[The repo to use for artifactory. Defaults to "libs-release-local" if no repo supplied.]:repo:'
+        '(--json-config -j)'{--json-config,-j}'[An input file containing a JSON config to use.
+        It may contain any of the options\: "username", "password", "url", and "repo" (corresponding to the similarly-named options for this command).
+        If these options are passed directly to a command, they override the options found in the config.]:json-config:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_artifactory_delete() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':path:'
+        '(--username -u)'{--username,-u}'[The username to use for authentication.]:username:'
+        '(--password -p)'{--password,-p}'[The password to use for authentication.]:password:'
+        '--url[The base URL to use for artifactory.
+        Defaults to "https\://artifactory.zgtools.net/artifactory" if no URL supplied.]:url:'
+        '(--repo -r)'{--repo,-r}'[The repo to use for artifactory. Defaults to "libs-release-local" if no repo supplied.]:repo:'
+        '(--json-config -j)'{--json-config,-j}'[An input file containing a JSON config to use.
+        It may contain any of the options\: "username", "password", "url", and "repo" (corresponding to the similarly-named options for this command).
+        If these options are passed directly to a command, they override the options found in the config.]:json-config:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_json-schema() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'release-config:'
+            'schedule-pipeline-config:'
+            'score-config:Commands for the module score JSON schema'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        release-config|schedule-pipeline-config|score-config)
+            "_ios_json-schema_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_json-schema_release-config() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'dump:A tool to dump the schema for release config to a file'
+            'validate:A check that validates that the dumped schema for release config matches the in-code schema'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        dump|validate)
+            "_ios_json-schema_release-config_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_json-schema_release-config_dump() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--path[The path to the schema json file, relative to repo root for the schema file]:path:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_json-schema_release-config_validate() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--schema-path[The path to the schema json file, relative to repo root.]:schema-path:'
+        '--config-path[The path to the config file, relative to repo root.]:config-path:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_json-schema_schedule-pipeline-config() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'dump:A tool to dump the schema for schedule pipeline config to a file'
+            'validate-schema:A check that validates that the dumped schema for schedule pipeline config matches the in-code schema'
+            'validate-config:A check that validates that the dumped schema for schedule pipeline config matches the in-code schema'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        dump|validate-schema|validate-config)
+            "_ios_json-schema_schedule-pipeline-config_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_json-schema_schedule-pipeline-config_dump() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--path[The path to the schema json file, relative to repo root for the schema file]:path:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_json-schema_schedule-pipeline-config_validate-schema() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--schema-path[The path to the schema json file, relative to repo root.]:schema-path:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_json-schema_schedule-pipeline-config_validate-config() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--config-path[The path to the config file, or folder to be recursed and search for config files to validate., relative to repo root.]:config-path:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_json-schema_score-config() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'dump:Dumps the module score config JSON schema.'
+            'validate:Validates the module score config JSON schema.'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        dump|validate)
+            "_ios_json-schema_score-config_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_json-schema_score-config_dump() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--path[The path at which to dump the JSON schema file]:path:'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_json-schema_score-config_validate() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--path[The path of the schema file to validate]:path:'
+        '--enable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '--disable-auto-upgrade[This flag enables/disables auto-upgrading of the ios-cli.
+        The following environment variables are available to adjust auto-upgrade behavior in your environment\:
+        - IOS_CLI_AUTO_UPGRADE\: disabled, enabled (default)
+        - IOS_CLI_UPGRADE_ACCURACY\: accurate (default), fast
+        If passed, this flag will override the behavior of IOS_CLI_AUTO_UPGRADE.]'
+        '*'{--verbosity,-v}'[Control the verbosity of the CLI, the more times you pass the flag, the more verbose the output. Use `ios <command> -vvv` for the most verbose output.]'
+        '--log-to-file[In addition to printing to the console, log to root/ios-cli.log]'
+        '(--skip --skip-prompts)'{--skip,--skip-prompts}'[This option will skip all prompts in the ios-cli tool]'
+        '--git-lfs-verification[Should the CLI run git LFS verifications]'
+        '--no-git-lfs-verification[Should the CLI run git LFS verifications]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_repo() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'sparse-checkout:This command is used to create sparse checkouts, which change the working tree from having all tracked files present to only having a subset files based on dependency analysis.'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        sparse-checkout)
+            "_ios_repo_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_ios_repo_sparse-checkout() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:project:'
+        '(--max-concurrency -m)'{--max-concurrency,-m}'[Maximum number of concurrent graph resolutions.]:max-concurrency:'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios_help() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:subcommands:'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_ios

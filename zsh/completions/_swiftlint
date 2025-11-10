@@ -1,0 +1,290 @@
+#compdef swiftlint
+
+__swiftlint_complete() {
+    local -ar non_empty_completions=("${@:#(|:*)}")
+    local -ar empty_completions=("${(M)@:#(|:*)}")
+    _describe -V '' non_empty_completions -- empty_completions -P $'\'\''
+}
+
+__swiftlint_custom_complete() {
+    local -a completions
+    completions=("${(@f)"$("${command_name}" "${@}" "${command_line[@]}")"}")
+    if [[ "${#completions[@]}" -gt 1 ]]; then
+        __swiftlint_complete "${completions[@]:0:-1}"
+    fi
+}
+
+__swiftlint_cursor_index_in_current_word() {
+    if [[ -z "${QIPREFIX}${IPREFIX}${PREFIX}" ]]; then
+        printf 0
+    else
+        printf %s "${#${(z)LBUFFER}[-1]}"
+    fi
+}
+
+_swiftlint() {
+    emulate -RL zsh -G
+    setopt extendedglob nullglob numericglobsort
+    unsetopt aliases banghist
+
+    local -xr SAP_SHELL=zsh
+    local -x SAP_SHELL_VERSION
+    SAP_SHELL_VERSION="$(builtin emulate zsh -c 'printf %s "${ZSH_VERSION}"')"
+    local -r SAP_SHELL_VERSION
+
+    local context state state_descr line
+    local -A opt_args
+
+    local -r command_name="${words[1]}"
+    local -ar command_line=("${words[@]}")
+    local -ir current_word_index="$((CURRENT - 1))"
+
+    local -i ret=1
+    local -ar arg_specs=(
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'analyze:Run analysis rules'
+            'docs:Open SwiftLint documentation website in the default web browser'
+            'generate-docs:Generates markdown documentation for selected group of rules'
+            'lint:Print lint warnings and errors'
+            'baseline:Operations on existing baselines'
+            'reporters:Display the list of reporters and their identifiers'
+            'rules:Display the list of rules and their identifiers'
+            'version:Display the current version of SwiftLint'
+            'help:Show subcommand help information.'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        analyze|docs|generate-docs|lint|baseline|reporters|rules|version|help)
+            "_swiftlint_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_swiftlint_analyze() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*--config[The path to one or more SwiftLint configuration files, evaluated as a parent-child hierarchy.]:config:_files'
+        '(--fix --autocorrect)'{--fix,--autocorrect}'[Correct violations whenever possible.]'
+        '--format[Should reformat the Swift files using the same mechanism used by Xcode (via SourceKit).
+        Only applied with `--fix`/`--autocorrect`.]'
+        '--use-alternative-excluding[Use an alternative algorithm to exclude paths for `excluded`, which may be faster in some cases.]'
+        '--use-script-input-files[Read SCRIPT_INPUT_FILE* environment variables as files.]'
+        '--use-script-input-file-lists[Read SCRIPT_INPUT_FILE_LIST* environment variables as file lists.]'
+        '--strict[Upgrades warnings to serious violations (errors).]'
+        '--lenient[Downgrades serious violations to warnings, warning threshold is disabled.]'
+        '--force-exclude[Exclude files in config `excluded` even if their paths are explicitly specified.]'
+        '--benchmark[Save benchmarks to `benchmark_files.txt` and `benchmark_rules.txt`.]'
+        '--reporter[The reporter used to log errors and warnings.]:reporter:'
+        '--baseline[The path to a baseline file, which will be used to filter out detected violations.]:baseline:'
+        '--write-baseline[The path to save detected violations to as a new baseline.]:write-baseline:_files'
+        '--working-directory[The working directory to use when running SwiftLint.]:working-directory:_files -/'
+        '--output[The file where violations should be saved. Prints to stdout by default.]:output:'
+        '--progress[Show a live-updating progress bar instead of each file being processed.]'
+        '--check-for-updates[Check whether a later version of SwiftLint is available after processing all files.]'
+        '*--only-rule[Run only the specified rule, ignoring `only_rules`, `opt_in_rules` and `disabled_rules`.
+        Can be specified repeatedly to run multiple rules.]:only-rule:'
+        '--quiet[Don'\''t print status logs like '\''Analyzing <file>'\'' & '\''Done analyzing'\''.]'
+        '--compiler-log-path[The path of the full xcodebuild log to use when running AnalyzerRules.]:compiler-log-path:'
+        '--compile-commands[The path of a compilation database to use when running AnalyzerRules.]:compile-commands:'
+        '*:paths:_files'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint_docs() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':rule-id:'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint_generate-docs() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--path[The directory where the documentation should be saved]:path:_files -/'
+        '--config[The path to a SwiftLint configuration file]:config:'
+        '(--enabled -e)'{--enabled,-e}'[Only show enabled rules]'
+        '(--disabled -d)'{--disabled,-d}'[Only show disabled rules]'
+        '(--correctable -c)'{--correctable,-c}'[Only display correctable rules]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint_lint() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*--config[The path to one or more SwiftLint configuration files, evaluated as a parent-child hierarchy.]:config:_files'
+        '(--fix --autocorrect)'{--fix,--autocorrect}'[Correct violations whenever possible.]'
+        '--format[Should reformat the Swift files using the same mechanism used by Xcode (via SourceKit).
+        Only applied with `--fix`/`--autocorrect`.]'
+        '--use-alternative-excluding[Use an alternative algorithm to exclude paths for `excluded`, which may be faster in some cases.]'
+        '--use-script-input-files[Read SCRIPT_INPUT_FILE* environment variables as files.]'
+        '--use-script-input-file-lists[Read SCRIPT_INPUT_FILE_LIST* environment variables as file lists.]'
+        '--strict[Upgrades warnings to serious violations (errors).]'
+        '--lenient[Downgrades serious violations to warnings, warning threshold is disabled.]'
+        '--force-exclude[Exclude files in config `excluded` even if their paths are explicitly specified.]'
+        '--benchmark[Save benchmarks to `benchmark_files.txt` and `benchmark_rules.txt`.]'
+        '--reporter[The reporter used to log errors and warnings.]:reporter:'
+        '--baseline[The path to a baseline file, which will be used to filter out detected violations.]:baseline:'
+        '--write-baseline[The path to save detected violations to as a new baseline.]:write-baseline:_files'
+        '--working-directory[The working directory to use when running SwiftLint.]:working-directory:_files -/'
+        '--output[The file where violations should be saved. Prints to stdout by default.]:output:'
+        '--progress[Show a live-updating progress bar instead of each file being processed.]'
+        '--check-for-updates[Check whether a later version of SwiftLint is available after processing all files.]'
+        '*--only-rule[Run only the specified rule, ignoring `only_rules`, `opt_in_rules` and `disabled_rules`.
+        Can be specified repeatedly to run multiple rules.]:only-rule:'
+        '--use-stdin[Lint standard input.]'
+        '--quiet[Don'\''t print status logs like '\''Linting <file>'\'' & '\''Done linting'\''.]'
+        '--silence-deprecation-warnings[Don'\''t print deprecation warnings.]'
+        '--cache-path[The directory of the cache used when linting.]:cache-path:'
+        '--no-cache[Ignore cache when linting.]'
+        '--enable-all-rules[Run all rules, even opt-in and disabled ones, ignoring `only_rules`.]'
+        '*:paths:_files'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint_baseline() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+    case "${state}" in
+    command)
+        local -ar subcommands=(
+            'report:Reports the violations in a baseline.'
+            'compare:Reports the violations that are present in another baseline but not in the original baseline.'
+        )
+        _describe -V subcommand subcommands
+        ;;
+    arg)
+        case "${words[1]}" in
+        report|compare)
+            "_swiftlint_baseline_${words[1]}"
+            ;;
+        esac
+        ;;
+    esac
+
+    return "${ret}"
+}
+
+_swiftlint_baseline_report() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':baseline:_files'
+        '--reporter[The reporter used to report violations. The '\''summary'\'' reporter can be useful to provide an overview.]:reporter:'
+        '--output[The file where violations should be saved. Prints to stdout by default.]:output:'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint_baseline_compare() {
+    local -i ret=1
+    local -ar arg_specs=(
+        ':baseline:_files'
+        '--other-baseline[The path to a second baseline to compare against the baseline. Violations in the second baseline that are not present in the original baseline will be reported.]:other-baseline:'
+        '--reporter[The reporter used to report violations. The '\''summary'\'' reporter can be useful to provide an overview.]:reporter:'
+        '--output[The file where violations should be saved. Prints to stdout by default.]:output:'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint_reporters() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint_rules() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--config[The path to a SwiftLint configuration file]:config:_files -g '\''*..yml *..yaml'\'''
+        '(--enabled -e)'{--enabled,-e}'[Only show enabled rules]'
+        '(--disabled -d)'{--disabled,-d}'[Only show disabled rules]'
+        '(--correctable -c)'{--correctable,-c}'[Only display correctable rules]'
+        '(--verbose -v)'{--verbose,-v}'[Display full configuration details]'
+        '--config-only[Print only the YAML configuration(s)]'
+        '--default-config[Print default configuration(s)]'
+        ':rule-id:'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint_version() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '--verbose[Display full version info.]'
+        '--check-for-updates[Check whether a later version of SwiftLint is available after processing all files.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint_help() {
+    local -i ret=1
+    local -ar arg_specs=(
+        '*:subcommands:'
+        '--version[Show the version.]'
+    )
+    _arguments -w -s -S : "${arg_specs[@]}" && ret=0
+
+    return "${ret}"
+}
+
+_swiftlint

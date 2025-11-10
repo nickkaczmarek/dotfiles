@@ -7,7 +7,8 @@ vscode-html-languageserver-bin \
 vscode-json-languageserver \
 typescript \
 typescript-language-server \
-yaml-language-server
+yaml-language-server \
+bash-language-server
 
 pip3 install -U jedi-language-server
 

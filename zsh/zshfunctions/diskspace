@@ -1,0 +1,3 @@
+diskutil info / | \
+grep 'Container' | \
+awk '/Free Space/ {free=$4; unit=$5} /Total Space/ {total=$4} END {print free, unit, "of", total, unit, "free"}'
