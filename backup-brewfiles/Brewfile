@@ -1,0 +1,70 @@
+tap "buo/cask-upgrade"
+brew "mas"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "robotsandpencils/made"
+tap "shaunsingh/sfmono-nerd-font-ligaturized"
+brew "aria2"
+brew "asdf"
+brew "bat"
+brew "cloc"
+brew "diff-so-fancy"
+brew "ffmpeg"
+brew "fzf"
+brew "gh"
+brew "git-delta"
+brew "gnupg"
+brew "llvm"
+brew "perl"
+brew "pinentry-mac"
+brew "ripgrep"
+brew "swiftformat"
+brew "swiftlint"
+brew "tree"
+brew "xcbeautify"
+brew "youtube-dl"
+brew "yq"
+brew "robotsandpencils/made/xcodes"
+cask "apparency"
+cask "archaeology"
+cask "finicky"
+cask "font-fira-code"
+cask "font-meslo-lg-nerd-font"
+cask "font-sf-mono-nerd-font-ligaturized"
+cask "keycastr"
+cask "overkill"
+cask "qlcolorcode"
+cask "qlimagesize"
+cask "qlmarkdown"
+cask "qlstephen"
+cask "qlvideo"
+cask "quicklook-json"
+cask "quicklookase"
+cask "rectangle"
+cask "suspicious-package"
+cask "syntax-highlight"
+cask "visual-studio-code"
+cask "xcodes"
+mas "1Password for Safari", id: 1569813296
+mas "BBEdit", id: 404009241
+mas "Color Picker", id: 1545870783
+mas "DaisyDisk", id: 411643860
+mas "Developer", id: 640199958
+mas "DuckDuckGo Privacy for Safari", id: 1482920575
+mas "Front and Center", id: 1493996622
+mas "Hand Mirror", id: 1502839586
+mas "Hush", id: 1544743900
+mas "JSONPeep", id: 1458969831
+mas "Magic Lasso", id: 1198047227
+mas "Microsoft Remote Desktop", id: 1295203466
+mas "Noir", id: 1592917505
+mas "Refined GitHub", id: 1519867270
+mas "Remote Desktop", id: 409907375
+mas "Soulver 3", id: 1508732804
+mas "SwitchGlass", id: 1498546559
+mas "Userscripts-Mac-App", id: 1463298887
+mas "UTC Time", id: 1538245904
+mas "Zavala", id: 1546457750
