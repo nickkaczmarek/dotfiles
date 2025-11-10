@@ -15,12 +15,10 @@ link () {
             ln -sfnv "$BASEDIR/gitconfig-personal" "$HOME/.gitconfig-personal"
             ln -sfnv "$BASEDIR/gitconfig-work" "$HOME/.gitconfig-work"
             ln -sfnv "$BASEDIR/gitconfig-personal-work" "$HOME/.gitconfig-personal-work"
-            ln -sfnv "$BASEDIR/vimrc" "$HOME/.vimrc"
             ln -sfnv "$BASEDIR/gvimrc" "$HOME/.gvimrc"
             ln -sfnv "$BASEDIR/.macos" "$HOME/.macos"
             ln -sfnv "$BASEDIR/Brewfile" "$HOME/Brewfile"
             ln -sfnv "$BASEDIR/gitpairs" "$HOME/.gitpairs"
-            ln -sFnv "$BASEDIR/vim" "$HOME/.vim"
             ln -sFnv "$BASEDIR/.p10k.zsh" "$HOME/.p10k.zsh"
             ln -sFnv "$BASEDIR/.gitmessage" "$HOME/.gitmessage"
             ;;
