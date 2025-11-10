@@ -64,6 +64,8 @@
 [commit]
     template = /Users/nickka/.gitmessage
     gpgsign = true
+[tag]
+    gpgsign = true
 [gpg]
     program = /opt/homebrew/bin/gpg
     format = openpgp
