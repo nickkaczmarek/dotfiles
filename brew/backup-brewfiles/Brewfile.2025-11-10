@@ -1,0 +1,176 @@
+tap "app-platform/mobile-platform", "git@gitlab.zgtools.net:zillow/mobile/app-platform/homebrew-mobile-platform.git"
+tap "buo/cask-upgrade"
+tap "charmbracelet/tap"
+tap "getsentry/tools"
+tap "kylef/formulae"
+tap "mczachurski/wallpapper"
+tap "peripheryapp/periphery"
+tap "robotsandpencils/made"
+tap "shaunsingh/sfmono-nerd-font-ligaturized"
+tap "tuist/tuist"
+
+brew "lz4"
+brew "little-cms2"
+brew "webp"
+brew "jpeg-xl"
+brew "aom"
+brew "aria2"
+brew "asdf"
+brew "bat"
+brew "glib"
+brew "cairo"
+brew "pycparser"
+brew "cffi"
+brew "cloc"
+brew "lima"
+brew "colima"
+brew "coreutils"
+brew "cryptography"
+brew "diff-so-fancy"
+brew "dua-cli"
+brew "eza"
+brew "gnutls"
+brew "harfbuzz"
+brew "libass"
+brew "librist"
+brew "libssh"
+brew "pango"
+brew "tesseract"
+brew "ffmpeg"
+brew "fzf"
+brew "gh"
+brew "ghostscript"
+brew "git-delta"
+brew "git-lfs"
+brew "glab"
+brew "gnupg"
+brew "netpbm"
+brew "python@3.14"
+brew "psutils"
+brew "groff"
+brew "icu4c@75"
+brew "shared-mime-info"
+brew "libheif"
+brew "imagemagick"
+brew "jq"
+brew "librsvg"
+brew "licenseplist"
+brew "llvm"
+brew "mas"
+brew "md5sha1sum"
+brew "nginx"
+brew "node"
+brew "openldap"
+brew "perl"
+brew "pinentry-mac"
+brew "powerlevel10k"
+brew "pv"
+brew "pyenv"
+brew "python@3.10"
+brew "python@3.11"
+brew "python@3.12"
+brew "python@3.9"
+brew "qemu"
+brew "ripgrep"
+brew "ruby-build"
+brew "swift-protobuf"
+brew "swiftformat"
+brew "swiftlint"
+brew "tcl-tk"
+brew "tree"
+brew "tree-sitter"
+brew "tree-sitter-cli"
+brew "unxip"
+brew "vapor"
+brew "vim"
+brew "wakeonlan"
+brew "wget"
+brew "xcbeautify"
+brew "yq"
+brew "zsh-completions"
+brew "app-platform/mobile-platform/ios-cli@0.0.1330"
+brew "app-platform/mobile-platform/muter"
+brew "charmbracelet/tap/crush"
+brew "getsentry/tools/sentry-cli"
+brew "getsentry/tools/sentry-wizard"
+brew "mczachurski/wallpapper/wallpapper"
+brew "robotsandpencils/made/xcodes"
+brew "tuist/tuist/tuist@4.50.1"
+
+cask "1password-cli"
+cask "apparency"
+cask "archaeology"
+cask "font-fira-code"
+cask "font-meslo-lg-nerd-font"
+cask "font-sf-mono-nerd-font-ligaturized"
+cask "inkscape"
+cask "keycastr"
+cask "markedit"
+cask "overkill"
+cask "periphery"
+cask "postman"
+cask "qlcolorcode"
+cask "qlmarkdown"
+cask "qlstephen"
+cask "qlvideo"
+cask "quicklook-json"
+cask "quicklookase"
+cask "suspicious-package"
+cask "syntax-highlight"
+cask "trunk-io"
+cask "visual-studio-code"
+cask "xcodes-app"
+
+mas "1Password for Safari", id: 1569813296
+mas "BBEdit", id: 404009241
+mas "Color Picker", id: 1545870783
+mas "DaisyDisk", id: 411643860
+mas "Developer", id: 640199958
+mas "Drafts", id: 1435957248
+mas "Front and Center", id: 1493996622
+mas "GarageBand", id: 682658836
+mas "Glean", id: 6448766375
+mas "Hand Mirror", id: 1502839586
+mas "Hush", id: 1544743900
+mas "Hyperspace", id: 6739505345
+mas "ImageDiff", id: 1602522152
+mas "iMovie", id: 408981434
+mas "JSON Peep", id: 1458969831
+mas "Keynote", id: 409183694
+mas "Magic Lasso", id: 1198047227
+mas "Mercury", id: 1621800675
+mas "Noir", id: 1592917505
+mas "Numbers", id: 409203825
+mas "Okta Extension App", id: 1439967473
+mas "Pages", id: 409201541
+mas "PiPifier", id: 1160374471
+mas "Refined GitHub", id: 1519867270
+mas "Remote Desktop", id: 409907375
+mas "Soulver 3", id: 1508732804
+mas "SwitchGlass", id: 1498546559
+mas "Userscripts", id: 1463298887
+mas "UTC Time", id: 1538245904
+mas "Windows App", id: 1295203466
+mas "Zavala", id: 1546457750
+vscode "andyyaldoo.vscode-json"
+vscode "davidbwaters.macos-modern-theme"
+vscode "dracula-theme.theme-dracula"
+vscode "eamodio.gitlens"
+vscode "editorconfig.editorconfig"
+vscode "gitlab.gitlab-workflow"
+vscode "graphql.vscode-graphql"
+vscode "graphql.vscode-graphql-syntax"
+vscode "gruntfuggly.activitusbar"
+vscode "llvm-vs-code-extensions.lldb-dap"
+vscode "luisherasme.glsl-with-imports"
+vscode "mitchdenny.ecdc"
+vscode "ms-vsliveshare.vsliveshare"
+vscode "redhat.vscode-yaml"
+vscode "shopify.ruby-lsp"
+vscode "smockle.xcode-default-theme"
+vscode "sswg.swift-lang"
+vscode "swiftlang.swift-vscode"
+vscode "vadimcn.vscode-lldb"
+vscode "visualstudioexptteam.intellicode-api-usage-examples"
+vscode "visualstudioexptteam.vscodeintellicode"
+vscode "xadillax.viml"

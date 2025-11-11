@@ -1,54 +1,93 @@
 tap "buo/cask-upgrade"
-brew "mas"
-
+tap "charmbracelet/tap"
 tap "robotsandpencils/made"
-brew "1password-cli"
-# work
-brew "mise"  # Version manager for neovim, node, python, ruby, etc.
+
+# Core utilities
 brew "aria2"
 brew "bat"
 brew "cloc"
+brew "colima"  # Docker alternative
 brew "eza"
-brew "gnutls"
-brew "gh"
-brew "gnupg"
-brew "jq"
-brew "llvm"
-brew "pinentry-mac"
-brew "swiftlint"
-brew "tree"
-brew "wget"
-brew "robotsandpencils/made/xcodes"
-brew "git-delta"
 brew "ffmpeg"
 brew "fzf"
+brew "gh"
+brew "git-delta"
+brew "git-lfs"
+brew "glab"
+brew "gnutls"
+brew "gnupg"
+brew "imagemagick"
+brew "jq"
+brew "lima"  # Required for colima
+brew "llvm"
+brew "mas"
+brew "pinentry-mac"
+brew "powerlevel10k"
+brew "ripgrep"
+brew "tree"
 brew "tree-sitter"
 brew "tree-sitter-cli"
+brew "unxip"
+brew "wget"
+brew "xcbeautify"
+brew "yq"
+brew "zsh-completions"
 
-cask "xcodes-app"
-cask "visual-studio-code"
-cask "keycastr"
+# Development tools
+brew "mise"  # Version manager for neovim, node, python, ruby, etc.
+brew "swiftformat"
+brew "swiftlint"
 
-# Mothers Ruin software
+# Tapped packages
+brew "charmbracelet/tap/crush"
+brew "robotsandpencils/made/xcodes"
+
+# GUI Applications
+cask "1password-cli"
 cask "apparency"
-cask "suspicious-package"
 cask "archaeology"
-
-# fonts
-cask "font-meslo-lg-nerd-font"
-# quit apple music from opening
+cask "inkscape"
+cask "keycastr"
+cask "markedit"
 cask "overkill"
+cask "suspicious-package"
+cask "syntax-highlight"
+cask "visual-studio-code"
+cask "xcodes-app"
 
+# QuickLook plugins
+cask "qlcolorcode"
+cask "qlmarkdown"
+cask "qlstephen"
+cask "qlvideo"
+cask "quicklook-json"
+cask "quicklookase"
+
+# Fonts
+cask "font-meslo-lg-nerd-font"
+cask "font-sf-mono-nerd-font-ligaturized"
+
+# Mac App Store apps
+mas "1Password for Safari", id: 1569813296
 mas "BBEdit", id: 404009241
 mas "Color Picker", id: 1545870783
 mas "DaisyDisk", id: 411643860
 mas "Developer", id: 640199958
 mas "Front and Center", id: 1493996622
+mas "Hand Mirror", id: 1502839586
 mas "Hush", id: 1544743900
-mas "JSONPeep", id: 1458969831
+mas "Hyperspace", id: 6739505345
+mas "ImageDiff", id: 1602522152
+mas "JSON Peep", id: 1458969831
 mas "Keynote", id: 409183694
 mas "Magic Lasso", id: 1198047227
+mas "Mercury", id: 1621800675
+mas "Noir", id: 1592917505
+mas "PiPifier", id: 1160374471
+mas "Refined GitHub", id: 1519867270
+mas "Remote Desktop", id: 409907375
+mas "Soulver 3", id: 1508732804
+mas "SwitchGlass", id: 1498546559
 mas "Userscripts", id: 1463298887
 mas "UTC Time", id: 1538245904
 mas "Zavala", id: 1546457750
-
