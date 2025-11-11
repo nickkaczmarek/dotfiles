@@ -1,3 +1,23 @@
-*.DS_Store
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Vim/Neovim temporary files
+*.swp
+*.swo
+*.swn
+*~
+.nvimlog
+
+# Neovim plugin cache (generated)
+config/nvim/plugin/packer_compiled.lua
+
+# Backup Brewfiles (dated snapshots)
+brew/backup-brewfiles/Brewfile.20*
+
+# Shell history
+.zsh_history
+
+# Misc
 .vim
-nvim/plugin
