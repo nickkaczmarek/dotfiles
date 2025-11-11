@@ -6,6 +6,7 @@ Personal dotfiles for macOS setup with shell configurations, git settings, and d
 
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
+- [Neovim Setup (Automatic)](#neovim-setup-automatic)
 - [Directory Structure](#directory-structure)
 - [What Gets Installed](#what-gets-installed)
 - [Selective Installation](#selective-installation)
@@ -90,6 +91,41 @@ cd ~/Developer/dotfiles
 git pull
 bash install/install.sh
 ```
+
+## Neovim Setup (Automatic)
+
+The Neovim configuration includes **fully automatic plugin management**. On a fresh machine, when you first launch `nvim`:
+
+### What Happens Automatically
+
+1. **Packer plugin manager** auto-installs (if not present)
+2. **All plugins** auto-install via PackerSync
+3. **LSP servers** auto-install via Mason (`lua_ls`, `rust_analyzer`, `ts_ls`)
+4. **Treesitter grammars** compile automatically (requires `node` from mise)
+
+### First Launch Experience
+
+```bash
+nvim
+```
+
+**Expected behavior:**
+- First launch takes 30-60 seconds (plugins installing)
+- You may see informational messages about installations
+- Some minor errors are normal during initial setup
+- **Close and reopen nvim** after the first launch completes
+
+**No manual steps required!** Everything installs itself.
+
+### How It Works
+
+The auto-bootstrap is embedded in `config/nvim/lua/kerams/packer.lua`:
+- Checks if Packer exists on startup
+- If missing, clones Packer from GitHub
+- Automatically runs `PackerSync` to install all plugins
+- LSPs and Treesitter grammars install on subsequent startup
+
+This makes the Neovim setup **completely reproducible** on fresh machines without any manual intervention.
 
 ## Directory Structure
 
@@ -361,32 +397,193 @@ exec zsh
 
 ### Neovim Errors or Missing Plugins
 
+#### Quick Fixes (Try These First)
+
 If you see errors about missing colorschemes, plugins, or treesitter:
 
 ```bash
-# 1. Ensure mise tools are installed
+# 1. Ensure mise tools are installed (neovim 0.11.5, node 20)
 mise install
 
 # 2. Verify neovim and node are available
-which nvim   # Should show mise path
-which node   # Should show mise path
+which nvim   # Should show: ~/.local/share/mise/installs/neovim/...
+which node   # Should show: ~/.local/share/mise/installs/node/...
+
+# 3. Restart shell to pick up mise shims
+exec zsh
+
+# 4. Launch nvim (auto-bootstrap will run if needed)
+nvim
+```
+
+If auto-bootstrap doesn't run or errors persist, try the manual steps below.
+
+#### Manual Plugin Installation
+
+If auto-bootstrap fails or you want to manually trigger it:
+
+```bash
+# Open nvim and run PackerSync
+nvim
+:PackerSync
+
+# Wait for all plugins to install, then restart nvim
+:qa
+nvim
+```
+
+#### Complete Neovim Reset (Nuclear Option)
+
+If Neovim is completely broken or won't start:
+
+```bash
+# 1. Back up current state (optional)
+mv ~/.local/share/nvim ~/.local/share/nvim.backup
+mv ~/.cache/nvim ~/.cache/nvim.backup
+
+# 2. Remove all Neovim data and cache
+rm -rf ~/.local/share/nvim
+rm -rf ~/.cache/nvim
 
 # 3. Restart shell
 exec zsh
 
-# 4. Open nvim and install plugins
+# 4. Launch nvim (auto-bootstrap will start fresh)
 nvim
-:PackerSync
 
-# 5. Install LSPs via Mason (inside nvim)
-:Mason
-# Press 'i' on any LSP to install
+# Auto-bootstrap will:
+# - Install Packer
+# - Install all plugins
+# - Install LSPs and Treesitter grammars
+# 
+# This may take 30-60 seconds on first launch.
+# Close and reopen nvim after it completes.
 ```
 
-Common issues:
-- **"tree-sitter generate" errors**: Node not found → run `mise install`
-- **"colorscheme not found"**: Plugins not installed → run `:PackerSync`
-- **LSP not working**: Not installed → run `:Mason` and press 'i' to install
+#### Common Error Messages and Fixes
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `"tree-sitter generate" errors` | Node not found | Run `mise install` to install node 20 |
+| `"colorscheme 'rose-pine' not found"` | Plugins not installed | Run `:PackerSync` in nvim |
+| `"module 'harpoon.mark' not found"` | Plugins not installed | Run `:PackerSync` in nvim |
+| `"lualine" not found` | Plugins not installed | Run `:PackerSync` in nvim |
+| `LSP not working` | LSP not installed | Run `:Mason` and press `i` to install |
+| `deprecation warning about lspconfig` | Known issue with lsp-zero v3.x | Harmless, will be fixed in lsp-zero update |
+| `PackerSync command not found` | Packer not installed | Delete nvim data (see reset steps above) |
+
+#### Checking Neovim Configuration (Without Opening)
+
+To test your Neovim config and see errors without getting stuck in the editor:
+
+```bash
+# This loads config, prints any errors, and exits immediately
+nvim --headless -c 'quitall'
+```
+
+If there are no errors, it exits silently. If there are errors, they'll be printed to the terminal. This is perfect for testing after changes or during fresh setup.
+
+#### Running Neovim Commands from Terminal
+
+You can run any Neovim command from the terminal using `--headless` mode. This is incredibly useful for automation, troubleshooting, and CI/CD pipelines.
+
+**Install/Update All Plugins (PackerSync)**
+
+```bash
+# Run PackerSync and wait for completion before quitting
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+```
+
+**Install Specific LSP Servers**
+
+```bash
+# Install one LSP
+nvim --headless -c 'MasonInstall lua_ls' -c 'quitall'
+
+# Install multiple LSPs at once
+nvim --headless -c 'MasonInstall lua_ls rust_analyzer ts_ls' -c 'quitall'
+```
+
+**Update Treesitter Parsers**
+
+```bash
+# Update all treesitter parsers
+nvim --headless -c 'TSUpdateSync' -c 'quitall'
+
+# Install specific parser
+nvim --headless -c 'TSInstall swift' -c 'quitall'
+```
+
+**Generate Health Check Report**
+
+```bash
+# Output checkhealth to a file for review
+nvim --headless -c 'checkhealth' -c 'write! /tmp/nvim-health.txt' -c 'quitall'
+cat /tmp/nvim-health.txt
+
+# Or check specific health (e.g., just LSP or Treesitter)
+nvim --headless -c 'checkhealth lsp' -c 'write! /tmp/lsp-health.txt' -c 'quitall'
+```
+
+**General Pattern**
+
+```bash
+# Basic pattern for any command
+nvim --headless -c '<command>' -c 'quitall'
+
+# Alternative shorter syntax
+nvim --headless +'<command>' +qa
+
+# Chain multiple commands
+nvim --headless -c '<command1>' -c '<command2>' -c 'quitall'
+```
+
+**Practical Examples**
+
+```bash
+# Full plugin setup from scratch (automated)
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+nvim --headless -c 'MasonInstall lua_ls rust_analyzer ts_ls' -c 'quitall'
+nvim --headless -c 'TSUpdateSync' -c 'quitall'
+
+# Verify setup without opening editor
+nvim --headless -c 'checkhealth' -c 'write! /tmp/health.txt' -c 'quitall' && cat /tmp/health.txt
+
+# Test config loads without errors
+nvim --headless -c 'quitall' && echo "✓ Config loaded successfully"
+```
+
+#### Checking Neovim Health
+
+To diagnose issues, use Neovim's built-in health check:
+
+```bash
+nvim
+:checkhealth
+```
+
+This will show:
+- Which LSPs are installed
+- Treesitter parser status
+- Plugin manager status
+- Required dependencies
+
+#### Verifying mise Tools
+
+```bash
+# Check what mise has installed
+mise list
+
+# Should show:
+# neovim  0.11.5
+# node    20.x.x
+# ruby    3.4.0
+# usage   latest
+
+# Check if they're in PATH
+which nvim  # Should be mise path, not homebrew
+which node  # Should be mise path
+```
 
 ### PATH Not Including Scripts
 
