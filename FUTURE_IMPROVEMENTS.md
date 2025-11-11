@@ -6,15 +6,17 @@ This document tracks potential improvements and enhancements for the dotfiles re
 
 ## Quick Wins (Low effort, high value)
 
-### 1. Fix .gitignore
+### 1. ~~Fix .gitignore~~ ✅ COMPLETED
 **Priority:** High  
-**Effort:** Low (5 min)
+**Effort:** Low (5 min)  
+**Status:** ✅ Done (2025-11-10)
 
-Currently `.nvimlog` and `.DS_Store` show up in git status.
-
-**Action:**
-- Add to `.gitignore`: `.nvimlog`, `.DS_Store`, `*.swp`, `*.swo`
-- Add `brew/backup-brewfiles/Brewfile.*` (dated backups)
+Updated `.gitignore` with:
+- ✅ `.nvimlog` (Neovim debug log)
+- ✅ `.DS_Store` and macOS temp files
+- ✅ `*.swp`, `*.swo`, `*.swn` (vim swap files)
+- ✅ `config/nvim/plugin/packer_compiled.lua` (generated)
+- ✅ `brew/backup-brewfiles/Brewfile.20*` (dated backups)
 
 ---
 
@@ -295,7 +297,7 @@ You have `.macos` config. Consider:
 ## Implementation Priority
 
 ### Do First (High Value, Low Effort):
-1. Fix .gitignore
+1. ~~Fix .gitignore~~ ✅ DONE
 2. Add dotfiles-update script
 3. Document Brewfile workflow
 4. Document 1Password setup
