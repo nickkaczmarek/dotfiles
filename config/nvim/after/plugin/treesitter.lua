@@ -1,5 +1,6 @@
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
+  -- Note: Swift requires node to compile, so it's included in mise.toml
   ensure_installed = { "javascript", "typescript", "swift", "rust", "c", "lua", "vim", "vimdoc", "query" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)

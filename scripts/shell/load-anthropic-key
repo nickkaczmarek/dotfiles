@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+# Load Anthropic API key on demand from 1Password
+# Usage: load-anthropic-key
+
+if [ -z "$ANTHROPIC_API_KEY" ]; then
+    echo "Loading Anthropic API key from 1Password..."
+    export ANTHROPIC_API_KEY=$(op read "op://Zillow/Anthropic API Key/credential")
+    echo "✓ ANTHROPIC_API_KEY loaded"
+else
+    echo "✓ ANTHROPIC_API_KEY already loaded"
+fi
+
+

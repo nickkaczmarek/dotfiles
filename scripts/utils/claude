@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+# Wrapper for Claude Code that auto-loads API key from 1Password
+# This ensures the key is only loaded when actually using Claude
+
+# Auto-load API key if not set
+if [ -z "$ANTHROPIC_API_KEY" ]; then
+    # Only load if we have the function available
+    if command -v load-anthropic-key &> /dev/null; then
+        load-anthropic-key
+    else
+        echo "Warning: load-anthropic-key function not found"
+        echo "Attempting to load key directly..."
+        export ANTHROPIC_API_KEY=$(op read "op://Zillow/Anthropic API Key/credential")
+    fi
+fi
+
+# Run the actual claude command with all arguments passed through
+command claude "$@"
+
+

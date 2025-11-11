@@ -1,15 +1,14 @@
 tap "buo/cask-upgrade"
 brew "mas"
 
-tap "homebrew/bundle"
 tap "robotsandpencils/made"
-tap "homebrew/cask-fonts"
+brew "1password-cli"
 # work
-brew "asdf"
+brew "mise"  # Version manager for neovim, node, python, ruby, etc.
 brew "aria2"
 brew "bat"
 brew "cloc"
-brew "exa"
+brew "eza"
 brew "gnutls"
 brew "gh"
 brew "gnupg"
@@ -23,8 +22,10 @@ brew "robotsandpencils/made/xcodes"
 brew "git-delta"
 brew "ffmpeg"
 brew "fzf"
+brew "tree-sitter"
+brew "tree-sitter-cli"
 
-cask "xcodes"
+cask "xcodes-app"
 cask "visual-studio-code"
 cask "keycastr"
 
@@ -47,7 +48,6 @@ mas "Hush", id: 1544743900
 mas "JSONPeep", id: 1458969831
 mas "Keynote", id: 409183694
 mas "Magic Lasso", id: 1198047227
-mas "Refined GitHub", id: 1519867270
 mas "Userscripts", id: 1463298887
 mas "UTC Time", id: 1538245904
 mas "Zavala", id: 1546457750

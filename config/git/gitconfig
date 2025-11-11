@@ -11,8 +11,8 @@
     rst =               reset --hard HEAD
     latest =            describe --abbrev=0
     alias =             config --get-regexp alias
-    sorted-authors =    "!$HOME/Developer/dotfiles/git/list-authors"
-    pp =                "!$HOME/Developer/dotfiles/git/pull-push"
+    sorted-authors =    "!$DOTGIT/list-authors"
+    pp =                "!$DOTGIT/pull-push"
     sa =                sorted-authors
     list-authors =      shortlog -e -s -n
     la =                list-authors
@@ -22,10 +22,10 @@
     pl =                pretty-log
     log-no-merges =     log --no-merges --first-parent
     pl-no-merges =      pl --no-merges --first-parent
-    reset-to-server =   "!$HOME/Developer/dotfiles/git/reset-to-server"
-    ui =                "!$DOTBIN/git-ui.zsh"
+    reset-to-server =   "!$DOTGIT/reset-to-server"
+    ui =                "!$DOTGIT/git-ui.zsh"
     delete-remote =     push origin --delete
-    fco =               "!$DOTBIN/fuzzy-checkout"
+    fco =               "!$DOTGIT/fuzzy-checkout"
     update =            "!$DOTGIT/fetch-and-merge-origin-main"
     skip-ci =           push -o ci.skip
     current-branch =    rev-parse --abbrev-ref head

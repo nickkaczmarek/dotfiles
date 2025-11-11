@@ -1,3 +1,8 @@
+-- Note: lspconfig deprecation warnings are from lsp-zero using old API
+-- This is a known issue with lsp-zero v3 + Neovim 0.11+
+-- The warnings are harmless - functionality still works
+-- Will be fixed when lsp-zero updates to new vim.lsp.config API
+
 local lsp_zero = require('lsp-zero')
 
 lsp_zero.on_attach(function(client, bufnr)
@@ -17,7 +22,13 @@ end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = {'tsserver', 'rust_analyzer' }, 
+  -- LSPs to automatically install on fresh machine
+  -- If installation fails, it won't break nvim startup
+  ensure_installed = {
+    'lua_ls',        -- Lua (for neovim config)
+    'rust_analyzer', -- Rust
+    'ts_ls',         -- TypeScript/JavaScript
+  },
   handlers = {
     lsp_zero.default_setup,
     lua_ls = function()

@@ -1,0 +1,22 @@
+# mise configuration - version-locked tools
+# This file pins versions of tools to avoid breaking changes from auto-updates
+# Symlinked to ~/.config/mise/config.toml
+
+[tools]
+# Existing tools (from current config)
+ruby = "3.4.0"
+usage = "latest"
+node = "20"  # Required for nvim-treesitter to compile grammars
+
+# Neovim - version-locked to avoid breaking changes
+# Using 0.11.5 which is stable and works with current plugins
+neovim = "0.11.5"
+
+# Add other version-sensitive tools here as needed
+# Examples:
+# python = "3.12.0"
+
+[settings]
+# Use shortened tool names in prompts
+verbose = false
+

@@ -32,7 +32,7 @@ if type brew &>/dev/null; then
 fi
 
 # Your personal completions first (override vendor/system)
-fpath=(~/.zsh/vendor-completions ~/.zsh/completions $DOTFILES/zsh/completions $fpath)
+fpath=(~/.zsh/vendor-completions ~/.zsh/completions $DOTFILES/config/shell/completions $fpath)
 
 
 # Load completion once
@@ -102,15 +102,13 @@ eval "$(mise activate zsh)"
 export C_INCLUDE_PATH=$(brew --prefix)/include
 export LIBRARY_PATH=$(brew --prefix)/lib
 
-source $DOTFILES/zgai.sh
-
 # Load my aliases and functions
-source $DOTFILES/zsh/aliases.zsh
-source $DOTFILES/zsh/functions.zsh
+source $DOTFILES/config/shell/aliases.zsh
+source $DOTFILES/config/shell/functions.zsh
 
 # Autoload any functions defined as one function per file
-fpath=($DOTFILES/zsh/zshfunctions $fpath)
-autoload -Uz $DOTFILES/zsh/zshfunctions/*(:t)
+fpath=($DOTFILES/scripts/shell $fpath)
+autoload -Uz $DOTFILES/scripts/shell/*(:t)
 
 
 # work thing to make builds faster

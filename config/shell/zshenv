@@ -1,7 +1,8 @@
 typeset -U path                     # unique-ify $path entries
 export DOTFILES="$HOME/Developer/dotfiles"
-export DOTBIN="$DOTFILES/bin"
-export DOTGIT="$DOTFILES/git"
+export DOTBIN="$DOTFILES/scripts/utils"
+export DOTGIT="$DOTFILES/scripts/git"
+export DOTSHELL="$DOTFILES/scripts/shell"
 export GEM_HOME="$HOME/.gem"
 export DOTLOCAL="$HOME/.local/bin"
 export HOMEBREW="/opt/homebrew/bin"
@@ -20,6 +21,8 @@ export EXA_COLORS="uu=2;33:da=0;37"
 path=(
     $GEM_HOME/bin
     $DOTBIN
+    $DOTGIT
+    $DOTSHELL
     $DOTLOCAL
     $HOMEBREW
     $path
