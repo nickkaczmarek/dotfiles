@@ -38,7 +38,21 @@ require('mason-lspconfig').setup({
   }
 })
 
-require('lspconfig').sourcekit.setup({})
+-- Configure sourcekit using the new vim.lsp.config API (Neovim 0.11+)
+-- This replaces the deprecated require('lspconfig').sourcekit.setup({}) pattern
+vim.lsp.config.sourcekit = {
+  cmd = { 'sourcekit-lsp' },
+  filetypes = { 'swift', 'objective-c', 'objective-cpp' },
+  root_markers = { 'Package.swift', '.git' },
+}
+
+-- Enable sourcekit for the current buffer if it matches
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'swift', 'objective-c', 'objective-cpp' },
+  callback = function(args)
+    vim.lsp.enable('sourcekit', args.buf)
+  end,
+})
 
 
 local cmp = require('cmp')
